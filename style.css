@@ -2134,3 +2134,17 @@ transform: translateY(0);
     color: white;
     border-radius: 5px;
 }
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    gap: 5px;
+}
+.input-group input {
+    padding: 12px;
+    background: #000;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 8px;
+}

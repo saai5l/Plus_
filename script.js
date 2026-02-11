@@ -1039,15 +1039,13 @@ function executeDecision(appId, status) {
 }
 
 
-let countdownInterval;
-
-// دالة لتحديث الإعدادات من لوحة الإدارة وحفظها في Firebase
+// دالة لتحديث البيانات في Firebase
 function updateCountdownSettings(isActive) {
     const text = document.getElementById('admin-banner-text').value;
     const date = document.getElementById('admin-target-date').value;
 
     if (isActive && (!text || !date)) {
-        return showNotification("يرجى ملء النص والتاريخ أولاً");
+        return showNotification("يرجى إدخال النص والتاريخ");
     }
 
     database.ref('siteSettings/countdown').set({
@@ -1055,50 +1053,52 @@ function updateCountdownSettings(isActive) {
         message: text,
         targetDate: date
     }).then(() => {
-        showNotification("تم تحديث إعدادات العداد بنجاح");
+        showNotification(isActive ? "تم تفعيل العداد بنجاح" : "تم إيقاف العداد");
     });
 }
 
-// دالة مراقبة التغييرات (تعمل عند كل زائر)
-function watchCountdown() {
+// دالة مراقبة العداد (توضع خارج دوال الأدمن لكي يراها الزوار أيضاً)
+function initCountdownListener() {
     database.ref('siteSettings/countdown').on('value', (snapshot) => {
         const data = snapshot.val();
-        const banner = document.getElementById('countdown-banner');
+        const banner = document.getElementById('countdown-banner'); // تأكد من وجوده في أعلى الهيدر
         
         if (data && data.active) {
             banner.style.display = 'block';
             document.getElementById('banner-text').innerText = data.message;
-            startTimer(data.targetDate);
+            runTimer(data.targetDate);
         } else {
-            banner.style.display = 'none';
-            clearInterval(countdownInterval);
+            if(banner) banner.style.display = 'none';
         }
     });
 }
 
-// دالة حساب الوقت
-function startTimer(endTime) {
-    clearInterval(countdownInterval);
+let timerInterval;
+function runTimer(endTime) {
+    clearInterval(timerInterval);
     const target = new Date(endTime).getTime();
 
-    countdownInterval = setInterval(() => {
+    timerInterval = setInterval(() => {
         const now = new Date().getTime();
-        const distance = target - now;
+        const gap = target - now;
 
-        if (distance < 0) {
-            clearInterval(countdownInterval);
+        if (gap <= 0) {
+            clearInterval(timerInterval);
             document.getElementById('countdown-banner').style.display = 'none';
             return;
         }
 
-        document.getElementById('days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-        document.getElementById('hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        document.getElementById('minutes').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        document.getElementById('seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000);
+        const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+        const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((gap % (1000 * 60)) / 1000);
+
+        document.getElementById('days').innerText = d;
+        document.getElementById('hours').innerText = h;
+        document.getElementById('minutes').innerText = m;
+        document.getElementById('seconds').innerText = s;
     }, 1000);
 }
 
-// استدعاء الدالة عند تحميل الصفحة
-window.addEventListener('DOMContentLoaded', () => {
-    watchCountdown();
-});
+// استدعاء الدالة عند تشغيل الموقع
+initCountdownListener();
