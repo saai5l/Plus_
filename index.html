@@ -50,29 +50,6 @@
 </div>
 
 
-<div id="countdown-banner" class="countdown-banner" style="display: none;">
-    <div class="banner-content">
-        <span id="banner-text">انتظروا المفاجأة الكبرى!</span>
-        <div id="timer">
-            <span id="days">00</span> يوم : 
-            <span id="hours">00</span> ساعة : 
-            <span id="minutes">00</span> دقيقة : 
-            <span id="seconds">00</span> ثانية
-        </div>
-    </div>
-</div>
-
-<div id="admin-countdown-controls" style="display:none; padding: 20px; background: #1a1a1a; border: 2px solid var(--primary-color); margin: 20px; border-radius: 10px;">
-    <h3 style="color: var(--primary-color);"><i class="fas fa-tools"></i> لوحة تحكم العداد</h3>
-    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
-        <input type="text" id="admin-banner-text" placeholder="اكتب نص الإعلان هنا..." style="flex: 1; min-width: 200px; padding: 10px; border-radius: 5px; border: 1px solid #333; background: #000; color: #fff;">
-        <input type="datetime-local" id="admin-target-date" style="padding: 10px; border-radius: 5px; border: 1px solid #333; background: #000; color: #fff;">
-        <button onclick="updateCountdownSettings(true)" class="btn-confirm" style="padding: 10px 20px; cursor: pointer;">تفعيل ونشر</button>
-        <button onclick="updateCountdownSettings(false)" class="btn-cancel" style="padding: 10px 20px; cursor: pointer;">إلغاء العداد</button>
-    </div>
-</div>
-
-
 <!-- navbar -->
 <div class="container">
     <nav class="navbar">
@@ -236,25 +213,6 @@
             <button id="toggle-staff" class="toggle-btn" onclick="updateJobStatus('staff')">ON</button>
         </div>
     </div>
-
-    <div class="admin-card" style="margin-top: 20px; border-top: 2px solid var(--primary-color); padding-top: 20px;">
-    <h3><i class="fas fa-clock"></i> إدارة العداد التنازلي للإعلانات</h3>
-    <div style="display: grid; gap: 15px; margin-top: 15px;">
-        <div class="input-group">
-            <label>نص الإعلان:</label>
-            <input type="text" id="admin-banner-text" placeholder="مثال: متبقي على افتتاح السيرفر...">
-        </div>
-        <div class="input-group">
-            <label>تاريخ ووقت الانتهاء:</label>
-            <input type="datetime-local" id="admin-target-date">
-        </div>
-        <div style="display: flex; gap: 10px;">
-            <button onclick="updateCountdownSettings(true)" class="btn-confirm" style="flex: 1;">تفعيل ونشر</button>
-            <button onclick="updateCountdownSettings(false)" class="btn-cancel" style="flex: 1;">إيقاف العداد</button>
-        </div>
-    </div>
-</div>
-
 </div>
 
         <div class="admin-table-container">
