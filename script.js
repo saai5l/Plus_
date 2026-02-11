@@ -558,7 +558,7 @@ async function askAI() {
 
 
 const CLIENT_ID = '1453875994988380373'; 
-const REDIRECT_URI = 'http://127.0.0.1:5500/index.html'; 
+const REDIRECT_URI = 'https://saai5l.github.io/Plus_/index.html';
 
 function login() {
     const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
