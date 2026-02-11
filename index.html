@@ -49,6 +49,28 @@
     </div>
 </div>
 
+
+<div id="countdown-banner" class="countdown-banner" style="display: none;">
+    <div class="banner-content">
+        <span id="banner-text">انتظروا المفاجأة الكبرى!</span>
+        <div id="timer">
+            <span id="days">00</span> يوم : 
+            <span id="hours">00</span> ساعة : 
+            <span id="minutes">00</span> دقيقة : 
+            <span id="seconds">00</span> ثانية
+        </div>
+    </div>
+</div>
+
+<div id="admin-controls" style="display:none; padding: 20px; background: #1a1a1a; border: 1px solid var(--primary-color); margin: 20px;">
+    <h3>⚙️ التحكم في عداد التنازلي</h3>
+    <input type="text" id="admin-banner-text" placeholder="نص الإعلان (مثلاً: افتتاح السيرفر)">
+    <input type="datetime-local" id="admin-target-date">
+    <button onclick="updateCountdownSettings(true)" class="btn-confirm">تفعيل ونشر</button>
+    <button onclick="updateCountdownSettings(false)" class="btn-cancel">إيقاف العداد</button>
+</div>
+
+
 <!-- navbar -->
 <div class="container">
     <nav class="navbar">
@@ -78,16 +100,16 @@
                     </div>
                     
                     <hr>
-<a href="#" id="track-btn" onclick="showPage('tracking-page')">
-    <i class="fas fa-search-location"></i> تتبع طلبك
-</a>
+            <a href="#" id="track-btn" onclick="showPage('tracking-page')">
+                <i class="fas fa-search-location"></i> تتبع طلبك
+            </a>
 
-<a href="#" id="admin-btn" style="display: none;" onclick="showPage('admin-dashboard')">
-    <i class="fas fa-user-shield"></i> لوحة الإدارة
-</a>
-<a href="javascript:void(0)" class="logout-item" onclick="logoutUser()">
-    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-</a>
+            <a href="#" id="admin-btn" style="display: none;" onclick="showPage('admin-dashboard')">
+                <i class="fas fa-user-shield"></i> لوحة الإدارة
+            </a>
+            <a href="javascript:void(0)" class="logout-item" onclick="logoutUser()">
+                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+            </a>
                 </div>
             </div>
         </div>
@@ -110,6 +132,7 @@
 </div>
     </nav>
 </div>
+
 
 <!-- Logo -->
 <div class="top-logo-section">

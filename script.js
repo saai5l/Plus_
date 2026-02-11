@@ -1037,3 +1037,68 @@ function executeDecision(appId, status) {
         showNotification("حدث خطأ أثناء حفظ القرار", true);
     });
 }
+
+
+let countdownInterval;
+
+// دالة لتحديث الإعدادات من لوحة الإدارة وحفظها في Firebase
+function updateCountdownSettings(isActive) {
+    const text = document.getElementById('admin-banner-text').value;
+    const date = document.getElementById('admin-target-date').value;
+
+    if (isActive && (!text || !date)) {
+        return showNotification("يرجى ملء النص والتاريخ أولاً");
+    }
+
+    database.ref('siteSettings/countdown').set({
+        active: isActive,
+        message: text,
+        targetDate: date
+    }).then(() => {
+        showNotification("تم تحديث إعدادات العداد بنجاح");
+    });
+}
+
+// دالة مراقبة التغييرات (تعمل عند كل زائر)
+function watchCountdown() {
+    database.ref('siteSettings/countdown').on('value', (snapshot) => {
+        const data = snapshot.val();
+        const banner = document.getElementById('countdown-banner');
+        
+        if (data && data.active) {
+            banner.style.display = 'block';
+            document.getElementById('banner-text').innerText = data.message;
+            startTimer(data.targetDate);
+        } else {
+            banner.style.display = 'none';
+            clearInterval(countdownInterval);
+        }
+    });
+}
+
+// دالة حساب الوقت
+function startTimer(endTime) {
+    clearInterval(countdownInterval);
+    const target = new Date(endTime).getTime();
+
+    countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = target - now;
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            document.getElementById('countdown-banner').style.display = 'none';
+            return;
+        }
+
+        document.getElementById('days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+        document.getElementById('hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById('minutes').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById('seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000);
+    }, 1000);
+}
+
+// استدعاء الدالة عند تحميل الصفحة
+window.addEventListener('DOMContentLoaded', () => {
+    watchCountdown();
+});
