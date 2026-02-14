@@ -1,4 +1,3 @@
-// إعدادات Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyB5r_RltNkExAb3wHhgfMuCWPg_GzEd_Ok",
     authDomain: "planning-with-ai-60a3c.firebaseapp.com",
@@ -9,7 +8,6 @@ const firebaseConfig = {
     appId: "1:493882886067:web:ed8f0db9678a7e8a042dc6"
 };
 
-// تحقق مما إذا كانت المكتبة محملة لتجنب الخطأ
 if (typeof firebase !== 'undefined') {
     firebase.initializeApp(firebaseConfig);
     var database = firebase.database();
@@ -30,7 +28,7 @@ function showPage(pageId) {
       const savedUser = JSON.parse(localStorage.getItem('user'));
       if (!savedUser || !ADMIN_IDS.includes(savedUser.id)) {
           showNotification('⚠️ عذراً، لا تملك صلاحية الوصول للوحة الإدارة', true);
-          return; // يوقف الدالة وما يفتح الصفحة
+          return; 
       }
   }
 
@@ -138,7 +136,7 @@ function showRequirements(jobType) {
 
     document.getElementById('accept-req').onclick = function() {
         reqModal.style.display = 'none';
-        finalizeOpenForm(jobType); // فتح نموذج التقديم حقك
+        finalizeOpenForm(jobType); 
     };
 }
 
@@ -174,7 +172,7 @@ document.getElementById('job-form').addEventListener('submit', async function(e)
 
     const jobType = document.getElementById('job-type').value;
     const characterName = document.getElementById('character-name').value;
-    const characterId = document.getElementById('character-id').value; // Steam ID
+    const characterId = document.getElementById('character-id').value; 
     const phoneNumber = document.getElementById('phone-number').value;
     const discordUser = document.getElementById('discord-id-input').value; 
     const reason = document.getElementById('reason').value;
@@ -192,7 +190,6 @@ counterRef.transaction(function(currentValue) {
     const currentCounter = result.snapshot.val() - 1;
     const newAppId = `PLUS-${currentCounter}`;
     
-    // باقي كود الإرسال...
     sendApplicationToDiscord(newAppId, jobType, characterName, characterId, phoneNumber, discordUser, reason);
 });
 
@@ -238,20 +235,17 @@ async function sendApplicationToDiscord(newAppId, jobType, characterName, charac
 });
 
 function saveToAdminDashboard(name, job, reason, discordId, appId) {
-    // 1. تجهيز بيانات الطلب في كائن (Object)
     const newApp = {
         appId: appId, 
         name: name,
         job: job,
-        date: new Date().toLocaleDateString('ar-SA'), // التاريخ بالتنسيق العربي
+        date: new Date().toLocaleDateString('ar-SA'),
         status: "معلق",
         reason: reason,
         discordId: discordId,
         adminNote: ""
     };
 
-    // 2. الحفظ في Firebase Realtime Database
-    // سيتم إنشاء مجلد باسم applications وداخله مجلد برقم الطلب
     database.ref('applications/' + appId).set(newApp)
     .then(() => {
         console.log("تم حفظ الطلب بنجاح في قاعدة البيانات العالمية");
@@ -332,7 +326,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	else {
 		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
 	}
-	// ]]>
 
 
     document.addEventListener('contextmenu', e => e.preventDefault());
@@ -566,7 +559,7 @@ function login() {
 }
 
 function toggleUserMenu(event) {
-    event.stopPropagation(); // يمنع إغلاق القائمة فوراً عند الضغط
+    event.stopPropagation(); 
     const dropdown = document.getElementById('user-dropdown');
     dropdown.classList.toggle('show');
 }
@@ -639,9 +632,9 @@ function updateUI(user) {
 
         if (discordIdInput) {
             discordIdInput.value = user.id;
-            discordIdInput.readOnly = true; // منع المستخدم من الكتابة
-            discordIdInput.style.backgroundColor = "rgba(255, 255, 255, 0.02)"; // تعتيم الخانة
-            discordIdInput.style.cursor = "not-allowed"; // تغيير شكل الماوس
+            discordIdInput.readOnly = true; 
+            discordIdInput.style.backgroundColor = "rgba(255, 255, 255, 0.02)";
+            discordIdInput.style.cursor = "not-allowed"; 
             discordIdInput.title = "يجب عليك استخدام حسابك الحالي للتقديم";
         }
 
@@ -659,7 +652,6 @@ function updateUI(user) {
         if (loginBtn) loginBtn.style.display = 'flex';
         if (userArea) userArea.style.display = 'none';
         
-        // إذا سجل خروج نفتح الخانة ونمسح الكلام
         if (discordIdInput) {
             discordIdInput.value = '';
             discordIdInput.readOnly = false;
@@ -696,7 +688,6 @@ function clearLogs() {
         function() {
             database.ref('applications').remove()
             .then(() => {
-                // إعادة تعيين العداد في Firebase أيضاً
                 database.ref('settings/app_counter').set(200);
                 showNotification("تم تصفير النظام السحابي بالكامل", true);
             })
@@ -718,31 +709,25 @@ function loadAdminData() {
     const tableBody = document.getElementById('jobs-table-body');
     if (!tableBody) return;
 
-    // الاستماع للبيانات من Firebase (تحديث حي ومباشر)
     database.ref('applications').on('value', (snapshot) => {
         const data = snapshot.val();
         tableBody.innerHTML = ""; 
 
         if (!data) {
             tableBody.innerHTML = `<tr><td colspan="6" class="empty-msg">لا توجد طلبات تقديم حالياً</td></tr>`;
-            // تصفير العدادات إذا لم توجد بيانات
             if(document.getElementById('total-apps')) document.getElementById('total-apps').textContent = '0';
             return;
         }
 
-        // تحويل الكائن القادم من Firebase إلى مصفوفة
         const apps = Object.values(data);
 
-        // تحديث الإحصائيات (العدادات العلويّة)
         if(document.getElementById('total-apps')) document.getElementById('total-apps').textContent = apps.length;
         if(document.getElementById('approved-apps')) document.getElementById('approved-apps').textContent = apps.filter(a => a.status === 'مقبول').length;
         if(document.getElementById('rejected-apps')) document.getElementById('rejected-apps').textContent = apps.filter(a => a.status === 'رفض').length;
 
-        // عرض الطلبات (عكس الترتيب ليظهر الأحدث فوق)
         [...apps].reverse().forEach((app) => {
             const statusClass = app.status === 'مقبول' ? 'status-approved' : (app.status === 'رفض' ? 'status-rejected' : 'status-pending');
             
-            // ملاحظة: غيرنا التمرير في الأزرار من (index) إلى (app.appId) لأنه أدق في Firebase
             tableBody.innerHTML += `
                 <tr>
                     <td class="app-id-cell">${app.appId || '---'}</td>
@@ -795,7 +780,7 @@ function manageApplication(index, newStatus) {
         apps[index].status = newStatus;
         localStorage.setItem('serverApplications', JSON.stringify(apps));
         showNotification(`تم تحديث الحالة إلى: ${newStatus}`);
-        loadAdminData(); // تحديث الجدول فوراً
+        loadAdminData(); 
     }
 }
 
@@ -805,7 +790,6 @@ function deleteApplication(appId) {
         "حذف طلب",
         "fa-trash-can",
         function() {
-            // الحذف من Firebase
             database.ref('applications/' + appId).remove()
             .then(() => {
                 showNotification("تم حذف الطلب بنجاح", true);
@@ -888,7 +872,6 @@ function loadUserTrackingData() {
         return;
     }
 
-    // الاستماع لطلبات المستخدم الحالي فقط من Firebase
     database.ref('applications').on('value', (snapshot) => {
         const data = snapshot.val();
         
@@ -901,7 +884,6 @@ function loadUserTrackingData() {
             return;
         }
 
-        // فلترة الطلبات الخاصة بهذا المستخدم باستخدام الـ Discord ID
         const allApps = Object.values(data);
         const myApps = allApps.filter(a => a.discordId === savedUser.id).reverse();
 
@@ -909,11 +891,11 @@ function loadUserTrackingData() {
             if (noAppMsg) noAppMsg.style.display = 'none';
             if (appStatusInfo) appStatusInfo.style.display = 'block';
             
-            listContainer.innerHTML = ''; // تنظيف القائمة قبل العرض
+            listContainer.innerHTML = ''; 
 
             myApps.forEach(app => {
                 const statusClass = app.status === 'مقبول' ? 'status-approved' : 
-                                   app.status === 'رفض' ? 'status-rejected' : 'status-pending';
+                                    app.status === 'رفض' ? 'status-rejected' : 'status-pending';
                 
                 listContainer.innerHTML += `
                     <div class="status-box ${statusClass}">
@@ -968,14 +950,13 @@ function clearAllApplications() {
 }
 
 
-let pendingAction = null; // لتخزين الفعل الذي سيتم تنفيذه
+let pendingAction = null; 
 
 function openCustomConfirm(message, title, iconClass, action) {
     document.getElementById('modal-message').innerText = message;
     document.getElementById('modal-title').innerText = title || "تأكيد الإجراء";
     document.getElementById('modal-icon').className = `fa-solid ${iconClass || 'fa-circle-exclamation'} modal-icon`;
     
-    // تغيير لون الأيقونة بناءً على نوع الإجراء (أحمر للحذف/التصفير، برتقالي للباقي)
     const iconElem = document.getElementById('modal-icon');
     if (message.includes("حذف") || message.includes("تصفير")) {
         iconElem.style.color = "#e74c3c";
@@ -984,7 +965,7 @@ function openCustomConfirm(message, title, iconClass, action) {
     }
 
     document.getElementById('confirm-modal').style.display = 'flex';
-    pendingAction = action; // تخزين الوظيفة المراد تنفيذها
+    pendingAction = action; 
 }
 
 function closeConfirmModal() {
@@ -994,7 +975,7 @@ function closeConfirmModal() {
 
 document.getElementById('confirm-yes').onclick = function() {
     if (pendingAction) {
-        pendingAction(); // تنفيذ الفعل المخزن
+        pendingAction(); 
     }
     closeConfirmModal();
 };
@@ -1005,7 +986,7 @@ function logoutUser() {
         "تسجيل الخروج", 
         "fa-sign-out-alt", 
         function() {
-            localStorage.removeItem('user'); // مسح بيانات الدخول
+            localStorage.removeItem('user'); 
             
             if (typeof showNotification === "function") {
                 showNotification("تم تسجيل الخروج بنجاح");

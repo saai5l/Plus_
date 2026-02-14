@@ -57,7 +57,7 @@ radial-gradient(circle at 70% 30%, rgba(42, 42, 42, 0.1) 0%, transparent 25%);
 
 .top-logo-section {
     width: 100%;
-    height: 60vh; /* يخلي اللوقو في نص الشاشة */
+    height: 60vh; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -73,14 +73,14 @@ radial-gradient(circle at 70% 30%, rgba(42, 42, 42, 0.1) 0%, transparent 25%);
 @keyframes fadeIn {
     0% {
 opacity: 0;
-transform: translateY(-100px); /* يبدأ فوق أكثر */
+transform: translateY(-100px); 
     }
     100% {
 opacity: 1;
-transform: translateY(0); /* يرجع لمكانه */
+transform: translateY(0); 
     }
 }
-/* Navbar Styles */
+
 .navbar {
     background: linear-gradient(135deg, rgba(20, 20, 20, 0.95), rgba(15, 15, 15, 0.98));
     padding: 1rem 2rem;
@@ -162,7 +162,6 @@ transform: translateY(0); /* يرجع لمكانه */
     display: block;
 }
 
-/* Hero Section */
 .hero {
     text-align: center;
     padding: 4rem 2rem;
@@ -226,7 +225,6 @@ transform: translateY(0); /* يرجع لمكانه */
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
 }
 
-/* Social Media Section */
 .social-media {
     background: linear-gradient(135deg, rgba(15, 15, 15, 0.95), rgba(10, 10, 10, 0.9));
     padding: 3rem;
@@ -376,7 +374,6 @@ transform: translateY(0); /* يرجع لمكانه */
     font-size: 0.9rem;
 }
 
-/* Rules Page */
 .buttons-container {
     display: flex;
     justify-content: center;
@@ -538,7 +535,6 @@ li::before {
     margin-bottom: 0.5rem;
 }
 
-/* Tutorials Page */
 .tutorials-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -586,7 +582,6 @@ li::before {
     font-size: 0.9rem;
 }
 
-/* Jobs Page */
 .jobs-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -624,7 +619,7 @@ li::before {
     opacity: 0.5;
     pointer-events: none;
 }
-/* Modal Styles */
+
 .modal {
     display: none;
     position: fixed;
@@ -729,7 +724,7 @@ li::before {
 .notification.error {
     background: var(--danger-color);
 }
-/* Responsive Styles */
+
 @media (max-width: 768px) {
     .navbar {
 flex-direction: column;
@@ -771,7 +766,7 @@ width: 100%;
 transform: translateY(-60px) !important;
     }
 }
-/* Loading Screen */
+
 #loading-screen {
     position: fixed;
     width: 100%;
@@ -790,14 +785,13 @@ transform: translateY(-60px) !important;
     align-items: center;
 }
 
-/* حركة النبض والتوهج خلف الشعار */
 .logo-wrapper {
     position: relative;
     margin-bottom: 30px;
 }
 
 .loader-logo {
-    width: 120px; /* حجم مناسب */
+    width: 120px; 
     position: relative;
     z-index: 2;
     filter: drop-shadow(0 0 10px rgba(252, 120, 35, 0.3));
@@ -818,7 +812,6 @@ transform: translateY(-60px) !important;
     animation: pulseGlow 2s infinite alternate;
 }
 
-/* خط التحميل السفلي */
 .loading-bar-container {
     width: 200px;
     height: 3px;
@@ -844,7 +837,6 @@ transform: translateY(-60px) !important;
     opacity: 0.6;
 }
 
-/* الـ Animations */
 @keyframes pulseGlow {
     from { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
     to { transform: translate(-50%, -50%) scale(1.3); opacity: 0.6; }
@@ -890,8 +882,8 @@ transform: translateY(-60px) !important;
     gap: 25px;
     padding: 20px;
 
-    max-width: 1100px;   /* يمنع التمدد ويخليها وسط */
-    margin: 0 auto;      /* توسيط الشبكة */
+    max-width: 1100px;  
+    margin: 0 auto;    
     justify-content: center;
 }
 .team-card {
@@ -946,8 +938,8 @@ transform: translateY(-60px) !important;
   text-align: center;
   width: 90%; 
   max-width: 1150px; 
-  margin: 0 auto 4rem auto; /* توسيط أفقي + مسافة تحت */
-  padding: 3.5rem 2.5rem; /* تقليل الحواف الداخلية */
+  margin: 0 auto 4rem auto; 
+  padding: 3.5rem 2.5rem; 
   background: linear-gradient(135deg, rgba(15, 15, 15, 0.95), rgba(10, 10, 10, 0.9));
   border-radius: var(--border-radius);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -986,8 +978,8 @@ transform: translateY(-60px) !important;
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  width: 85%; /* يقلل حجم البوكس */
-  margin: 0 auto; /* يخليه بالمنتصف */
+  width: 85%; 
+  margin: 0 auto; 
 }
 
 .update-card:hover {
@@ -1058,7 +1050,6 @@ transform: translateY(-60px) !important;
     color: white;
 }
 
-/* تأثير اللمعان المتحرك على الزر */
 .job-card .btn::before {
     content: '';
     position: absolute;
@@ -1072,20 +1063,16 @@ transform: translateY(-60px) !important;
     left: 100%;
 }
 
-
-
-/* القسم الرئيسي للأسئلة الشائعة */
 .faq-standalone-section {
     padding: 60px 20px;
     display: flex;
-    justify-content: center; /* لضمان توسط البوكس في الصفحة */
+    justify-content: center; 
 }
 
-/* البوكس الكبير - تم تعديل العرض هنا ليكون 1200px */
 .faq-box {
     max-width: 1200px; 
     width: 100%;
-    background: rgba(10, 10, 10, 0.85); /* سواد فخم مثل الصورة */
+    background: rgba(10, 10, 10, 0.85);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 20px;
@@ -1093,7 +1080,6 @@ transform: translateY(-60px) !important;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
-/* منطقة العنوان */
 .faq-title-area {
     text-align: center;
     margin-bottom: 50px;
@@ -1106,7 +1092,7 @@ transform: translateY(-60px) !important;
 }
 
 .faq-title-area h2 {
-    color: #ff8c42; /* اللون البرتقالي المعتمد في صورتك */
+    color: #ff8c42; 
     font-size: 35px;
     margin-bottom: 10px;
     letter-spacing: 1px;
@@ -1119,7 +1105,6 @@ transform: translateY(-60px) !important;
     margin: 0 auto;
 }
 
-/* الخط المتدرج تحت العنوان */
 .faq-title-area::after {
     content: '';
     display: block;
@@ -1129,7 +1114,6 @@ transform: translateY(-60px) !important;
     margin: 20px auto 0;
 }
 
-/* حاوية الأكورديون */
 .faq-accordion-container {
     margin-top: 20px;
 }
@@ -1143,7 +1127,6 @@ transform: translateY(-60px) !important;
     border-bottom: none;
 }
 
-/* تصميم السؤال */
 .faq-question {
     width: 100%;
     padding: 25px 15px;
@@ -1155,7 +1138,7 @@ transform: translateY(-60px) !important;
     font-weight: 600;
     cursor: pointer;
     display: flex;
-    flex-direction: row-reverse; /* لجعل الزائد على اليسار والنص على اليمين */
+    flex-direction: row-reverse; 
     justify-content: space-between;
     align-items: center;
     transition: all 0.3s ease;
@@ -1166,7 +1149,6 @@ transform: translateY(-60px) !important;
     color: #ff8c42;
 }
 
-/* أيقونة الزائد */
 .faq-question::before {
     content: '+';
     color: #ff8c42;
@@ -1174,13 +1156,11 @@ transform: translateY(-60px) !important;
     transition: transform 0.3s ease;
 }
 
-/* حالة النشاط (عند الفتح) */
 .faq-item.active .faq-question::before {
     content: '-';
     transform: rotate(180deg);
 }
 
-/* الجواب */
 .faq-answer {
     max-height: 0;
     overflow: hidden;
@@ -1193,7 +1173,6 @@ transform 0.5s ease;
     background: rgba(255, 255, 255, 0.015);
 }
 
-/* عند الفتح */
 .faq-item.active .faq-answer {
     max-height: 550px;
     opacity: 1;
@@ -1201,7 +1180,6 @@ transform 0.5s ease;
     padding-top: 8px;
 }
 
-/* النص */
 .faq-answer p {
     padding: 0 20px 22px;
     color: #bfbfbf;
@@ -1215,13 +1193,11 @@ opacity 0.6s ease 0.25s,
 transform 0.6s ease 0.25s;
 }
 
-/* يظهر النص بهدوء */
 .faq-item.active .faq-answer p {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* علامة + */
 .faq-question::before {
     content: '+';
     font-size: 22px;
@@ -1231,16 +1207,11 @@ transform 0.5s ease,
 color 0.4s ease;
 }
 
-/* تتحول لـ X بهدوء */
 .faq-item.active .faq-question::before {
     transform: rotate(45deg);
     color: #ffffff;
 }
 
-
-
-
-/* أيقونة البوت العائمة */
 .ai-bubble {
     position: fixed; bottom: 30px; right: 30px;
     width: 60px; height: 60px; background: #ff8c42;
@@ -1251,7 +1222,6 @@ color 0.4s ease;
 }
 .ai-bubble:hover { transform: scale(1.1); }
 
-/* نافذة الشات */
 .chat-window {
     position: fixed; bottom: 100px; right: 30px;
     width: 350px; height: 500px; background: rgba(15, 15, 15, 0.95);
@@ -1278,7 +1248,7 @@ color 0.4s ease;
     gap: 10px;
     padding: 15px;
     overflow-y: auto;
-    height: 350px; /* أو حسب تصميمك */
+    height: 350px;
 }
 
 .user-msg {
@@ -1299,9 +1269,6 @@ color 0.4s ease;
     max-width: 85%;
 }
 
-
-
-/* التنسيق النهائي للقائمة المنسدلة */
 .auth-container { 
     position: relative; 
     display: inline-block;
@@ -1321,17 +1288,16 @@ color 0.4s ease;
     display: none; 
     position: absolute; 
     left: 0; 
-    top: 55px; /* المسافة من فوق */
+    top: 55px; 
     background: #1a1a1a; 
     min-width: 200px; 
     border-radius: 10px; 
     box-shadow: 0 8px 16px rgba(0,0,0,0.5); 
-    z-index: 99999; /* رقم عالي جداً لتظهر فوق كل شيء */
+    z-index: 99999; 
     border: 1px solid #333;
     overflow: hidden;
 }
 
-/* الكلاس المسؤول عن الإظهار */
 .dropdown-content.show { 
     display: block !important; 
 }
@@ -1353,8 +1319,6 @@ color 0.4s ease;
 
 .dropdown-content a:hover { background: var(--primary-color); color: black; }
 .logout-item { color: #ff4d4d !important; border-top: 1px solid #333; }
-
-
 
 
 .admin-hero {
@@ -1461,7 +1425,6 @@ color 0.4s ease;
 
 .admin-table tr:hover { background: rgba(255, 255, 255, 0.02); }
 
-/* تنسيق النافذة المنبثقة */
 .modal {
     display: none; 
     position: fixed; 
@@ -1495,12 +1458,10 @@ color 0.4s ease;
 
 .close:hover { color: var(--primary-color); }
 
-/* تعريف متغيرات اللون الأساسي في أعلى الملف */
 :root {
     --primary-color: #fc7823;
 }
 
-/* تعديلات الوضع الفاتح */
 body.light-theme {
     background-color: #f5f5f5;
     color: #333;
@@ -1517,7 +1478,6 @@ body.light-theme .setting-item {
     border-bottom: 1px solid #ddd;
 }
 
-/* تنسيق منتقي الألوان */
 #primary-color-picker {
     border: none;
     width: 40px;
@@ -1526,22 +1486,17 @@ body.light-theme .setting-item {
     background: none;
 }
 
-
-
-/* تنسيق الحاوية */
 .auth-container {
     display: flex;
     align-items: center;
 }
 
-/* تنسيق الزر الفخم */
 .user-profile {
   width: 135px;
   height: 50px;
   border-radius: 15px;
   cursor: pointer;
   transition: 0.3s ease;
-  /* تدرج يدمج بين البرتقالي والشفافية ليناسب الخلفية السوداء */
   background: linear-gradient(
     to bottom right,
     #fc7823 0%,
@@ -1564,7 +1519,7 @@ body.light-theme .setting-item {
   width: 131px;
   height: 46px;
   border-radius: 13px;
-  background-color: #121212; /* لون داكن جداً ليبرز التوهج */
+  background-color: #121212; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1576,7 +1531,7 @@ body.light-theme .setting-item {
 .user-profile-inner svg {
   width: 22px;
   height: 22px;
-  fill: #fc7823; /* لون الأيقونة برتقالي ليطابق Plus Dev */
+  fill: #fc7823; 
 }
 
 .user-profile-inner p {
@@ -1584,7 +1539,6 @@ body.light-theme .setting-item {
     font-size: 14px;
 }
 
-/* حاوية البروفايل بعد التسجيل */
 .user-avatar-wrapper {
     width: 50px;
     height: 50px;
@@ -1610,18 +1564,17 @@ body.light-theme .setting-item {
     border-radius: 10px;
     object-fit: cover;
 }
-/* الحاوية الرئيسية يجب أن تكون نسبيّة */
+
 .user-menu-container {
     position: relative;
     display: inline-block;
 }
 
-/* تعديل قائمة الديسكورد المنسدلة */
 .dropdown-content {
-    display: none; /* مخفية افتراضياً */
+    display: none; 
     position: absolute;
-    top: 110%; /* تجعلها تظهر تحت الزر مباشرة */
-    right: 0;   /* محاذاة لجهة اليمين */
+    top: 110%; 
+    right: 0; 
     background-color: #1a1a1a;
     min-width: 200px;
     border-radius: 12px;
@@ -1632,7 +1585,6 @@ body.light-theme .setting-item {
     overflow: hidden;
 }
 
-/* لجعل القائمة تظهر عند إضافة كلاس show عبر الجافاسكريبت */
 .dropdown-content.show {
     display: block;
     animation: fadeInDown 0.3s ease;
@@ -1655,7 +1607,6 @@ transform: translateY(0);
   border-radius: 15px;
   text-decoration: none;
   transition: 0.3s ease;
-  /* تدرج برتقالي مطابق لموقعك */
   background: linear-gradient(
     to bottom right,
     #fc7823 0%,
@@ -1689,11 +1640,11 @@ transform: translateY(0);
 
 .plus-discord-inner i {
   font-size: 1.2rem;
-  color: #fc7823; /* لون الأيقونة برتقالي */
+  color: #fc7823;
 }
 
 .plus-discord-btn:hover .plus-discord-inner i {
-    color: #fff; /* تتحول للأبيض عند التحويم */
+    color: #fff; 
 }
 
 .toggle-btn {
@@ -1706,14 +1657,12 @@ transform: translateY(0);
     min-width: 80px;
 }
 
-/* حالة التشغيل (مفتوح) */
 .toggle-btn.on {
-    background-color: #fc7823; /* لونك البرتقالي */
+    background-color: #fc7823;
     color: white;
     box-shadow: 0 0 10px rgba(252, 120, 35, 0.4);
 }
 
-/* حالة الإيقاف (مغلق) */
 .toggle-btn.off {
     background-color: #444;
     color: #bbb;
@@ -1730,50 +1679,42 @@ transform: translateY(0);
 }
 
 
-/* تنسيق الخانة المقفولة */
 .locked-input {
     background-color: rgba(255, 255, 255, 0.05) !important;
     border: 1px solid #444 !important;
-    color: #888 !important; /* لون النص باهت */
-    cursor: not-allowed; /* علامة الممنوع عند التأشير بالماوس */
+    color: #888 !important; 
+    cursor: not-allowed; 
     font-weight: bold;
 }
 
-/* لإزالة التوهج عند الضغط عليها وهي مقفولة */
 .locked-input:focus {
     outline: none;
     border-color: #444 !important;
     box-shadow: none !important;
 }
 
-
-
-
-
-/* حاوية الطلبات - تضمن التوسط في الصفحة */
 #applications-list {
     display: flex;
     flex-direction: column;
-    align-items: center; /* يضع البطاقات في المنتصف */
+    align-items: center; 
     gap: 20px;
     padding: 20px;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* تصميم البطاقة المصغرة والمحسنة */
 .status-box {
     background: rgba(20, 20, 20, 0.6);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     width: 100%;
-    max-width: 500px; /* تصغير العرض كما طلبت */
+    max-width: 500px; 
     padding: 20px;
     position: relative;
     transition: transform 0.3s ease;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border-right: 4px solid #fc7823; /* خط جانبي جمالي */
+    border-right: 4px solid #fc7823; 
 }
 
 .status-box:hover {
@@ -1781,7 +1722,6 @@ transform: translateY(0);
     border-color: rgba(252, 120, 35, 0.4);
 }
 
-/* تنسيق الأسطر داخل البطاقة */
 .status-row {
     display: flex;
     justify-content: space-between;
@@ -1805,7 +1745,6 @@ transform: translateY(0);
     font-size: 0.95rem;
 }
 
-/* تنسيق خاص لرقم الطلب */
 .app-number-style {
     color: #fc7823 !important;
     background: rgba(252, 120, 35, 0.1);
@@ -1814,7 +1753,6 @@ transform: translateY(0);
     font-weight: bold;
 }
 
-/* صندوق ملاحظات الإدارة */
 .admin-notes-section {
     margin-top: 15px;
     padding: 12px;
@@ -1831,22 +1769,17 @@ transform: translateY(0);
     font-weight: bold;
 }
 
-/* حالات الألوان */
 .status-approved { border-right-color: #2ecc71; }
 .status-rejected { border-right-color: #e74c3c; }
 .status-pending { border-right-color: #f1c40f; }
 
-
-
-
-/* تنسيق حقل الملاحظة في جدول الإدارة */
 #jobs-table-body input {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(252, 120, 35, 0.2);
     color: white;
     padding: 6px;
     border-radius: 5px;
-    width: 100%; /* ليأخذ مساحة العمود بالكامل */
+    width: 100%; 
     box-sizing: border-box;
 }
 
@@ -1856,7 +1789,6 @@ transform: translateY(0);
     background: rgba(252, 120, 35, 0.1);
 }
 
-/* تنسيق حقل الملاحظات في جدول الإدارة */
 .admin-note-input {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(252, 120, 35, 0.2);
@@ -1876,7 +1808,6 @@ transform: translateY(0);
     box-shadow: 0 0 10px rgba(252, 120, 35, 0.1);
 }
 
-/* تنسيق أزرار الإجراءات */
 .admin-actions {
     display: flex;
     gap: 8px;
@@ -1908,7 +1839,7 @@ transform: translateY(0);
 #jobs-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 10px; /* مسافة بين الأسطر لجعلها مريحة */
+    border-spacing: 0 10px; 
 }
 
 #jobs-table th {
@@ -1920,23 +1851,20 @@ transform: translateY(0);
 }
 
 #jobs-table td {
-    background: #151515; /* لون خلفية السطر */
+    background: #151515;
     padding: 12px 15px;
     color: #ddd;
 }
 
-/* تدوير حواف السطر أول وآخر خلية */
 #jobs-table td:first-child { border-radius: 10px 0 0 10px; }
 #jobs-table td:last-child { border-radius: 0 10px 10px 0; }
 
-/* خلية رقم الطلب */
 .app-id-cell {
     color: #fc7823 !important;
     font-weight: bold;
     font-family: monospace;
 }
 
-/* مربع الملاحظات - تم تحويله لـ Textarea ليكون أريح */
 .admin-textarea {
     background: #0d0d0d;
     color: #bbb;
@@ -1952,11 +1880,10 @@ transform: translateY(0);
 
 .admin-textarea:focus {
     border-color: #fc7823;
-    height: 60px; /* يتوسع عند الكتابة */
+    height: 60px; 
     outline: none;
 }
 
-/* مجموعة الأزرار */
 .action-group {
     display: flex;
     gap: 5px;
@@ -1984,7 +1911,6 @@ transform: translateY(0);
 .btn-remove { background: rgba(255, 255, 255, 0.05); color: #666; }
 .btn-remove:hover { background: #ff4444; color: white; }
 
-/* رسالة الجدول الفارغ */
 .empty-msg {
     padding: 40px !important;
     text-align: center;
@@ -1993,7 +1919,7 @@ transform: translateY(0);
 }
 
 .btn-clear-all {
-    background: rgba(231, 76, 60, 0.1); /* أحمر شفاف */
+    background: rgba(231, 76, 60, 0.1); 
     color: #e74c3c;
     border: 1px solid #e74c3c;
     padding: 10px 20px;
@@ -2020,29 +1946,21 @@ transform: translateY(0);
     font-size: 1rem;
 }
 
-
-
-
-
-
 @keyframes highlightUpdate {
     0% { background-color: rgba(252, 120, 35, 0.2); }
     100% { background-color: transparent; }
 }
 
-/* هذا الكلاس يضاف تلقائياً عند إعادة تحميل الجدول */
 .status-box-updated {
     animation: highlightUpdate 1s ease-out;
 }
-
-
 
 .custom-modal {
     display: none; 
     position: fixed;
     z-index: 10000;
     left: 0; top: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.85); /* تعتيم الخلفية */
+    background-color: rgba(0, 0, 0, 0.85); 
     backdrop-filter: blur(5px);
     align-items: center;
     justify-content: center;
@@ -2099,3 +2017,68 @@ transform: translateY(0);
     box-shadow: 0 10px 20px rgba(252, 120, 35, 0.2);
 }
 
+.custom-modal {
+    display: none; 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0, 0, 0, 0.8); 
+    z-index: 9999; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.modal-content {
+    background: #1a1a1a; 
+    padding: 30px; 
+    border-radius: 15px; 
+    border: 1px solid #333; 
+    text-align: right; 
+    max-width: 400px; 
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+    color: #fc7823; 
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.modal-body {
+    color: #eee; 
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.modal-footer {
+    display: flex; 
+    gap: 10px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.btn-confirm {
+    background-color: #fc7823;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background-color: #e66a1f;
+}
+
+.btn-cancel {
+    background-color: #444;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #555;
+}

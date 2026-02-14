@@ -6,6 +6,7 @@
     <title>Plus Dev</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ai-chat-enhanced.css">
     <meta property="og:type" content="website">
 <meta property="og:site_name" content="Plus Dev">
 <meta property="og:title" content="Plus Dev - متجر سكربتات فايف إم احترافية">
@@ -17,21 +18,25 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#fc7823">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <!-- Favicon -->
 <link rel="icon" type="image/png" href="https://cdn.discordapp.com/avatars/990216490085142578/4b1d6f63ac4b6e1a59a320ef820a2053.png?size=1024">
 <link rel="shortcut icon" href="https://cdn.discordapp.com/avatars/990216490085142578/4b1d6f63ac4b6e1a59a320ef820a2053.png?size=1024" type="image/png">
 
 </head>
-<div id="req-modal" class="custom-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
-    <div class="modal-content" style="background:#1a1a1a; padding:30px; border-radius:15px; border:1px solid #333; text-align:right; max-width:400px; width:90%;">
-        <h3 id="req-title" style="color:#fc7823; margin-bottom:20px;">شروط التقديم</h3>
-        <div id="req-list" style="color:#eee; margin-bottom:25px;"></div>
-        <div style="display:flex; gap:10px;">
-            <button id="accept-req" class="modal-btn btn-confirm" style="flex:1;">أوافق</button>
-            <button onclick="closeReqModal()" class="modal-btn btn-cancel" style="flex:1;">إلغاء</button>
+
+<div id="req-modal" class="custom-modal">
+    <div class="modal-content">
+        <h3 id="req-title" class="modal-header">شروط التقديم</h3>
+        <div id="req-list" class="modal-body">
+            </div>
+        <div class="modal-footer">
+            <button id="accept-req" class="modal-btn btn-confirm">أوافق</button>
+            <button onclick="closeReqModal()" class="modal-btn btn-cancel">إلغاء</button>
         </div>
     </div>
 </div>
+
 <body>
 <canvas id="particles-canvas" style="position: fixed; top: 0; left: 0; z-index: -1;"></canvas>
 
@@ -48,7 +53,6 @@
         <p class="loading-text">PLUS DEV IS LOADING...</p>
     </div>
 </div>
-
 
 <!-- navbar -->
 <div class="container">
@@ -111,7 +115,6 @@
 </div>
     </nav>
 </div>
-
 
 <!-- Logo -->
 <div class="top-logo-section">
@@ -422,7 +425,7 @@
                 <li>[4] يجب اختيار اسم كركتر واقعي.</li>
                 <li>[5] يمنع دخول نفس الشخص بشخصية ثانية في سيناريو قائم.</li>
                 <li>[6] يمنع دخول المنازل أثناء السيناريو.</li>
-                <li>[7] يجب تشغيل برنامج تصوير أثناء اللعب.</li>
+                <li>[7] يجب تشغيل برنامج تسجيل (يحفظ آخر 20 دقيقة)</li>
                 <li>[8] يمنع التدخل في أي سيناريو قائم.</li>
                 <li>[9] يمنع لبس الملابس العسكرية.</li>
                 <li>[10] يمنع التعرض للمسعفين أو سرقة معدات الشرطة.</li>
@@ -810,17 +813,15 @@
 </div>
 
 <!-- Notification -->
-<div id="notification" class="notification">
-    <span id="notification-message"></span>
-</div>
-
-<!-- Notification -->
 <div class="notification" id="notification">
     <i class="fas fa-check-circle"></i>
     <span id="notification-message">تم إرسال تقديمك وستصلك رسالة بالقبول</span>
 </div>
 
-<!-- ai-chat -->
+<!-- ============================================
+     Enhanced AI Chat Bot - Plus Dev
+     المساعد الذكي المتطور
+     ============================================ -->
 <div id="ai-chat-toggle" class="ai-bubble" onclick="toggleChat()">
     <span>🤖</span>
 </div>
@@ -830,19 +831,28 @@
     <div class="chat-header">
         <div class="header-content">
             <span class="online-dot"></span>
-            <span>مساعد بلس لايف الذكي</span>
+            <span>🤖 مساعد Plus Dev الذكي</span>
         </div>
-        <button class="close-btn" onclick="toggleChat()">×</button>
+        <button class="close-btn" onclick="toggleChat()" title="إغلاق">×</button>
     </div>
     
     <div id="chat-body" class="chat-body">
         <div class="ai-msg">
-            مرحبًا بك! 🌟 أنا هنا لأساعدك في أي سؤال يخص قوانين السيرفر أو أي استفسار آخر.
+            <div class="ai-response">
+                <div class="response-title">👋 مرحبًا بك في Plus Dev!</div>
+                <div class="response-message">
+                    أنا المساعد الذكي للسيرفر، هنا لمساعدتك في:
+                    <br>• الإجابة على أسئلة القوانين
+                    <br>• شرح قوانين الرول بلاي
+                    <br>• توضيح أنظمة السرقات والعصابات
+                    <br>• أي استفسار يخص السيرفر
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="chat-footer">
-        <input type="text" id="ai-input" placeholder="اكتب سؤالك هنا...">
+        <input type="text" id="ai-input" placeholder="اكتب سؤالك أو اختر من الأزرار...">
         <button id="send-btn" onclick="askAI()">إرسال</button>
     </div>
 </div>
@@ -903,6 +913,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script src="script.js"></script>
+<script src="ai-chat-enhanced.js"></script>
 </body>
 </html>
 
