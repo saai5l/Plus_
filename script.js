@@ -16,7 +16,7 @@ if (typeof firebase !== 'undefined') {
 }
 
 // الأدمنز يُقرأون من Firebase — لا تعدّل هنا
-let ADMIN_IDS = ["1453875192009986166","1462236116785827851"]; // fallback مؤقت حتى يتحمل Firebase
+let ADMIN_IDS = ["1453875192009986166",""]; // fallback مؤقت حتى يتحمل Firebase
 
 // تحميل الأدمنز من Firebase وتحديث الـ UI
 function loadAdminIds() {
@@ -25,7 +25,7 @@ function loadAdminIds() {
         if (data && typeof data === 'object') {
             ADMIN_IDS = Object.values(data).map(a => a.id).filter(Boolean);
         } else {
-            ADMIN_IDS = ["1453875192009986166","1462236116785827851"];
+            ADMIN_IDS = ["1453875192009986166",""];
         }
         // أعد رسم زر الأدمن بعد تحديث القائمة
         const savedUser = JSON.parse(localStorage.getItem('user') || 'null');
