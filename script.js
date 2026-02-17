@@ -550,12 +550,11 @@ async function askAI() {
 }
 
 
-const CLIENT_ID = '1453875994988380373'; 
-const REDIRECT_URI = 'https://saai5l.github.io/Plus_';
+const CLIENT_ID = '1473279349430943910'; 
+const REDIRECT_URI = 'http://127.0.0.1:5500/login.html';
 
 function login() {
-    const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
-    window.location.href = url;
+    window.location.href = 'login.html';
 }
 
 function toggleUserMenu(event) {
@@ -584,28 +583,18 @@ window.onclick = function(event) {
 }
 
 window.addEventListener('load', () => {
-    const fragment = new URLSearchParams(window.location.hash.slice(1));
-    const accessToken = fragment.get('access_token');
-
-    if (accessToken) {
-        fetch('https://discord.com/api/users/@me', {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        })
-        .then(res => res.json())
-        .then(user => {
-            const avatarUrl = user.avatar 
-                ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-                : `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
-
-            const userData = { name: user.username, avatar: avatarUrl, id: user.id };
-            localStorage.setItem('user', JSON.stringify(userData));
-            updateUI(userData);
-            window.history.replaceState({}, document.title, "index.html");
-        })
-        .catch(err => console.error("خطأ في جلب بيانات الديسكورد:", err));
-    } else {
+    // تسجيل الدخول يتم الآن عبر login.html فقط
+    // هنا نقرأ البيانات المحفوظة ونحدّث الواجهة
+    try {
         const savedUser = localStorage.getItem('user');
-        if (savedUser) updateUI(JSON.parse(savedUser));
+        if (savedUser) {
+            const parsed = JSON.parse(savedUser);
+            if (parsed && parsed.id && parsed.name) {
+                updateUI(parsed);
+            }
+        }
+    } catch(e) {
+        localStorage.removeItem('user');
     }
 });
 
