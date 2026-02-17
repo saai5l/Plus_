@@ -552,18 +552,28 @@ window.onclick = function(event) {
 
 window.addEventListener('load', () => {
     try {
-        const raw = localStorage.getItem('user') || localStorage.getItem('plusdev_user');
+        // ✅ اقرأ من كلا المفتاحين — أيهما فيه بيانات أولاً
+        const raw = localStorage.getItem('plusdev_user') || localStorage.getItem('user');
         if (raw) {
             const parsed = JSON.parse(raw);
             if (parsed && parsed.id && parsed.name) {
-                localStorage.setItem('user', JSON.stringify(parsed));
-                localStorage.setItem('plusdev_user', JSON.stringify(parsed));
+                // ✅ احفظ في كلا المفتاحين لضمان التزامن دائماً
+                const userStr = JSON.stringify(parsed);
+                localStorage.setItem('user', userStr);
+                localStorage.setItem('plusdev_user', userStr);
                 updateUI(parsed);
+            } else {
+                localStorage.removeItem('user');
+                localStorage.removeItem('plusdev_user');
+                updateUI(null);
             }
+        } else {
+            updateUI(null);
         }
     } catch(e) {
         localStorage.removeItem('user');
         localStorage.removeItem('plusdev_user');
+        updateUI(null);
     }
 });
 
@@ -946,9 +956,11 @@ function logoutUser() {
         "تسجيل الخروج", 
         "fa-sign-out-alt", 
         function() {
+            // ✅ امسح كل مفاتيح الجلسة بشكل كامل
             localStorage.removeItem('user');
             localStorage.removeItem('plusdev_user');
             sessionStorage.removeItem('plusdev_user');
+            sessionStorage.removeItem('user');
             if (typeof showNotification === "function") {
                 showNotification("تم تسجيل الخروج بنجاح");
             }

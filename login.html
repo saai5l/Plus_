@@ -429,16 +429,24 @@ window.addEventListener('load',()=>{
       .catch(()=>showAlert('فشل الاتصال بديسكورد، جرب مرة ثانية.'));
     window.history.replaceState({},document.title,window.location.pathname);
   } else {
+    // ✅ تحقق من كلا المفتاحين
     try {
-      const raw = localStorage.getItem('user');
-      const parsed = raw ? JSON.parse(raw) : null;
-      if (parsed && parsed.id && parsed.name) {
-        redirectHome();
-      } else {
-        localStorage.removeItem('plusdev_user');
-        localStorage.removeItem('user');
-        sessionStorage.removeItem('plusdev_user');
+      const raw = localStorage.getItem('plusdev_user') || localStorage.getItem('user');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.id && parsed.name) {
+          // تأكد من حفظ البيانات في كلا المفتاحين قبل التحويل
+          const userStr = JSON.stringify(parsed);
+          localStorage.setItem('user', userStr);
+          localStorage.setItem('plusdev_user', userStr);
+          redirectHome();
+          return;
+        }
       }
+      // إذا ما فيه بيانات صحيحة، امسح كل شي
+      localStorage.removeItem('plusdev_user');
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('plusdev_user');
     } catch(e) {
       localStorage.removeItem('plusdev_user');
       localStorage.removeItem('user');
@@ -584,9 +592,18 @@ function forgotPw(){
 
 /* ════════════════════ LOGIN SUCCESS ════════════════════ */
 function loginOk(user,rem,msg){
+  // ✅ احفظ البيانات في كلا المفتاحين بشكل متزامن
   const userStr = JSON.stringify(user);
-  localStorage.setItem('user', userStr);
-  localStorage.setItem('plusdev_user', userStr);
+  try {
+    localStorage.setItem('user', userStr);
+    localStorage.setItem('plusdev_user', userStr);
+    // تحقق من الحفظ
+    const verify = localStorage.getItem('user');
+    if (!verify) throw new Error('فشل الحفظ');
+  } catch(e) {
+    showAlert('حدث خطأ في حفظ بيانات الجلسة، جرب مرة ثانية.');
+    return;
+  }
   if(msg) showAlert(msg,'ok');
   else showAlert('مرحباً ' + (user.name||'') + '! جاري التحويل…','ok');
   setTimeout(redirectHome, 1200);
