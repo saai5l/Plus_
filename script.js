@@ -15,7 +15,24 @@ if (typeof firebase !== 'undefined') {
     console.error("خطأ: مكتبة Firebase لم يتم تحميلها بشكل صحيح في index.html");
 }
 
-const ADMIN_IDS = ["1453875192009986166","1462236116785827851"]; 
+// الأدمنز يُقرأون من Firebase — لا تعدّل هنا
+let ADMIN_IDS = ["1453875192009986166","1462236116785827851"]; // fallback مؤقت حتى يتحمل Firebase
+
+// تحميل الأدمنز من Firebase وتحديث الـ UI
+function loadAdminIds() {
+    database.ref('adminIds').on('value', (snap) => {
+        const data = snap.val();
+        if (data && typeof data === 'object') {
+            ADMIN_IDS = Object.values(data).map(a => a.id).filter(Boolean);
+        } else {
+            ADMIN_IDS = ["1453875192009986166","1462236116785827851"];
+        }
+        // أعد رسم زر الأدمن بعد تحديث القائمة
+        const savedUser = JSON.parse(localStorage.getItem('user') || 'null');
+        if (savedUser) updateUI(savedUser);
+        renderAdminIds();
+    });
+}
 
         const jobConfig = {
             police: { open: true, webhook: "https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ" },
@@ -668,6 +685,9 @@ const mockJobs = [
 function loadAdminData() {
     const tableBody = document.getElementById('jobs-table-body');
     if (!tableBody) return;
+    
+    // تحديث قائمة الأدمنز
+    renderAdminIds();
 
     database.ref('applications').on('value', (snapshot) => {
         const data = snapshot.val();
@@ -819,20 +839,19 @@ function toggleAllJobs() {
 
 /* ════ مستمع الإشعارات العامة من Firebase ════ */
 (function() {
-    let lastSeenTimestamp = parseInt(localStorage.getItem('lastNotifTs') || '0');
+    // نبدأ الاستماع فقط من اللحظة الحالية — نتجاهل الإشعارات القديمة
+    const startTime = Date.now();
 
-    database.ref('globalNotifs').orderByChild('timestamp').startAt(Date.now() - 1000).on('child_added', (snap) => {
-        const notif = snap.val();
-        if (!notif) return;
-
-        // تجنب الإشعارات القديمة
-        if (notif.timestamp <= lastSeenTimestamp) return;
-        lastSeenTimestamp = notif.timestamp;
-        localStorage.setItem('lastNotifTs', lastSeenTimestamp);
-
-        // أضفه لقائمة الإشعارات المحلية
-        addNotification(notif.type || 'info', notif.title, notif.msg);
-    });
+    database.ref('globalNotifs')
+        .orderByChild('timestamp')
+        .startAt(startTime)
+        .on('child_added', (snap) => {
+            const notif = snap.val();
+            if (!notif || !notif.title || !notif.msg) return;
+            // تأكد إن الإشعار جديد فعلاً (بعد فتح الصفحة)
+            if (notif.timestamp < startTime) return;
+            addNotification(notif.type || 'info', notif.title, notif.msg);
+        });
 })();
 
 database.ref('jobStatus').on('value', (snapshot) => {
@@ -1079,9 +1098,17 @@ function initNotifications() {
 }
 
 function addNotification(type, title, msg) {
+    if (!title || !msg) return; // تجاهل الإشعارات الفارغة
+
+    // منع التكرار خلال ثانية واحدة
+    const isDuplicate = notifications.some(n =>
+        n.title === title && n.msg === msg && (Date.now() - n.id) < 1000
+    );
+    if (isDuplicate) return;
+
     const notif = {
         id: Date.now(),
-        type,
+        type: type || 'info',
         title,
         msg,
         time: new Date().toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'}),
@@ -1241,9 +1268,93 @@ function initLoginNotification(user) {
     }
 }
 
-// Init on load
+// ════ Init on load (موحّد) ════
 window.addEventListener('load', () => {
-    initNotifications();
     checkMobileMenu();
+    initNotifications();
+    loadAdminIds();
 });
 
+
+/* ============================================
+   🛡️ إدارة الأدمنز من لوحة التحكم
+   ============================================ */
+
+function renderAdminIds() {
+    const list = document.getElementById('admin-ids-list');
+    if (!list) return;
+
+    database.ref('adminIds').once('value', (snap) => {
+        const data = snap.val() || {};
+        list.innerHTML = '';
+
+        if (Object.keys(data).length === 0) {
+            list.innerHTML = '<p style="color:#666;text-align:center;padding:10px;">لا يوجد أدمنز مضافين</p>';
+            return;
+        }
+
+        Object.entries(data).forEach(([key, admin]) => {
+            const row = document.createElement('div');
+            row.className = 'admin-id-row';
+            row.innerHTML = `
+                <div class="admin-id-info">
+                    <img src="${admin.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" class="admin-id-avatar">
+                    <div>
+                        <div class="admin-id-name">${admin.name || 'غير معروف'}</div>
+                        <div class="admin-id-num">${admin.id}</div>
+                    </div>
+                </div>
+                <button class="admin-id-del" onclick="removeAdminId('${key}', '${admin.id}')">
+                    <i class="fas fa-trash"></i>
+                </button>`;
+            list.appendChild(row);
+        });
+    });
+}
+
+function addAdminId() {
+    const input = document.getElementById('new-admin-id');
+    const newId = input ? input.value.trim() : '';
+    if (!newId) { showToast('⚠️', 'تنبيه', 'أدخل الـ ID أولاً'); return; }
+    if (!/^\d{15,20}$/.test(newId)) { showToast('⚠️', 'خطأ', 'الـ ID يجب أن يكون أرقام فقط (15-20 رقم)'); return; }
+
+    // ابحث عن بيانات المستخدم إذا موجود
+    database.ref('adminIds').orderByChild('id').equalTo(newId).once('value', (snap) => {
+        if (snap.val()) { showToast('⚠️', 'موجود مسبقاً', 'هذا الـ ID مضاف مسبقاً'); return; }
+
+        // ابحث عنه في طلبات التوظيف لجلب اسمه وصورته
+        const discordData = JSON.parse(localStorage.getItem('pd_discord_users') || '{}');
+        const userInfo = discordData[newId] || null;
+
+        database.ref('adminIds').push({
+            id: newId,
+            name: userInfo ? userInfo.name : 'Admin',
+            avatar: userInfo ? userInfo.avatar : 'https://cdn.discordapp.com/embed/avatars/0.png',
+            addedAt: Date.now()
+        }).then(() => {
+            showToast('✅', 'تم الإضافة', `تم إضافة الـ ID بنجاح`);
+            if (input) input.value = '';
+            renderAdminIds();
+        });
+    });
+}
+
+function removeAdminId(key, adminId) {
+    const me = JSON.parse(localStorage.getItem('user') || 'null');
+    if (me && me.id === adminId) {
+        showToast('⚠️', 'تنبيه', 'لا تستطيع حذف نفسك!');
+        return;
+    }
+    openCustomConfirm(
+        'هل أنت متأكد من حذف هذا الأدمن؟',
+        'حذف أدمن',
+        'fa-trash',
+        function() {
+            database.ref('adminIds/' + key).remove().then(() => {
+                showToast('✅', 'تم الحذف', 'تم حذف الأدمن بنجاح');
+                renderAdminIds();
+                closeConfirmModal();
+            });
+        }
+    );
+}

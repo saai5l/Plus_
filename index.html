@@ -213,6 +213,24 @@
             </div>
         </div>
 
+    <!-- ─── قسم إدارة الأدمنز ─── -->
+<div class="admin-managers-section">
+    <h2><i class="fas fa-user-shield"></i> إدارة الأدمنز</h2>
+    <p style="color:#888;font-size:0.85rem;margin-bottom:16px;">أضف أو احذف أدمنز — فقط من يملك الـ Discord ID هنا يقدر يدخل لوحة الإدارة</p>
+
+    <div class="add-admin-row">
+        <input type="text" id="new-admin-id" placeholder="أدخل Discord ID مثل: 123456789012345678"
+            style="flex:1;padding:11px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:Tajawal,sans-serif;font-size:0.9rem;outline:none;">
+        <button onclick="addAdminId()" class="btn-add-admin">
+            <i class="fas fa-plus"></i> إضافة
+        </button>
+    </div>
+
+    <div id="admin-ids-list" class="admin-ids-list">
+        <p style="color:#666;text-align:center;padding:10px;">جاري التحميل...</p>
+    </div>
+</div>
+
 <div class="admin-actions">
     <h2>التحكم السريع</h2>
     <div class="actions-group">
