@@ -583,60 +583,18 @@ window.onclick = function(event) {
 }
 
 window.addEventListener('load', () => {
-    // استقبال token من ديسكورد مباشرة (لو رجع هنا بدل login.html)
-    const fragment = new URLSearchParams(window.location.hash.slice(1));
-    const accessToken = fragment.get('access_token');
-
-    if (accessToken) {
-        // امسح الـ token من الـ URL فوراً
-        window.history.replaceState({}, document.title, window.location.pathname);
-
-        fetch('https://discord.com/api/users/@me', {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        })
-        .then(res => res.json())
-        .then(user => {
-            const avatarUrl = user.avatar
-                ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-                : `https://cdn.discordapp.com/embed/avatars/${(user.discriminator || 0) % 5}.png`;
-
-            const email = (user.email || '').toLowerCase() || null;
-            const userData = {
-                id: user.id,
-                name: user.global_name || user.username,
-                avatar: avatarUrl,
-                email: email,
-                loginVia: 'discord'
-            };
-
-            localStorage.setItem('user', JSON.stringify(userData));
-            localStorage.setItem('plusdev_user', JSON.stringify(userData));
-
-            // حفظ الإيميل للربط لاحقاً
-            if (email) {
-                const links = JSON.parse(localStorage.getItem('pd_email_links') || '{}');
-                links[email] = user.id;
-                localStorage.setItem('pd_email_links', JSON.stringify(links));
+    // تسجيل الدخول يتم الآن عبر login.html فقط
+    // هنا نقرأ البيانات المحفوظة ونحدّث الواجهة
+    try {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            const parsed = JSON.parse(savedUser);
+            if (parsed && parsed.id && parsed.name) {
+                updateUI(parsed);
             }
-
-            updateUI(userData);
-        })
-        .catch(err => console.error('خطأ في جلب بيانات ديسكورد:', err));
-    } else {
-        // قراءة الجلسة المحفوظة
-        try {
-            const savedUser = localStorage.getItem('user');
-            if (savedUser) {
-                const parsed = JSON.parse(savedUser);
-                if (parsed && parsed.id && parsed.name) {
-                    updateUI(parsed);
-                } else {
-                    localStorage.removeItem('user');
-                }
-            }
-        } catch(e) {
-            localStorage.removeItem('user');
         }
+    } catch(e) {
+        localStorage.removeItem('user');
     }
 });
 
@@ -1051,3 +1009,227 @@ function executeDecision(appId, status) {
 }
 
 
+
+/* ============================================
+   🛍️ STORE FUNCTIONS
+   ============================================ */
+function filterProducts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.product-card').forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+            card.style.display = '';
+            card.style.animation = 'fadeInUp2 0.4s ease both';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function buyProduct(name, price) {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (!user) {
+        showToast('⚠️', 'يجب تسجيل الدخول', 'سجّل دخولك أولاً للشراء');
+        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        return;
+    }
+    if (price === 0) {
+        showToast('✅', 'تم التحميل!', `تم تحميل "${name}" بنجاح`);
+        addNotification('success', 'تحميل مجاني', `تم تحميل "${name}" بنجاح`);
+    } else {
+        showToast('🛒', 'طلب الشراء', `سيتم التواصل معك قريباً لإتمام شراء "${name}" بسعر ${price}$`);
+        addNotification('info', 'طلب شراء جديد', `طلبك على "${name}" — ${price}$ قيد المعالجة`);
+    }
+}
+
+/* ============================================
+   🔔 NOTIFICATION SYSTEM
+   ============================================ */
+let notifications = JSON.parse(localStorage.getItem('pd_notifs') || '[]');
+
+function initNotifications() {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const bell = document.getElementById('notif-bell');
+    if (bell) bell.style.display = user ? 'flex' : 'none';
+    renderNotifs();
+}
+
+function addNotification(type, title, msg) {
+    const notif = {
+        id: Date.now(),
+        type,
+        title,
+        msg,
+        time: new Date().toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'}),
+        read: false
+    };
+    notifications.unshift(notif);
+    if (notifications.length > 30) notifications = notifications.slice(0, 30);
+    saveNotifs();
+    renderNotifs();
+    showToast(
+        type === 'success' ? '✅' : type === 'warning' ? '⚠️' : type === 'danger' ? '❌' : 'ℹ️',
+        title, msg
+    );
+}
+
+function renderNotifs() {
+    const list = document.getElementById('notif-list');
+    const count = document.getElementById('notif-count');
+    const empty = document.getElementById('notif-empty');
+    if (!list) return;
+
+    const unread = notifications.filter(n => !n.read).length;
+
+    if (count) {
+        if (unread > 0) {
+            count.style.display = 'flex';
+            count.textContent = unread > 9 ? '9+' : unread;
+        } else {
+            count.style.display = 'none';
+        }
+    }
+
+    const items = list.querySelectorAll('.notif-item');
+    items.forEach(i => i.remove());
+
+    if (notifications.length === 0) {
+        if (empty) empty.style.display = 'block';
+        return;
+    }
+    if (empty) empty.style.display = 'none';
+
+    notifications.forEach(n => {
+        const el = document.createElement('div');
+        el.className = `notif-item${n.read ? '' : ' unread'}`;
+        el.onclick = () => markRead(n.id);
+        const iconMap = { success:'fa-check', info:'fa-info', warning:'fa-exclamation', danger:'fa-times' };
+        el.innerHTML = `
+            <div class="notif-icon ${n.type}"><i class="fas ${iconMap[n.type]||'fa-bell'}"></i></div>
+            <div class="notif-text">
+                <div class="notif-title">${n.title}</div>
+                <div class="notif-msg">${n.msg}</div>
+                <div class="notif-time">${n.time}</div>
+            </div>`;
+        list.appendChild(el);
+    });
+}
+
+function markRead(id) {
+    const n = notifications.find(n => n.id === id);
+    if (n) { n.read = true; saveNotifs(); renderNotifs(); }
+}
+
+function clearAllNotifs(e) {
+    e.stopPropagation();
+    notifications = [];
+    saveNotifs();
+    renderNotifs();
+}
+
+function saveNotifs() {
+    localStorage.setItem('pd_notifs', JSON.stringify(notifications));
+}
+
+function toggleNotifDropdown(e) {
+    e.stopPropagation();
+    const dd = document.getElementById('notif-dropdown');
+    if (!dd) return;
+    dd.classList.toggle('open');
+    // mark all as read when opened
+    if (dd.classList.contains('open')) {
+        notifications.forEach(n => n.read = true);
+        saveNotifs();
+        renderNotifs();
+    }
+}
+
+document.addEventListener('click', function(e) {
+    const dd = document.getElementById('notif-dropdown');
+    const bell = document.getElementById('notif-bell');
+    if (dd && bell && !bell.contains(e.target)) {
+        dd.classList.remove('open');
+    }
+    // close mobile menu too
+    const navLinks = document.getElementById('nav-links');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    if (navLinks && menuBtn && !menuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+        navLinks.classList.remove('mobile-open');
+        const icon = document.getElementById('menu-icon');
+        if (icon) { icon.className = 'fas fa-bars'; }
+    }
+});
+
+// Add notif for job status changes (demo: watch localStorage)
+function notifyJobStatus(jobName, status) {
+    const type = status === 'مقبول' ? 'success' : status === 'مرفوض' ? 'danger' : 'info';
+    addNotification(type, 'تحديث طلب وظيفة', `طلبك على ${jobName}: ${status}`);
+}
+
+/* ============================================
+   📱 MOBILE MENU
+   ============================================ */
+function toggleMobileMenu() {
+    const nav = document.getElementById('nav-links');
+    const icon = document.getElementById('menu-icon');
+    if (!nav) return;
+    nav.classList.toggle('mobile-open');
+    if (icon) {
+        icon.className = nav.classList.contains('mobile-open') ? 'fas fa-times' : 'fas fa-bars';
+    }
+}
+
+// Show mobile menu button on small screens
+function checkMobileMenu() {
+    const btn = document.getElementById('mobile-menu-btn');
+    if (!btn) return;
+    btn.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+}
+window.addEventListener('resize', checkMobileMenu);
+window.addEventListener('load', checkMobileMenu);
+
+/* ============================================
+   🍞 TOAST NOTIFICATION
+   ============================================ */
+let toastTimer;
+function showToast(icon, title, msg) {
+    const t = document.getElementById('toast-notif');
+    if (!t) return;
+    document.getElementById('toast-icon').textContent = icon;
+    document.getElementById('toast-title').textContent = title;
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+/* ============================================
+   🔗 HOOK INTO EXISTING updateUI
+   ============================================ */
+const _origUpdateUI = typeof updateUI === 'function' ? updateUI : null;
+function updateUI(user) {
+    if (_origUpdateUI) _origUpdateUI(user);
+    initNotifications();
+    // Welcome notification on first login
+    const welcomed = sessionStorage.getItem('pd_welcomed');
+    if (user && !welcomed) {
+        sessionStorage.setItem('pd_welcomed', '1');
+        setTimeout(() => {
+            addNotification('success', `مرحباً ${user.name}! 👋`, 'تم تسجيل دخولك بنجاح');
+        }, 800);
+    }
+}
+
+// Init on load
+window.addEventListener('load', () => {
+    initNotifications();
+    checkMobileMenu();
+    // Hook admin job status changes to send notifications
+    const origUpdateJobStatus = window.updateJobStatus;
+    if (typeof origUpdateJobStatus === 'function') {
+        window.updateJobStatus = function(appId, status) {
+            origUpdateJobStatus(appId, status);
+            notifyJobStatus('الوظيفة', status);
+        };
+    }
+});
