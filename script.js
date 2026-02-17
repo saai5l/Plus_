@@ -583,18 +583,60 @@ window.onclick = function(event) {
 }
 
 window.addEventListener('load', () => {
-    // تسجيل الدخول يتم الآن عبر login.html فقط
-    // هنا نقرأ البيانات المحفوظة ونحدّث الواجهة
-    try {
-        const savedUser = localStorage.getItem('user');
-        if (savedUser) {
-            const parsed = JSON.parse(savedUser);
-            if (parsed && parsed.id && parsed.name) {
-                updateUI(parsed);
+    // استقبال token من ديسكورد مباشرة (لو رجع هنا بدل login.html)
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    const accessToken = fragment.get('access_token');
+
+    if (accessToken) {
+        // امسح الـ token من الـ URL فوراً
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        fetch('https://discord.com/api/users/@me', {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        })
+        .then(res => res.json())
+        .then(user => {
+            const avatarUrl = user.avatar
+                ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+                : `https://cdn.discordapp.com/embed/avatars/${(user.discriminator || 0) % 5}.png`;
+
+            const email = (user.email || '').toLowerCase() || null;
+            const userData = {
+                id: user.id,
+                name: user.global_name || user.username,
+                avatar: avatarUrl,
+                email: email,
+                loginVia: 'discord'
+            };
+
+            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('plusdev_user', JSON.stringify(userData));
+
+            // حفظ الإيميل للربط لاحقاً
+            if (email) {
+                const links = JSON.parse(localStorage.getItem('pd_email_links') || '{}');
+                links[email] = user.id;
+                localStorage.setItem('pd_email_links', JSON.stringify(links));
             }
+
+            updateUI(userData);
+        })
+        .catch(err => console.error('خطأ في جلب بيانات ديسكورد:', err));
+    } else {
+        // قراءة الجلسة المحفوظة
+        try {
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                const parsed = JSON.parse(savedUser);
+                if (parsed && parsed.id && parsed.name) {
+                    updateUI(parsed);
+                } else {
+                    localStorage.removeItem('user');
+                }
+            }
+        } catch(e) {
+            localStorage.removeItem('user');
         }
-    } catch(e) {
-        localStorage.removeItem('user');
     }
 });
 
