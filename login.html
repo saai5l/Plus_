@@ -585,10 +585,11 @@ function forgotPw(){
 
 /* ════════════════════ LOGIN SUCCESS ════════════════════ */
 function loginOk(user,rem,msg){
-  localStorage.setItem('plusdev_user',JSON.stringify(user));
-  localStorage.setItem('user',JSON.stringify(user));
+  // دائمًا احفظ في localStorage عشان ما تنمسح عند التنقل بين الصفحات
+  localStorage.setItem('plusdev_user', JSON.stringify(user));
+  localStorage.setItem('user', JSON.stringify(user));
   if(msg) showAlert(msg,'ok');
-  setTimeout(redirectHome,1100);
+  setTimeout(redirectHome, 1100);
 }
 function redirectHome(){ window.location.href='https://saai5l.github.io/Plus_/index.html'; }
 

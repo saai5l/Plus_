@@ -563,16 +563,15 @@ function toggleUserMenu(event) {
     dropdown.classList.toggle('show');
 }
 
-/* window.onclick موحّد في الأسفل */
+// دمج window.onclick — موجود في الأسفل
 
 window.addEventListener('load', () => {
     try {
-        // اقرأ من كل المفاتيح الممكنة
         const raw = localStorage.getItem('user') || localStorage.getItem('plusdev_user');
         if (raw) {
             const parsed = JSON.parse(raw);
             if (parsed && parsed.id && parsed.name) {
-                // تأكد إن الاثنين محفوظين
+                // sync كلا المفتاحين
                 localStorage.setItem('user', JSON.stringify(parsed));
                 localStorage.setItem('plusdev_user', JSON.stringify(parsed));
                 updateUI(parsed);
@@ -638,6 +637,8 @@ function updateUI(user) {
 
 function logout() {
     localStorage.removeItem('user');
+    localStorage.removeItem('plusdev_user');
+    sessionStorage.removeItem('plusdev_user');
     window.location.href = "index.html";
 }
 
@@ -961,7 +962,10 @@ function logoutUser() {
         "تسجيل الخروج", 
         "fa-sign-out-alt", 
         function() {
-            localStorage.removeItem('user'); 
+            // امسح كل مفاتيح المستخدم
+            localStorage.removeItem('user');
+            localStorage.removeItem('plusdev_user');
+            sessionStorage.removeItem('plusdev_user');
             
             if (typeof showNotification === "function") {
                 showNotification("تم تسجيل الخروج بنجاح");
