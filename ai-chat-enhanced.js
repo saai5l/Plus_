@@ -472,11 +472,4 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-  
-  // إضافة الأزرار السريعة عند تحميل الصفحة
-  setTimeout(() => {
-    if (conversationHistory.length === 0) {
-      addQuickButtons();
-    }
-  }, 500);
 });
