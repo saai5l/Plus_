@@ -1203,3 +1203,12 @@ window.addEventListener('load', () => {
         };
     }
 });
+
+// مراقبة localStorage بشكل مباشر
+const origSetItem = localStorage.setItem.bind(localStorage);
+localStorage.setItem = function(key, value) {
+    console.log('💾 localStorage.setItem:', key, '=', value.substring(0, 100));
+    origSetItem(key, value);
+};
+
+console.log('✅ جاهز — الآن سجل دخولك');
