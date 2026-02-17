@@ -550,8 +550,8 @@ async function askAI() {
 }
 
 
-const CLIENT_ID = '1473279349430943910'; 
-const REDIRECT_URI = 'http://127.0.0.1:5500/login.html';
+const CLIENT_ID = '1453875994988380373'; 
+const REDIRECT_URI = 'https://saai5l.github.io/Plus_/login.html';
 
 function login() {
     window.location.href = 'login.html';
