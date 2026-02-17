@@ -87,8 +87,10 @@ transform: translateY(0);
     border-radius: var(--border-radius);
     margin-bottom: 2rem;
     display: flex;
-    justify-content: space-between;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
     align-items: center;
+    gap: 0;
     box-shadow: var(--box-shadow);
     margin-top: 40px;
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -100,7 +102,23 @@ transform: translateY(0);
     display: flex;
     align-items: center;
     gap: 10px;
-    order: 3;
+    flex-shrink: 0;
+}
+
+/* ─── روابط الناف بار في الوسط ─── */
+.nav-links {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* ─── Join Discord في اليسار ─── */
+.social-links {
+    flex-shrink: 0;
+    display: flex;
+    gap: 1rem;
 }
 
 .logo {
@@ -120,12 +138,6 @@ transform: translateY(0);
     color: var(--primary-light);
 }
 
-.nav-links {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-}
-
 .nav-links a {
     color: var(--light-color);
     text-decoration: none;
@@ -143,11 +155,6 @@ transform: translateY(0);
 .nav-links a.active {
     background-color: var(--accent-color);
     color: var(--lighter-color);
-}
-
-.social-links {
-    display: flex;
-    gap: 1rem;
 }
 
 .social-links a {
