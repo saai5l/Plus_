@@ -1284,42 +1284,6 @@ color 0.4s ease;
     display: block;
 }
 
-.dropdown-content {
-    display: none; 
-    position: absolute; 
-    left: 0; 
-    top: 55px; 
-    background: #1a1a1a; 
-    min-width: 200px; 
-    border-radius: 10px; 
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5); 
-    z-index: 99999; 
-    border: 1px solid #333;
-    overflow: hidden;
-}
-
-.dropdown-content.show { 
-    display: block !important; 
-}
-
-.user-header { padding: 12px; text-align: center; background: #222; border-bottom: 1px solid #333; }
-#user-display-name { font-weight: bold; color: white; margin-bottom: 4px; display: block; }
-#user-status { font-size: 11px; color: var(--primary-color); }
-
-.dropdown-content a { 
-    color: white; 
-    padding: 12px 15px; 
-    text-decoration: none; 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    font-size: 14px;
-    transition: 0.2s;
-}
-
-.dropdown-content a:hover { background: var(--primary-color); color: black; }
-.logout-item { color: #ff4d4d !important; border-top: 1px solid #333; }
-
 
 .admin-hero {
     background: linear-gradient(45deg, #1a1a1a, #272727);
@@ -1571,34 +1535,110 @@ body.light-theme .setting-item {
 }
 
 .dropdown-content {
-    display: none; 
+    display: none;
     position: absolute;
-    top: 110%; 
-    right: 0; 
+    top: calc(100% + 10px);
+    right: 0;
     background-color: #1a1a1a;
-    min-width: 200px;
-    border-radius: 12px;
-    border: 1px solid rgba(252, 120, 35, 0.3);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-    z-index: 1000;
-    padding: 10px;
+    min-width: 220px;
+    border-radius: 14px;
+    border: 1px solid rgba(252, 120, 35, 0.25);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.03);
+    z-index: 99999;
     overflow: hidden;
+    padding-bottom: 6px;
 }
 
 .dropdown-content.show {
-    display: block;
-    animation: fadeInDown 0.3s ease;
+    display: block !important;
+    animation: fadeInDown 0.25s ease;
 }
 
 @keyframes fadeInDown {
-    from {
-opacity: 0;
-transform: translateY(-10px);
-    }
-    to {
-opacity: 1;
-transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* رأس القائمة — اسم المستخدم والحالة */
+.user-header {
+    padding: 14px 16px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(252,120,35,0.12), rgba(30,30,30,0.9));
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+#user-display-name {
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 3px;
+    display: block;
+    font-size: 14px;
+}
+
+#user-discord-id {
+    font-size: 11px;
+    color: #666;
+    display: block;
+    margin-bottom: 5px;
+}
+
+#user-status {
+    font-size: 11px;
+    color: #fc7823;
+    background: rgba(252,120,35,0.1);
+    padding: 2px 10px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.dropdown-content hr {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 4px 0;
+}
+
+/* روابط داخل القائمة */
+.dropdown-content a {
+    color: #ddd;
+    padding: 11px 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    margin: 2px 6px;
+}
+
+.dropdown-content a i {
+    width: 18px;
+    text-align: center;
+    color: #fc7823;
+    font-size: 13px;
+}
+
+.dropdown-content a:hover {
+    background: rgba(252, 120, 35, 0.12);
+    color: #fff;
+    transform: translateX(-3px);
+}
+
+/* زر تسجيل الخروج */
+.logout-item {
+    color: #ff5555 !important;
+    border-top: 1px solid rgba(255,255,255,0.06) !important;
+    margin-top: 4px !important;
+}
+
+.logout-item i {
+    color: #ff5555 !important;
+}
+
+.logout-item:hover {
+    background: rgba(255, 60, 60, 0.1) !important;
+    color: #ff7070 !important;
 }
 
 .plus-discord-btn {
