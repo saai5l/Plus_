@@ -606,6 +606,8 @@ function updateUI(user) {
             userStatus.innerText = "Player";
             userStatus.style.color = "#aaaaaa";
         }
+        // إشعار الترحيب
+        if (typeof initLoginNotification === 'function') initLoginNotification(user);
     } else {
         if (loginBtn) loginBtn.style.display = 'flex';
         if (userArea) userArea.style.display = 'none';
@@ -1174,13 +1176,10 @@ function showToast(icon, title, msg) {
 }
 
 /* ============================================
-   🔗 HOOK INTO EXISTING updateUI
+   🔗 NOTIFICATIONS AFTER LOGIN
    ============================================ */
-const _origUpdateUI = typeof updateUI === 'function' ? updateUI : null;
-function updateUI(user) {
-    if (_origUpdateUI) _origUpdateUI(user);
+function initLoginNotification(user) {
     initNotifications();
-    // Welcome notification on first login
     const welcomed = sessionStorage.getItem('pd_welcomed');
     if (user && !welcomed) {
         sessionStorage.setItem('pd_welcomed', '1');
@@ -1204,11 +1203,3 @@ window.addEventListener('load', () => {
     }
 });
 
-// مراقبة localStorage بشكل مباشر
-const origSetItem = localStorage.setItem.bind(localStorage);
-localStorage.setItem = function(key, value) {
-    console.log('💾 localStorage.setItem:', key, '=', value.substring(0, 100));
-    origSetItem(key, value);
-};
-
-console.log('✅ جاهز — الآن سجل دخولك');
