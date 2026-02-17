@@ -794,9 +794,9 @@ function updateJobStatus(jobType) {
     // إرسال إشعار عام للكل
     const jobLabel = jobNames[jobType] || jobType;
     if (isCurrentlyOn) {
-        pushGlobalNotif('warning', '🔒 تم إغلاق التقديم', `تم إغلاق التقديم على وظيفة ${jobLabel} مؤقتاً`);
+        pushGlobalNotif('warning', `🔒 إغلاق التقديم — ${jobLabel}`, `تم إغلاق باب التقديم على وظيفة ${jobLabel} مؤقتاً من قِبل الإدارة.`);
     } else {
-        pushGlobalNotif('success', '🟢 فُتح التقديم', `تم فتح التقديم على وظيفة ${jobLabel}، قدّم الآن!`);
+        pushGlobalNotif('success', `🟢 فُتح التقديم — ${jobLabel}`, `فُتح باب التقديم على وظيفة ${jobLabel}! لا تفوّت الفرصة وقدّم الآن.`);
     }
 }
 
@@ -1245,13 +1245,5 @@ function initLoginNotification(user) {
 window.addEventListener('load', () => {
     initNotifications();
     checkMobileMenu();
-    // Hook admin job status changes to send notifications
-    const origUpdateJobStatus = window.updateJobStatus;
-    if (typeof origUpdateJobStatus === 'function') {
-        window.updateJobStatus = function(appId, status) {
-            origUpdateJobStatus(appId, status);
-            notifyJobStatus('الوظيفة', status);
-        };
-    }
 });
 
