@@ -585,13 +585,12 @@ function forgotPw(){
 
 /* ════════════════════ LOGIN SUCCESS ════════════════════ */
 function loginOk(user,rem,msg){
-  const st=rem?localStorage:sessionStorage;
-  st.setItem('plusdev_user',JSON.stringify(user));
-  localStorage.setItem('user',JSON.stringify(user)); /* compat */
+  localStorage.setItem('plusdev_user',JSON.stringify(user));
+  localStorage.setItem('user',JSON.stringify(user));
   if(msg) showAlert(msg,'ok');
   setTimeout(redirectHome,1100);
 }
-function redirectHome(){ window.location.href='https://saai5l.github.io/Plus_/'; }
+function redirectHome(){ window.location.href='https://saai5l.github.io/Plus_/index.html'; }
 
 /* ════════════════════ STORAGE HELPERS ════════════════════ */
 function saveEmailLink(email,discordId){

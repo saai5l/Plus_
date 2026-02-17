@@ -563,38 +563,24 @@ function toggleUserMenu(event) {
     dropdown.classList.toggle('show');
 }
 
-window.onclick = function(event) {
-    if (!event.target.matches('.user-avatar-wrapper img')) {
-        const dropdowns = document.getElementsByClassName("dropdown-content");
-        for (let i = 0; i < dropdowns.length; i++) {
-            let openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
-    }
-}
-
-window.onclick = function(event) {
-    const menu = document.getElementById("user-dropdown");
-    if (menu && !event.target.closest('.user-profile')) {
-        menu.classList.remove("show");
-    }
-}
+/* window.onclick موحّد في الأسفل */
 
 window.addEventListener('load', () => {
-    // تسجيل الدخول يتم الآن عبر login.html فقط
-    // هنا نقرأ البيانات المحفوظة ونحدّث الواجهة
     try {
-        const savedUser = localStorage.getItem('user');
-        if (savedUser) {
-            const parsed = JSON.parse(savedUser);
+        // اقرأ من كل المفاتيح الممكنة
+        const raw = localStorage.getItem('user') || localStorage.getItem('plusdev_user');
+        if (raw) {
+            const parsed = JSON.parse(raw);
             if (parsed && parsed.id && parsed.name) {
+                // تأكد إن الاثنين محفوظين
+                localStorage.setItem('user', JSON.stringify(parsed));
+                localStorage.setItem('plusdev_user', JSON.stringify(parsed));
                 updateUI(parsed);
             }
         }
     } catch(e) {
         localStorage.removeItem('user');
+        localStorage.removeItem('plusdev_user');
     }
 });
 
