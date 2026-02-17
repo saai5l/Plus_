@@ -92,6 +92,15 @@ transform: translateY(0);
     box-shadow: var(--box-shadow);
     margin-top: 40px;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+/* ─── عناصر يمين الناف بار (جرس + أفاتار + لوجن) ─── */
+.nav-right-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    order: 3;
 }
 
 .logo {
@@ -2285,8 +2294,9 @@ body.light-theme .setting-item {
 #notif-bell {
     position: relative;
     cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.08);
     transition: all 0.3s;
@@ -2295,9 +2305,9 @@ body.light-theme .setting-item {
     justify-content: center;
     color: #aaa;
     font-size: 1rem;
-    margin-left: 8px;
+    flex-shrink: 0;
 }
-#notif-bell:hover { background: rgba(252,120,35,0.15); color: #fc7823; }
+#notif-bell:hover { background: rgba(252,120,35,0.15); color: #fc7823; border-color: rgba(252,120,35,0.3); }
 #notif-count {
     position: absolute;
     top: -4px;
