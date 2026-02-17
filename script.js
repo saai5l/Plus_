@@ -563,21 +563,42 @@ function toggleUserMenu(event) {
     dropdown.classList.toggle('show');
 }
 
-// دمج window.onclick — موجود في الأسفل
+window.onclick = function(event) {
+    if (!event.target.matches('.user-avatar-wrapper img')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+            let openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}
+
+window.onclick = function(event) {
+    const menu = document.getElementById("user-dropdown");
+    if (menu && !event.target.closest('.user-profile')) {
+        menu.classList.remove("show");
+    }
+}
 
 window.addEventListener('load', () => {
     try {
         const raw = localStorage.getItem('user') || localStorage.getItem('plusdev_user');
+        console.log('[load] raw from storage:', raw ? 'FOUND' : 'NULL');
         if (raw) {
             const parsed = JSON.parse(raw);
             if (parsed && parsed.id && parsed.name) {
-                // sync كلا المفتاحين
                 localStorage.setItem('user', JSON.stringify(parsed));
                 localStorage.setItem('plusdev_user', JSON.stringify(parsed));
+                console.log('[load] calling updateUI for:', parsed.name);
                 updateUI(parsed);
+            } else {
+                console.warn('[load] parsed but invalid:', parsed);
             }
         }
     } catch(e) {
+        console.error('[load] error:', e);
         localStorage.removeItem('user');
         localStorage.removeItem('plusdev_user');
     }
@@ -597,8 +618,8 @@ function updateUI(user) {
         if (loginBtn) loginBtn.style.display = 'none';
         if (userArea) userArea.style.display = 'flex';
         
-        userAvatar.src = user.avatar;
-        userDisplayName.innerText = user.name;
+        if (userAvatar) userAvatar.src = user.avatar || '';
+        if (userDisplayName) userDisplayName.innerText = user.name || '';
         
         if (userDiscordId) {
             userDiscordId.innerText = "ID: " + user.id;
@@ -637,8 +658,6 @@ function updateUI(user) {
 
 function logout() {
     localStorage.removeItem('user');
-    localStorage.removeItem('plusdev_user');
-    sessionStorage.removeItem('plusdev_user');
     window.location.href = "index.html";
 }
 
@@ -962,7 +981,6 @@ function logoutUser() {
         "تسجيل الخروج", 
         "fa-sign-out-alt", 
         function() {
-            // امسح كل مفاتيح المستخدم
             localStorage.removeItem('user');
             localStorage.removeItem('plusdev_user');
             sessionStorage.removeItem('plusdev_user');

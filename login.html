@@ -475,8 +475,7 @@ function handleDiscordUser(u){
   /* Save email → discordId mapping if email available */
   if(email) saveEmailLink(email, u.id);
 
-  showAlert('مرحباً '+userData.name+'! جاري التحويل…','ok');
-  setTimeout(redirectHome,1100);
+  loginOk(userData, true, 'مرحباً '+userData.name+'! جاري التحويل…');
 }
 
 /* ════════════════════ EMAIL LOGIN ════════════════════ */
@@ -585,13 +584,23 @@ function forgotPw(){
 
 /* ════════════════════ LOGIN SUCCESS ════════════════════ */
 function loginOk(user,rem,msg){
-  // دائمًا احفظ في localStorage عشان ما تنمسح عند التنقل بين الصفحات
-  localStorage.setItem('plusdev_user', JSON.stringify(user));
-  localStorage.setItem('user', JSON.stringify(user));
+  // احفظ في localStorage دائماً بغض النظر عن rem
+  try {
+    const userStr = JSON.stringify(user);
+    localStorage.setItem('user', userStr);
+    localStorage.setItem('plusdev_user', userStr);
+    console.log('[loginOk] Saved user:', user.name, user.id);
+  } catch(err) {
+    console.error('[loginOk] Save failed:', err);
+  }
   if(msg) showAlert(msg,'ok');
-  setTimeout(redirectHome, 1100);
+  else showAlert('مرحباً ' + (user.name||'') + '! جاري التحويل…','ok');
+  setTimeout(redirectHome,1200);
 }
-function redirectHome(){ window.location.href='https://saai5l.github.io/Plus_/index.html'; }
+function redirectHome(){
+  console.log('[redirectHome] Going home, user in storage:', localStorage.getItem('user') ? 'YES' : 'NO');
+  window.location.href='https://saai5l.github.io/Plus_/index.html';
+}
 
 /* ════════════════════ STORAGE HELPERS ════════════════════ */
 function saveEmailLink(email,discordId){
