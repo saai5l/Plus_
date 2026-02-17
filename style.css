@@ -87,26 +87,26 @@ transform: translateY(0);
     border-radius: var(--border-radius);
     margin-bottom: 2rem;
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 0;
     box-shadow: var(--box-shadow);
     margin-top: 40px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     position: relative;
 }
 
-/* ─── عناصر يمين الناف بار (جرس + أفاتار + لوجن) ─── */
-.nav-right-section {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* ─── Join Discord → أقصى اليسار (order:3 بسبب RTL) ─── */
+.social-links {
+    order: 3;
     flex-shrink: 0;
+    display: flex;
+    gap: 1rem;
 }
 
-/* ─── روابط الناف بار في الوسط ─── */
+/* ─── الروابط → الوسط (order:2) ─── */
 .nav-links {
+    order: 2;
     flex: 1;
     display: flex;
     justify-content: center;
@@ -114,11 +114,13 @@ transform: translateY(0);
     gap: 1.5rem;
 }
 
-/* ─── Join Discord في اليسار ─── */
-.social-links {
-    flex-shrink: 0;
+/* ─── أفاتار + جرس → أقصى اليمين (order:1 بسبب RTL) ─── */
+.nav-right-section {
+    order: 1;
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
 }
 
 .logo {
