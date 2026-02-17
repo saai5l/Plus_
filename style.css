@@ -1,6 +1,6 @@
 
 :root {
-    --primary-color: #fc7813;
+    --primary-color: #fc7823;
     --primary-light: #d3d3d3;
     --primary-dark: #272727;
     --secondary-color: #363636;
@@ -10,11 +10,11 @@
     --darker-color: #050505;
     --light-color: #e0e0e0;
     --lighter-color: #f0f0f0;
-    --accent-color: #fc7813;
-    --success-color: #fc7813;
+    --accent-color: #fc7823;
+    --success-color: #fc7823;
     --danger-color: #c62828;
     --warning-color: #f9a825;
-    --info-color: #fc7813;
+    --info-color: #fc7823;
     --border-radius: 10px;
     --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;
@@ -118,6 +118,7 @@ transform: translateY(0);
 .nav-right-section {
     order: 1;
     display: flex;
+    flex-direction: row-reverse;
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
@@ -823,7 +824,7 @@ transform: translateY(-60px) !important;
     transform: translate(-50%, -50%);
     width: 100px;
     height: 100px;
-    background: #fc7813;
+    background: #fc7823;
     border-radius: 50%;
     filter: blur(50px);
     opacity: 0.4;
@@ -842,7 +843,7 @@ transform: translateY(-60px) !important;
 .loading-bar {
     width: 0%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, #fc7813, transparent);
+    background: linear-gradient(90deg, transparent, #fc7823, transparent);
     animation: loadingProgress 2s infinite linear;
 }
 
@@ -875,7 +876,7 @@ transform: translateY(-60px) !important;
     padding: 40px 0;
 }
 .team-title {
-    color: #fc7813;
+    color: #fc7823;
     font-size: 20px;
     margin-bottom: 5px;
 }
@@ -890,7 +891,7 @@ transform: translateY(-60px) !important;
     display: block;
     height: 4px;
     width: 80px;
-    background: #fc7813;
+    background: #fc7823;
     margin: 10px auto 0;
     border-radius: 4px;
 }
@@ -920,7 +921,7 @@ transform: translateY(-60px) !important;
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 4px solid #fc7813;
+    border: 4px solid #fc7823;
     margin-top: 20px;
     position: relative;
     z-index: 2;
@@ -929,7 +930,7 @@ transform: translateY(-60px) !important;
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 4px solid #fc7813;
+    border: 4px solid #fc7823;
     margin-top: 20px;
 }
 .team-name {
@@ -939,14 +940,14 @@ transform: translateY(-60px) !important;
     font-weight: bold;
 
     padding: 2px 8px;
-    border: 2px solid #fc7813;
+    border: 2px solid #fc7823;
     border-radius: 6px;
     display: inline-block;
     position: relative;
     z-index: 3;
 }
 .team-role {
-    color: #fc7813;
+    color: #fc7823;
     font-size: 14px;
     margin-top: 5px;
 }
@@ -1441,7 +1442,7 @@ color 0.4s ease;
 .close:hover { color: var(--primary-color); }
 
 :root {
-    --primary-color: #fc7813;
+    --primary-color: #fc7823;
 }
 
 body.light-theme {
@@ -1481,7 +1482,7 @@ body.light-theme .setting-item {
   transition: 0.3s ease;
   background: linear-gradient(
     to bottom right,
-    #fc7813 0%,
+    #fc7823 0%,
     rgba(252, 120, 35, 0) 35%
   );
   background-color: rgba(252, 120, 35, 0.1);
@@ -1513,7 +1514,7 @@ body.light-theme .setting-item {
 .user-profile-inner svg {
   width: 22px;
   height: 22px;
-  fill: #fc7813; 
+  fill: #fc7823; 
 }
 
 .user-profile-inner p {
@@ -1522,29 +1523,31 @@ body.light-theme .setting-item {
 }
 
 .user-avatar-wrapper {
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
     border-radius: 12px;
     cursor: pointer;
     transition: 0.3s ease;
-    background: linear-gradient(to bottom right, #fc7813 0%, rgba(252, 120, 35, 0) 50%);
-    background-color: rgba(252, 120, 35, 0.1);
+    border: 2px solid rgba(252, 120, 35, 0.5);
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(252, 120, 35, 0.2);
+    flex-shrink: 0;
 }
 
 .user-avatar-wrapper:hover {
-    box-shadow: 0 0 15px rgba(252, 120, 35, 0.4);
-    transform: scale(1.05);
+    border-color: #fc7823;
+    box-shadow: 0 0 14px rgba(252, 120, 35, 0.5);
+    transform: scale(1.06);
 }
 
 #user-avatar {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    height: 100%;
     border-radius: 10px;
     object-fit: cover;
+    display: block;
 }
 
 .user-menu-container {
@@ -1602,7 +1605,7 @@ body.light-theme .setting-item {
 
 #user-status {
     font-size: 11px;
-    color: #fc7813;
+    color: #fc7823;
     background: rgba(252,120,35,0.1);
     padding: 2px 10px;
     border-radius: 20px;
@@ -1633,7 +1636,7 @@ body.light-theme .setting-item {
 .dropdown-content a i {
     width: 18px;
     text-align: center;
-    color: #fc7813;
+    color: #fc7823;
     font-size: 13px;
 }
 
@@ -1667,7 +1670,7 @@ body.light-theme .setting-item {
   transition: 0.3s ease;
   background: linear-gradient(
     to bottom right,
-    #fc7813 0%,
+    #fc7823 0%,
     rgba(252, 120, 35, 0) 40%
   );
   background-color: rgba(252, 120, 35, 0.1);
@@ -1698,7 +1701,7 @@ body.light-theme .setting-item {
 
 .plus-discord-inner i {
   font-size: 1.2rem;
-  color: #fc7813;
+  color: #fc7823;
 }
 
 .plus-discord-btn:hover .plus-discord-inner i {
@@ -1716,7 +1719,7 @@ body.light-theme .setting-item {
 }
 
 .toggle-btn.on {
-    background-color: #fc7813;
+    background-color: #fc7823;
     color: white;
     box-shadow: 0 0 10px rgba(252, 120, 35, 0.4);
 }
@@ -1772,7 +1775,7 @@ body.light-theme .setting-item {
     position: relative;
     transition: transform 0.3s ease;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border-right: 4px solid #fc7813; 
+    border-right: 4px solid #fc7823; 
 }
 
 .status-box:hover {
@@ -1804,7 +1807,7 @@ body.light-theme .setting-item {
 }
 
 .app-number-style {
-    color: #fc7813 !important;
+    color: #fc7823 !important;
     background: rgba(252, 120, 35, 0.1);
     padding: 2px 10px;
     border-radius: 4px;
@@ -1822,7 +1825,7 @@ body.light-theme .setting-item {
 .admin-notes-title {
     display: block;
     font-size: 0.75rem;
-    color: #fc7813;
+    color: #fc7823;
     margin-bottom: 5px;
     font-weight: bold;
 }
@@ -1842,7 +1845,7 @@ body.light-theme .setting-item {
 }
 
 #jobs-table-body input:focus {
-    border-color: #fc7813;
+    border-color: #fc7823;
     outline: none;
     background: rgba(252, 120, 35, 0.1);
 }
@@ -1861,7 +1864,7 @@ body.light-theme .setting-item {
 
 .admin-note-input:focus {
     outline: none;
-    border-color: #fc7813;
+    border-color: #fc7823;
     background: rgba(252, 120, 35, 0.1);
     box-shadow: 0 0 10px rgba(252, 120, 35, 0.1);
 }
@@ -1918,7 +1921,7 @@ body.light-theme .setting-item {
 #jobs-table td:last-child { border-radius: 0 10px 10px 0; }
 
 .app-id-cell {
-    color: #fc7813 !important;
+    color: #fc7823 !important;
     font-weight: bold;
     font-family: monospace;
 }
@@ -1937,7 +1940,7 @@ body.light-theme .setting-item {
 }
 
 .admin-textarea:focus {
-    border-color: #fc7813;
+    border-color: #fc7823;
     height: 60px; 
     outline: none;
 }
@@ -2040,7 +2043,7 @@ body.light-theme .setting-item {
     to { transform: translateY(0); opacity: 1; }
 }
 
-.modal-icon { font-size: 50px; color: #fc7813; margin-bottom: 15px; }
+.modal-icon { font-size: 50px; color: #fc7823; margin-bottom: 15px; }
 
 .modal-buttons {
     display: flex;
@@ -2058,7 +2061,7 @@ body.light-theme .setting-item {
     transition: 0.3s;
 }
 
-.btn-confirm { background: #fc7813; color: white; }
+.btn-confirm { background: #fc7823; color: white; }
 .btn-confirm:hover { background: #e66a1f; }
 
 .btn-cancel { background: #333; color: white; }
@@ -2097,7 +2100,7 @@ body.light-theme .setting-item {
 }
 
 .modal-header {
-    color: #fc7813; 
+    color: #fc7823; 
     margin-bottom: 20px;
     font-size: 1.5rem;
 }
@@ -2124,7 +2127,7 @@ body.light-theme .setting-item {
 }
 
 .btn-confirm {
-    background-color: #fc7813;
+    background-color: #fc7823;
     color: white;
 }
 
@@ -2153,7 +2156,7 @@ body.light-theme .setting-item {
     color: #fff;
     margin-bottom: 10px;
 }
-.store-hero h1 span { color: #fc7813; }
+.store-hero h1 span { color: #fc7823; }
 .store-hero p { color: #888; font-size: 1.1rem; }
 
 .store-filters {
@@ -2176,8 +2179,8 @@ body.light-theme .setting-item {
     transition: all 0.3s;
 }
 .filter-btn:hover, .filter-btn.active {
-    background: linear-gradient(135deg, #fc7813, #e66a1f);
-    border-color: #fc7813;
+    background: linear-gradient(135deg, #fc7823, #e66a1f);
+    border-color: #fc7823;
     color: #fff;
     box-shadow: 0 4px 15px rgba(252,120,35,0.35);
 }
@@ -2214,7 +2217,7 @@ body.light-theme .setting-item {
     z-index: 2;
 }
 .badge-new { background: #2ecc71; color: #fff; }
-.badge-hot { background: linear-gradient(135deg,#fc7813,#e66a1f); color: #fff; }
+.badge-hot { background: linear-gradient(135deg,#fc7823,#e66a1f); color: #fff; }
 .badge-sale { background: #e74c3c; color: #fff; }
 
 .product-img {
@@ -2239,7 +2242,7 @@ body.light-theme .setting-item {
 .product-category {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #fc7813;
+    color: #fc7823;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 8px;
@@ -2265,7 +2268,7 @@ body.light-theme .setting-item {
 .product-price {
     font-size: 1.3rem;
     font-weight: 900;
-    color: #fc7813;
+    color: #fc7823;
 }
 .product-price .old-price {
     font-size: 0.85rem;
@@ -2276,7 +2279,7 @@ body.light-theme .setting-item {
 }
 .buy-btn {
     padding: 9px 20px;
-    background: linear-gradient(135deg, #fc7813, #e66a1f);
+    background: linear-gradient(135deg, #fc7823, #e66a1f);
     border: none;
     border-radius: 10px;
     color: #fff;
@@ -2316,7 +2319,7 @@ body.light-theme .setting-item {
     font-size: 1rem;
     flex-shrink: 0;
 }
-#notif-bell:hover { background: rgba(252,120,35,0.15); color: #fc7813; border-color: rgba(252,120,35,0.3); }
+#notif-bell:hover { background: rgba(252,120,35,0.15); color: #fc7823; border-color: rgba(252,120,35,0.3); }
 #notif-count {
     position: absolute;
     top: -4px;
@@ -2363,7 +2366,7 @@ body.light-theme .setting-item {
 .notif-header span { font-weight: 800; color: #fff; font-size: 0.95rem; }
 .notif-clear {
     font-size: 0.78rem;
-    color: #fc7813;
+    color: #fc7823;
     cursor: pointer;
     background: none;
     border: none;
@@ -2390,7 +2393,7 @@ body.light-theme .setting-item {
     right: 0;
     width: 3px;
     height: 100%;
-    background: #fc7813;
+    background: #fc7823;
     border-radius: 0 4px 4px 0;
 }
 .notif-item { position: relative; }
@@ -2406,7 +2409,7 @@ body.light-theme .setting-item {
 }
 .notif-icon.success { background: rgba(46,204,113,0.15); color: #2ecc71; }
 .notif-icon.info    { background: rgba(52,152,219,0.15); color: #3498db; }
-.notif-icon.warning { background: rgba(252,120,35,0.15); color: #fc7813; }
+.notif-icon.warning { background: rgba(252,120,35,0.15); color: #fc7823; }
 .notif-icon.danger  { background: rgba(231,76,60,0.15);  color: #e74c3c; }
 
 .notif-text { flex: 1; }
@@ -2479,7 +2482,7 @@ body.light-theme .setting-item {
     background: rgba(252,120,35,0.1);
     border: 1px solid rgba(252,120,35,0.25);
     border-radius: 20px;
-    color: #fc7813;
+    color: #fc7823;
     font-size: 0.82rem;
     font-weight: 700;
     margin-bottom: 24px;
@@ -2497,7 +2500,7 @@ body.light-theme .setting-item {
     margin-bottom: 16px;
     animation: fadeInUp2 0.7s ease 0.1s both;
 }
-.hero-enhanced h1 .orange { color: #fc7813; }
+.hero-enhanced h1 .orange { color: #fc7823; }
 .hero-enhanced p {
     font-size: 1.15rem;
     color: #888;
@@ -2519,7 +2522,7 @@ body.light-theme .setting-item {
 }
 .btn-primary {
     padding: 13px 30px;
-    background: linear-gradient(135deg, #fc7813, #e66a1f);
+    background: linear-gradient(135deg, #fc7823, #e66a1f);
     border: none;
     border-radius: 12px;
     color: #fff;
@@ -2548,7 +2551,7 @@ body.light-theme .setting-item {
 }
 .btn-outline:hover {
     border-color: rgba(252,120,35,0.5);
-    color: #fc7813;
+    color: #fc7823;
     background: rgba(252,120,35,0.05);
 }
 
@@ -2575,7 +2578,7 @@ body.light-theme .setting-item {
 .stat-bar-num {
     font-size: 1.6rem;
     font-weight: 900;
-    color: #fc7813;
+    color: #fc7823;
     display: block;
 }
 .stat-bar-lbl {
@@ -2630,7 +2633,7 @@ body.light-theme .setting-item {
         font-size: 1rem;
         transition: all 0.3s;
     }
-    #mobile-menu-btn:hover { color: #fc7813; border-color: rgba(252,120,35,0.3); }
+    #mobile-menu-btn:hover { color: #fc7823; border-color: rgba(252,120,35,0.3); }
 
     /* Store */
     .store-grid {
@@ -2678,4 +2681,3 @@ body.light-theme .setting-item {
     .stat-bar-item { border-left: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .team-grid { grid-template-columns: repeat(2, 1fr) !important; }
 }
-    
