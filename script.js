@@ -552,28 +552,18 @@ window.onclick = function(event) {
 
 window.addEventListener('load', () => {
     try {
-        // ✅ اقرأ من كلا المفتاحين — أيهما فيه بيانات أولاً
-        const raw = localStorage.getItem('plusdev_user') || localStorage.getItem('user');
+        const raw = localStorage.getItem('user') || localStorage.getItem('plusdev_user');
         if (raw) {
             const parsed = JSON.parse(raw);
             if (parsed && parsed.id && parsed.name) {
-                // ✅ احفظ في كلا المفتاحين لضمان التزامن دائماً
-                const userStr = JSON.stringify(parsed);
-                localStorage.setItem('user', userStr);
-                localStorage.setItem('plusdev_user', userStr);
+                localStorage.setItem('user', JSON.stringify(parsed));
+                localStorage.setItem('plusdev_user', JSON.stringify(parsed));
                 updateUI(parsed);
-            } else {
-                localStorage.removeItem('user');
-                localStorage.removeItem('plusdev_user');
-                updateUI(null);
             }
-        } else {
-            updateUI(null);
         }
     } catch(e) {
         localStorage.removeItem('user');
         localStorage.removeItem('plusdev_user');
-        updateUI(null);
     }
 });
 
@@ -774,13 +764,40 @@ function deleteApplication(appId) {
 
 
 
+const jobNames = {
+    police: 'شرطة LSPD',
+    ems: 'فريق EMS',
+    staff: 'فريق الإدارة'
+};
+
+function pushGlobalNotif(type, title, msg) {
+    // يحفظ الإشعار في Firebase ليصل لكل المستخدمين
+    const notif = {
+        id: Date.now(),
+        type,
+        title,
+        msg,
+        time: new Date().toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'}),
+        timestamp: Date.now()
+    };
+    database.ref('globalNotifs').push(notif);
+}
+
 function updateJobStatus(jobType) {
     const btn = document.getElementById(`toggle-${jobType}`);
     const isCurrentlyOn = btn && btn.innerText === "ON";
     
     database.ref('jobStatus/' + jobType).set({
-        closed: isCurrentlyOn 
+        closed: isCurrentlyOn
     });
+
+    // إرسال إشعار عام للكل
+    const jobLabel = jobNames[jobType] || jobType;
+    if (isCurrentlyOn) {
+        pushGlobalNotif('warning', '🔒 تم إغلاق التقديم', `تم إغلاق التقديم على وظيفة ${jobLabel} مؤقتاً`);
+    } else {
+        pushGlobalNotif('success', '🟢 فُتح التقديم', `تم فتح التقديم على وظيفة ${jobLabel}، قدّم الآن!`);
+    }
 }
 
 function toggleAllJobs() {
@@ -791,7 +808,32 @@ function toggleAllJobs() {
     jobs.forEach(job => {
         database.ref('jobStatus/' + job).set({ closed: shouldClose });
     });
+
+    // إشعار عام للكل
+    if (shouldClose) {
+        pushGlobalNotif('warning', '🔒 تم إغلاق جميع التقديمات', 'تم إغلاق التقديم على جميع الوظائف مؤقتاً');
+    } else {
+        pushGlobalNotif('success', '🟢 فُتحت جميع التقديمات', 'تم فتح التقديم على جميع الوظائف، قدّم الآن!');
+    }
 }
+
+/* ════ مستمع الإشعارات العامة من Firebase ════ */
+(function() {
+    let lastSeenTimestamp = parseInt(localStorage.getItem('lastNotifTs') || '0');
+
+    database.ref('globalNotifs').orderByChild('timestamp').startAt(Date.now() - 1000).on('child_added', (snap) => {
+        const notif = snap.val();
+        if (!notif) return;
+
+        // تجنب الإشعارات القديمة
+        if (notif.timestamp <= lastSeenTimestamp) return;
+        lastSeenTimestamp = notif.timestamp;
+        localStorage.setItem('lastNotifTs', lastSeenTimestamp);
+
+        // أضفه لقائمة الإشعارات المحلية
+        addNotification(notif.type || 'info', notif.title, notif.msg);
+    });
+})();
 
 database.ref('jobStatus').on('value', (snapshot) => {
     const statuses = snapshot.val() || {};
@@ -956,11 +998,9 @@ function logoutUser() {
         "تسجيل الخروج", 
         "fa-sign-out-alt", 
         function() {
-            // ✅ امسح كل مفاتيح الجلسة بشكل كامل
             localStorage.removeItem('user');
             localStorage.removeItem('plusdev_user');
             sessionStorage.removeItem('plusdev_user');
-            sessionStorage.removeItem('user');
             if (typeof showNotification === "function") {
                 showNotification("تم تسجيل الخروج بنجاح");
             }
