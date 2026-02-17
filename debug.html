@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Debug Auth</title>
+<style>
+  body { font-family: monospace; background: #111; color: #0f0; padding: 20px; direction: ltr; }
+  .key { color: #fc7823; font-weight: bold; }
+  .val { color: #fff; word-break: break-all; }
+  .box { background: #1a1a1a; border: 1px solid #333; padding: 15px; margin: 10px 0; border-radius: 8px; }
+  button { background: #fc7823; border: none; color: #fff; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin: 5px; font-size: 14px; }
+</style>
+</head>
+<body>
+<h2>🔍 LocalStorage Debug</h2>
+<div id="output"></div>
+<br>
+<button onclick="clearAll()">🗑️ Clear All Auth Keys</button>
+<button onclick="location.reload()">🔄 Refresh</button>
+<button onclick="location.href='index.html'">🏠 Go to Index</button>
+<button onclick="location.href='login.html'">🔐 Go to Login</button>
+
+<script>
+function show() {
+  const keys = ['user','plusdev_user','pd_discord_users','pd_email_accounts','pd_email_links'];
+  let html = '';
+  keys.forEach(k => {
+    const v = localStorage.getItem(k);
+    html += `<div class="box">
+      <div class="key">📦 ${k}</div>
+      <div class="val">${v ? JSON.stringify(JSON.parse(v), null, 2).replace(/</g,'&lt;') : '<span style="color:#666">null / not set</span>'}</div>
+    </div>`;
+  });
+  html += `<div class="box"><div class="key">🌐 Current URL</div><div class="val">${location.href}</div></div>`;
+  html += `<div class="box"><div class="key">📋 All localStorage keys (${localStorage.length})</div><div class="val">${Object.keys(localStorage).join(', ') || 'empty'}</div></div>`;
+  document.getElementById('output').innerHTML = html;
+}
+function clearAll() {
+  ['user','plusdev_user','pd_discord_users','pd_email_accounts','pd_email_links'].forEach(k => localStorage.removeItem(k));
+  show();
+  alert('Cleared!');
+}
+show();
+</script>
+</body>
+</html>
