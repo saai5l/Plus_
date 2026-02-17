@@ -584,23 +584,14 @@ function forgotPw(){
 
 /* ════════════════════ LOGIN SUCCESS ════════════════════ */
 function loginOk(user,rem,msg){
-  // احفظ في localStorage دائماً بغض النظر عن rem
-  try {
-    const userStr = JSON.stringify(user);
-    localStorage.setItem('user', userStr);
-    localStorage.setItem('plusdev_user', userStr);
-    console.log('[loginOk] Saved user:', user.name, user.id);
-  } catch(err) {
-    console.error('[loginOk] Save failed:', err);
-  }
+  const userStr = JSON.stringify(user);
+  localStorage.setItem('user', userStr);
+  localStorage.setItem('plusdev_user', userStr);
   if(msg) showAlert(msg,'ok');
   else showAlert('مرحباً ' + (user.name||'') + '! جاري التحويل…','ok');
-  setTimeout(redirectHome,1200);
+  setTimeout(redirectHome, 1200);
 }
-function redirectHome(){
-  console.log('[redirectHome] Going home, user in storage:', localStorage.getItem('user') ? 'YES' : 'NO');
-  window.location.href='https://saai5l.github.io/Plus_/index.html';
-}
+function redirectHome(){ window.location.href='https://saai5l.github.io/Plus_/index.html'; }
 
 /* ════════════════════ STORAGE HELPERS ════════════════════ */
 function saveEmailLink(email,discordId){
