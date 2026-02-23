@@ -78,24 +78,76 @@ function showPage(pageId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-        function showLawSection(sectionId) {
-            document.querySelectorAll('.law-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            document.getElementById(sectionId).classList.add('active');
-            
-            document.querySelectorAll('.law-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            const lawBtns = document.querySelectorAll('.law-btn');
-            for (let i = 0; i < lawBtns.length; i++) {
-                if (lawBtns[i].getAttribute('onclick') === `showLawSection('${sectionId}')`) {
-                    lawBtns[i].classList.add('active');
-                    break;
-                }
+        function showLawSection(sectionId, clickedTab) {
+            document.querySelectorAll('.law-section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(sectionId);
+            if (target) target.classList.add('active');
+
+            // Support both old .law-btn and new .laws-tab
+            document.querySelectorAll('.law-btn, .laws-tab').forEach(btn => btn.classList.remove('active'));
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            } else {
+                document.querySelectorAll('.law-btn, .laws-tab').forEach(btn => {
+                    const oc = btn.getAttribute('onclick') || '';
+                    if (oc.includes(sectionId)) btn.classList.add('active');
+                });
             }
+
+            // Clear search on tab switch
+            const searchInput = document.getElementById('laws-search-input');
+            if (searchInput) { searchInput.value = ''; filterLaws(''); }
+        }
+
+        function filterLaws(query) {
+            const q = query.trim().toLowerCase();
+            const countEl = document.getElementById('laws-search-count');
+            let total = 0, visible = 0;
+
+            document.querySelectorAll('.law-item-new').forEach(item => {
+                const text = item.querySelector('.law-text-new');
+                if (!text) return;
+                total++;
+                const raw = text.textContent.toLowerCase();
+                if (!q || raw.includes(q)) {
+                    item.style.display = '';
+                    visible++;
+                    if (q) {
+                        const rx = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+                        text.innerHTML = text.textContent.replace(rx, '<mark class="law-highlight-search">$1</mark>');
+                    } else {
+                        text.innerHTML = text.textContent;
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            if (countEl) {
+                countEl.textContent = q ? `${visible} نتيجة` : '';
+            }
+        }
+
+        function copyLaw(btn) {
+            const textEl = btn.closest('.law-item-new').querySelector('.law-text-new');
+            if (!textEl) return;
+            const text = textEl.textContent.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = btn.querySelector('i');
+                btn.classList.add('copied');
+                icon.className = 'fas fa-check';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    icon.className = 'fas fa-copy';
+                }, 1800);
+            }).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+            });
         }
         
         document.querySelectorAll('.collapse-btn').forEach(button => {
