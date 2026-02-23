@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الشراء المتكامل - شرح توضيحي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: #fff;
+            font-family: 'Tajawal', -apple-system, sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: #fc7823;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #aaa;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .feature-card {
+            background: rgba(252, 120, 35, 0.1);
+            border: 2px solid rgba(252, 120, 35, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #fc7823;
+            background: rgba(252, 120, 35, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #fc7823;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            color: #bbb;
+            font-size: 0.95rem;
+        }
+
+        .versions-section {
+            margin: 60px 0;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: #fc7823;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #fc7823, transparent);
+        }
+
+        .versions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .version-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(252, 120, 35, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .version-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #fc7823, #e66a1f);
+        }
+
+        .version-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #fc7823, #e66a1f);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .version-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+
+        .version-card ul {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .version-card li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ddd;
+        }
+
+        .checkmark {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .step-section {
+            margin: 60px 0;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .step {
+            background: linear-gradient(135deg, rgba(252, 120, 35, 0.1), rgba(252, 120, 35, 0.05));
+            border: 2px solid rgba(252, 120, 35, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #fc7823, #e66a1f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step h4 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #fc7823;
+        }
+
+        .step p {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid rgba(252, 120, 35, 0.2);
+        }
+
+        .comparison-table th {
+            background: rgba(252, 120, 35, 0.15);
+            padding: 15px;
+            text-align: right;
+            color: #fc7823;
+            font-weight: bold;
+            border-bottom: 2px solid rgba(252, 120, 35, 0.3);
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-table tbody tr:hover {
+            background: rgba(252, 120, 35, 0.05);
+        }
+
+        .check {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .cross {
+            color: #e74c3c;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin: 60px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(252, 120, 35, 0.15), rgba(252, 120, 35, 0.08));
+            border: 2px solid rgba(252, 120, 35, 0.3);
+            border-radius: 15px;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            color: #fc7823;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            color: #bbb;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fc7823, #e66a1f);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(252, 120, 35, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fc7823;
+            border: 2px solid #fc7823;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(252, 120, 35, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, #fc7823, transparent);
+        }
+
+        .timeline-item {
+            margin-bottom: 40px;
+            width: 45%;
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: 0;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: 55%;
+        }
+
+        .timeline-content {
+            background: rgba(252, 120, 35, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(252, 120, 35, 0.3);
+        }
+
+        .timeline-content h4 {
+            color: #fc7823;
+            margin-bottom: 8px;
+        }
+
+        .timeline-content p {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+
+        .emoji-large {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .versions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(odd) {
+                width: 100%;
+                margin-left: 50px;
+                text-align: left;
+            }
+
+            .timeline-item:nth-child(even) {
+                margin-left: 50px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(252, 120, 35, 0.2);
+            color: #aaa;
+            margin-top: 60px;
+        }
+
+        .footer p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>
+                <i class="fas fa-shopping-cart"></i>
+                نظام الشراء المتكامل
+            </h1>
+            <p>🎉 حل احترافي وآمن لإدارة طلبات الشراء مع Discord Webhook أو LocalStorage</p>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🛒</div>
+                <h3>تأكيد آمن</h3>
+                <p>Modal جميل يطلب تأكيد قبل إتمام أي عملية شراء</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Discord Integration</h3>
+                <p>رسائل احترافية مع Embed تصل فوراً للسيرفر</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💾</div>
+                <h3>حفظ آمن</h3>
+                <p>حفظ محلي للطلبات مع تصدير CSV سهل</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>لوحة تحكم</h3>
+                <p>Dashboard كامل لعرض وإدارة جميع الطلبات</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>سريع جداً</h3>
+                <p>معالجة فورية للطلبات بدون تأخير</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>آمن 100%</h3>
+                <p>معالجة أخطاء شاملة وحماية البيانات</p>
+            </div>
+        </div>
+
+        <!-- Versions Section -->
+        <div class="versions-section">
+            <h2 class="section-title">📱 النسختان المتاحتان</h2>
+
+            <div class="versions-grid">
+                <!-- Version 1 -->
+                <div class="version-card">
+                    <span class="version-badge">✨ الموصى به</span>
+                    <h3>النسخة الأساسية</h3>
+                    <p style="color: #aaa; margin-bottom: 20px;">مع Discord Webhook</p>
+                    
+                    <ul>
+                        <li><span class="checkmark">✓</span> رسائل Discord فورية</li>
+                        <li><span class="checkmark">✓</span> تصميم احترافي</li>
+                        <li><span class="checkmark">✓</span> معلومات مفصلة</li>
+                        <li><span class="checkmark">✓</span> إشعارات الفريق</li>
+                        <li><span class="checkmark">✓</span> سجل مركزي</li>
+                    </ul>
+
+                    <p style="color: #fc7823; font-size: 0.95rem;">
+                        ⏱️ وقت التثبيت: 5 دقائق فقط!
+                    </p>
+                </div>
+
+                <!-- Version 2 -->
+                <div class="version-card">
+                    <span class="version-badge">💾 بدون تكوينات</span>
+                    <h3>النسخة البديلة</h3>
+                    <p style="color: #aaa; margin-bottom: 20px;">مع LocalStorage</p>
+                    
+                    <ul>
+                        <li><span class="checkmark">✓</span> بدون Webhook URL</li>
+                        <li><span class="checkmark">✓</span> حفظ محلي آمن</li>
+                        <li><span class="checkmark">✓</span> تصدير CSV</li>
+                        <li><span class="checkmark">✓</span> سهل جداً</li>
+                        <li><span class="checkmark">✓</span> 100% مجاني</li>
+                    </ul>
+
+                    <p style="color: #fc7823; font-size: 0.95rem;">
+                        ⚡ استخدم فوراً بدون تحضيرات!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th style="text-align: right;">الميزة</th>
+                        <th>Discord</th>
+                        <th>LocalStorage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>سهولة التثبيت</td>
+                        <td><span class="check">⭐⭐⭐</span></td>
+                        <td><span class="check">⭐⭐⭐⭐⭐</span></td>
+                    </tr>
+                    <tr>
+                        <td>التنبيهات الفورية</td>
+                        <td><span class="check">✓ نعم</span></td>
+                        <td><span class="cross">✗ لا</span></td>
+                    </tr>
+                    <tr>
+                        <td>المشاركة مع الفريق</td>
+                        <td><span class="check">✓ نعم</span></td>
+                        <td><span class="cross">✗ لا</span></td>
+                    </tr>
+                    <tr>
+                        <td>الأمان</td>
+                        <td><span class="check">جيد</span></td>
+                        <td><span class="check">ممتاز</span></td>
+                    </tr>
+                    <tr>
+                        <td>الوصول من أي جهاز</td>
+                        <td><span class="check">✓ نعم</span></td>
+                        <td><span class="cross">الجهاز الحالي فقط</span></td>
+                    </tr>
+                    <tr>
+                        <td>التكلفة</td>
+                        <td><span class="check">مجاني</span></td>
+                        <td><span class="check">مجاني</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Steps Section -->
+        <div class="step-section">
+            <h2 class="section-title">🚀 خطوات التثبيت السريعة</h2>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>اختر النسخة</h4>
+                    <p>اختر بين Discord (احترافي) أو LocalStorage (بسيط)</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>إذا Discord</h4>
+                    <p>أنشِ Webhook وانسخ الـ URL</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>ضع البيانات</h4>
+                    <p>ضع الـ URL في script.js (أو استخدم البديل)</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>جرب النظام</h4>
+                    <p>افتح الموقع وجرب زر الشراء</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h4>عرض الطلبات</h4>
+                    <p>شوف الطلبات في Discord أو Dashboard</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <h4>استمتع!</h4>
+                    <p>نظام احترافي وآمن تماماً</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>🎯 جاهز للبدء؟</h2>
+            <p>اختر النسخة المناسبة وابدأ الآن!</p>
+            
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="alert('اقرأ SETUP_GUIDE.md لـ تفاصيل التثبيت')">
+                    <i class="fas fa-book"></i> اقرأ الدليل الكامل
+                </button>
+                <button class="btn btn-secondary" onclick="alert('افتح QUICK_START.md للخطوات السريعة')">
+                    <i class="fas fa-bolt"></i> البدء السريع
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>🎉 تم تطويره بـ ❤️ لـ Plus Dev</p>
+            <p>نظام شراء متكامل، آمن، واحترافي</p>
+            <p style="color: #888; margin-top: 20px;">آخر تحديث: 23 فبراير 2026</p>
+        </div>
+    </div>
+
+    <script>
+        // إضافة تأثيرات عند التمرير
+        document.querySelectorAll('.feature-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // إضافة تنبيه تفاعلي
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('اضغط على:', this.textContent);
+            });
+        });
+    </script>
+</body>
+</html>

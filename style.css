@@ -14,7 +14,7 @@
     --success-color: #fc7823;
     --danger-color: #c62828;
     --warning-color: #f9a825;
-    --info-color: #fc7823;
+    --info-color: rgb(252, 120, 35);
     --border-radius: 10px;
     --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;

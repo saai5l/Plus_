@@ -1,9 +1,3 @@
-// ============================================
-// Plus Dev - Enhanced AI Chat Bot
-// مساعد ذكي متطور لسيرفر Plus Dev
-// ============================================
-
-// تحميل قوانين السيرفر من laws.json
 const SERVER_LAWS = [
   "وعليكم السلام حياك الله في المساعد الخاص لي Plus Dev",
   "يجب عليك فهم معنى الرول بلاي والالتزام به.",
@@ -110,7 +104,6 @@ const LAW_CATEGORIES = {
   'عام': ['Meta Gaming', 'قلتش', 'برامج خارجية', 'ستريم سنايب']
 };
 
-// الأسئلة السريعة الشائعة
 const QUICK_QUESTIONS = [
   { text: '📜 ما هي قوانين الرول بلاي؟', icon: '📜' },
   { text: '⚔️ قوانين القتال والـ RDM', icon: '⚔️' },
@@ -122,10 +115,8 @@ const QUICK_QUESTIONS = [
   { text: '❓ سؤال آخر', icon: '❓' }
 ];
 
-// ذاكرة المحادثة
 let conversationHistory = [];
 
-// دالة البحث الذكي في القوانين
 function searchLaws(query) {
   query = query.toLowerCase().trim();
   
@@ -138,7 +129,6 @@ function searchLaws(query) {
   return results;
 }
 
-// دالة الحصول على قوانين حسب الفئة
 function getLawsByCategory(category) {
   const keywords = LAW_CATEGORIES[category] || [];
   const results = [];
@@ -153,7 +143,6 @@ function getLawsByCategory(category) {
   return results;
 }
 
-// دالة الرد الذكي على الأسئلة
 function getSmartResponse(question) {
   const q = question.toLowerCase().trim();
   
@@ -166,7 +155,6 @@ function getSmartResponse(question) {
     };
   }
   
-  // أسئلة عن الرول بلاي
   if (q.includes('رول بلاي') || q.includes('roleplay') || q.includes('تقمص')) {
     const laws = getLawsByCategory('رول بلاي');
     return {
@@ -178,7 +166,6 @@ function getSmartResponse(question) {
     };
   }
   
-  // أسئلة عن القتال و RDM
   if (q.includes('rdm') || q.includes('قتل') || q.includes('قتال') || q.includes('فايت')) {
     const laws = getLawsByCategory('قتال');
     return {
@@ -190,7 +177,6 @@ function getSmartResponse(question) {
     };
   }
   
-  // أسئلة عن VDM والمركبات
   if (q.includes('vdm') || q.includes('مركبة') || q.includes('سيارة') || q.includes('صدم')) {
     const laws = getLawsByCategory('مركبات');
     return {
@@ -202,7 +188,6 @@ function getSmartResponse(question) {
     };
   }
   
-  // أسئلة عن السرقات
   if (q.includes('سرقة') || q.includes('رهينة') || q.includes('بنك') || q.includes('مجوهرات')) {
     const laws = getLawsByCategory('سرقات');
     return {
@@ -214,7 +199,6 @@ function getSmartResponse(question) {
     };
   }
   
-  // أسئلة عن المناطق الآمنة
   if (q.includes('منطقة آمنة') || q.includes('مناطق آمنة') || q.includes('safe zone')) {
     return {
       type: 'laws',
@@ -225,7 +209,6 @@ function getSmartResponse(question) {
     };
   }
   
-  // أسئلة عن العصابات
   if (q.includes('عصابة') || q.includes('عائلة') || q.includes('gang')) {
     const laws = getLawsByCategory('عصابات');
     return {

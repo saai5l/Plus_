@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الطلبات - Plus Dev</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: #fff;
+            font-family: 'Tajawal', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #fc7823;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            color: #aaa;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fc7823, #e66a1f);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(252, 120, 35, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fc7823;
+            border: 2px solid #fc7823;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(252, 120, 35, 0.1);
+        }
+
+        .btn-danger {
+            background: rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: rgba(231, 76, 60, 0.5);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(252, 120, 35, 0.1);
+            border: 2px solid rgba(252, 120, 35, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #aaa;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            color: #fc7823;
+            font-weight: bold;
+        }
+
+        .orders-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(252, 120, 35, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table thead {
+            background: rgba(252, 120, 35, 0.1);
+        }
+
+        .orders-table th {
+            padding: 15px;
+            text-align: right;
+            color: #fc7823;
+            font-weight: bold;
+            border-bottom: 2px solid rgba(252, 120, 35, 0.3);
+        }
+
+        .orders-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .orders-table tbody tr:hover {
+            background: rgba(252, 120, 35, 0.05);
+        }
+
+        .order-id {
+            color: #fc7823;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .price {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .status.pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            color: #fc7823;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            color: #aaa;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-start;
+        }
+
+        .action-btns button {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-copy {
+            background: rgba(52, 152, 219, 0.3);
+            color: #3498db;
+            border: 1px solid #3498db;
+        }
+
+        .btn-copy:hover {
+            background: rgba(52, 152, 219, 0.5);
+        }
+
+        .btn-delete {
+            background: rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        .btn-delete:hover {
+            background: rgba(231, 76, 60, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .orders-table {
+                font-size: 0.9rem;
+            }
+
+            .orders-table th,
+            .orders-table td {
+                padding: 10px;
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #fc7823, #e66a1f);
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-chart-bar"></i>
+                لوحة تحكم الطلبات
+            </h1>
+            <p>إدارة طلبات الشراء من Plus Dev</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="refreshOrders()">
+                <i class="fas fa-sync-alt"></i> تحديث
+            </button>
+            <button class="btn btn-secondary" onclick="exportOrdersAsCSV()">
+                <i class="fas fa-download"></i> تصدير CSV
+            </button>
+            <button class="btn btn-secondary" onclick="copyAllDataToClipboard()">
+                <i class="fas fa-copy"></i> نسخ البيانات
+            </button>
+            <button class="btn btn-danger" onclick="confirmClearAll()">
+                <i class="fas fa-trash"></i> حذف الكل
+            </button>
+        </div>
+
+        <div class="stats" id="stats-container">
+            <div class="stat-card">
+                <h3>إجمالي الطلبات</h3>
+                <div class="stat-number" id="total-orders">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>إجمالي الإيرادات</h3>
+                <div class="stat-number" id="total-revenue">$0</div>
+            </div>
+            <div class="stat-card">
+                <h3>متوسط السعر</h3>
+                <div class="stat-number" id="average-price">$0</div>
+            </div>
+        </div>
+
+        <div class="orders-container">
+            <table class="orders-table" id="orders-table">
+                <thead>
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>المنتج</th>
+                        <th>السعر</th>
+                        <th>اسم المستخدم</th>
+                        <th>Discord ID</th>
+                        <th>البريد</th>
+                        <th>الوقت</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-tbody">
+                    <tr>
+                        <td colspan="9" class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <div class="empty-text">لا توجد طلبات بعد</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function loadOrders() {
+            return JSON.parse(localStorage.getItem('shop_orders') || '[]');
+        }
+
+        function saveOrders(orders) {
+            localStorage.setItem('shop_orders', JSON.stringify(orders));
+        }
+
+        function renderOrders() {
+            const orders = loadOrders();
+            const tbody = document.getElementById('orders-tbody');
+            const totalOrdersEl = document.getElementById('total-orders');
+            const totalRevenueEl = document.getElementById('total-revenue');
+            const averagePriceEl = document.getElementById('average-price');
+
+            if (orders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 60px 20px;">
+                            <div style="font-size: 3rem; margin-bottom: 20px;">📭</div>
+                            <div style="color: #aaa; font-size: 1.2rem;">لا توجد طلبات بعد</div>
+                        </td>
+                    </tr>
+                `;
+                totalOrdersEl.textContent = '0';
+                totalRevenueEl.textContent = '$0';
+                averagePriceEl.textContent = '$0';
+                return;
+            }
+
+            let totalRevenue = 0;
+            let html = '';
+
+            orders.forEach((order, index) => {
+                totalRevenue += order.price;
+                const orderDate = new Date(order.isoTime).toLocaleString('ar-SA');
+
+                html += `
+                    <tr>
+                        <td><span class="order-id">#${order.id}</span></td>
+                        <td>${order.product}</td>
+                        <td><span class="price">$${order.price}</span></td>
+                        <td>${order.username}</td>
+                        <td><code style="background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">${order.userId}</code></td>
+                        <td>${order.email}</td>
+                        <td style="font-size: 0.9rem;">${orderDate}</td>
+                        <td><span class="status ${order.status}">${order.status === 'pending' ? '⏳ قيد المعالجة' : '✅ مكتمل'}</span></td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="btn-copy" onclick="copyOrderDetails(${index})" title="نسخ التفاصيل">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button class="btn-delete" onclick="deleteOrder(${index})" title="حذف الطلب">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+
+            // تحديث الإحصائيات
+            totalOrdersEl.textContent = orders.length;
+            totalRevenueEl.textContent = `$${totalRevenue.toFixed(2)}`;
+            const averagePrice = (totalRevenue / orders.length).toFixed(2);
+            averagePriceEl.textContent = `$${averagePrice}`;
+        }
+
+        function deleteOrder(index) {
+            if (confirm('هل تتأكد من حذف هذا الطلب؟')) {
+                let orders = loadOrders();
+                orders.splice(index, 1);
+                saveOrders(orders);
+                renderOrders();
+                showNotification('✅ تم حذف الطلب بنجاح');
+            }
+        }
+
+        function confirmClearAll() {
+            if (confirm('هل تتأكد من حذف جميع الطلبات؟\n⚠️ هذا الإجراء لا يمكن التراجع عنه!')) {
+                localStorage.removeItem('shop_orders');
+                renderOrders();
+                showNotification('🗑️ تم حذف جميع الطلبات');
+            }
+        }
+
+        function exportOrdersAsCSV() {
+            const orders = loadOrders();
+            if (orders.length === 0) {
+                alert('لا توجد طلبات للتصدير');
+                return;
+            }
+
+            let csv = 'رقم الطلب,المنتج,السعر,اسم المستخدم,Discord ID,البريد,الوقت,الحالة\n';
+
+            orders.forEach(order => {
+                csv += `${order.id},"${order.product}",${order.price},"${order.username}",${order.userId},"${order.email}","${order.timestamp}",${order.status}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `plus-dev-orders-${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+
+            showNotification('✅ تم تصدير الطلبات بنجاح');
+        }
+
+        function copyOrderDetails(index) {
+            const orders = loadOrders();
+            const order = orders[index];
+            const text = `
+🛒 طلب شراء:
+المنتج: ${order.product}
+السعر: $${order.price}
+المستخدم: ${order.username}
+Discord ID: ${order.userId}
+البريد: ${order.email}
+الوقت: ${order.timestamp}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('📋 تم نسخ التفاصيل');
+            });
+        }
+
+        function copyAllDataToClipboard() {
+            const orders = loadOrders();
+            if (orders.length === 0) {
+                alert('لا توجد طلبات للنسخ');
+                return;
+            }
+
+            let text = 'قائمة جميع الطلبات:\n\n';
+            orders.forEach((order, index) => {
+                text += `${index + 1}. ${order.product} - $${order.price} - ${order.username}\n`;
+            });
+
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('✅ تم نسخ جميع البيانات');
+            });
+        }
+
+        function refreshOrders() {
+            renderOrders();
+            showNotification('🔄 تم التحديث');
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // تحميل البيانات عند فتح الصفحة
+        window.addEventListener('load', renderOrders);
+
+        // تحديث البيانات كل 5 ثواني
+        setInterval(renderOrders, 5000);
+    </script>
+</body>
+</html>
