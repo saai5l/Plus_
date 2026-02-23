@@ -200,14 +200,21 @@
             <div class="admin-card">
                 <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
                 <div class="stat-info">
-                    <h3 id="approved-apps">0</h3>
+                    <h3 id="approved-apps" style="color:#2ecc71;">0</h3>
                     <p>مقبول</p>
+                </div>
+            </div>
+            <div class="admin-card">
+                <i class="fas fa-clock" style="color: #f39c12;"></i>
+                <div class="stat-info">
+                    <h3 id="pending-apps" style="color:#f39c12;">0</h3>
+                    <p>قيد الانتظار</p>
                 </div>
             </div>
             <div class="admin-card">
                 <i class="fas fa-times-circle" style="color: #e74c3c;"></i>
                 <div class="stat-info">
-                    <h3 id="rejected-apps">0</h3>
+                    <h3 id="rejected-apps" style="color:#e74c3c;">0</h3>
                     <p>مرفوض</p>
                 </div>
             </div>
@@ -257,24 +264,35 @@
 </div>
 
         <div class="admin-table-container">
-            <h2>آخر طلبات التوظيف</h2>
-            <table class="admin-table">
-<thead>
-    <tr>
-        <th>رقم الطلب</th>
-        <th>اسم الشخصية</th>
-        <th>الوظيفة</th>
-        <th>ملاحظات الإدارة</th> <th>الحالة</th>
-        <th>الإجراءات</th>
-    </tr>
-</thead>
+            <div class="admin-table-header">
+                <h2>آخر طلبات التوظيف</h2>
+                <div class="filter-status-row">
+                    <button class="filter-status-btn active" data-status="all" onclick="filterAdminTable('all', this)">الكل</button>
+                    <button class="filter-status-btn" data-status="معلق" onclick="filterAdminTable('معلق', this)">⏳ معلق</button>
+                    <button class="filter-status-btn" data-status="مقبول" onclick="filterAdminTable('مقبول', this)">✅ مقبول</button>
+                    <button class="filter-status-btn" data-status="رفض" onclick="filterAdminTable('رفض', this)">❌ مرفوض</button>
+                </div>
+            </div>
 
-<button class="btn-clear-all" onclick="clearAllApplications()">
-    <i class="fa-solid fa-eraser"></i> تصفير جميع الطلبات
-</button>
-                <tbody id="jobs-table-body">
-                    </tbody>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>اسم الشخصية</th>
+                        <th>الوظيفة</th>
+                        <th>ملاحظات الإدارة</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="jobs-table-body"></tbody>
             </table>
+
+            <div class="admin-table-footer">
+                <button class="btn-clear-all" onclick="clearLogs()">
+                    <i class="fa-solid fa-eraser"></i> تصفير جميع الطلبات
+                </button>
+            </div>
         </div>
 
         
@@ -972,39 +990,97 @@
 <div id="job-modal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modal-title">تقديم على وظيفة</h3>
+            <div class="modal-header-content">
+                <div class="modal-job-icon" id="modal-job-icon">📋</div>
+                <div>
+                    <h3 id="modal-title">تقديم على وظيفة</h3>
+                    <p class="modal-subtitle">تأكد من ملء جميع الحقول بدقة</p>
+                </div>
+            </div>
             <button class="close-modal" onclick="closeModal()">&times;</button>
         </div>
-        <form id="job-form">
+
+        <form id="job-form" novalidate>
             <input type="hidden" id="job-type">
-            
-            <div class="form-group">
-                <label>أسمك الثلاثي (Character Name)</label>
-                <input type="text" id="character-name" placeholder="اسم شخصيتك في اللعبة / اسمك الحقيقي" required>
+
+            <!-- اسم الشخصية -->
+            <div class="form-group" id="fg-character-name">
+                <label for="character-name">
+                    <i class="fas fa-user"></i>
+                    اسمك الثلاثي (Character Name)
+                    <span class="field-required">*</span>
+                </label>
+                <input type="text" id="character-name"
+                    placeholder="مثال: Ahmad Al-Rashidi"
+                    autocomplete="off" required>
+                <span class="field-hint">الاسم الذي سجلته في اللعبة</span>
+                <span class="field-error" id="err-name"></span>
             </div>
 
-            <div class="form-group">
-                <label>Steam - ستيم</label>
-                <input type="text" id="character-id" placeholder="steam:1100001" required>
+            <!-- Steam ID -->
+            <div class="form-group" id="fg-character-id">
+                <label for="character-id">
+                    <i class="fab fa-steam"></i>
+                    Steam ID
+                    <span class="field-required">*</span>
+                </label>
+                <input type="text" id="character-id"
+                    placeholder="steam:110000112345678"
+                    autocomplete="off" required>
+                <span class="field-hint">تجده عبر F8 ثم اكتب: id</span>
+                <span class="field-error" id="err-steam"></span>
             </div>
 
+            <!-- Discord ID (مقفل) -->
             <div class="form-group">
-                <label for="discord-id-input">Discord ID - أيدي الديسكورد</label>
-                <input type="text" id="discord-id-input" placeholder="سجل دخولك لجلب الأيدي" class="locked-input">
+                <label for="discord-id-input">
+                    <i class="fab fa-discord"></i>
+                    Discord ID
+                </label>
+                <div class="locked-input-wrapper">
+                    <input type="text" id="discord-id-input"
+                        placeholder="سجّل دخولك لجلب الـ ID تلقائياً"
+                        class="locked-input" readonly>
+                    <span class="lock-icon"><i class="fas fa-lock"></i></span>
+                </div>
+                <span class="field-hint">يُملأ تلقائياً عند تسجيل الدخول</span>
             </div>
 
-            <div class="form-group">
-                <label>Your Available Time - الوقت المتاح</label>
-                <input type="text" id="phone-number" placeholder="مثال: 5-8 ساعات" required>
+            <!-- الوقت المتاح -->
+            <div class="form-group" id="fg-phone-number">
+                <label for="phone-number">
+                    <i class="fas fa-clock"></i>
+                    الوقت المتاح يومياً
+                    <span class="field-required">*</span>
+                </label>
+                <input type="text" id="phone-number"
+                    placeholder="مثال: 4-6 ساعات"
+                    required>
+                <span class="field-error" id="err-time"></span>
             </div>
 
-            <div class="form-group">
-                <label>Reason For Apply - سبب التقديم</label>
-                <input type="text" id="reason" placeholder="اكتب سبب تقديمك هنا..." required>
+            <!-- سبب التقديم -->
+            <div class="form-group" id="fg-reason">
+                <label for="reason">
+                    <i class="fas fa-pen-to-square"></i>
+                    سبب التقديم
+                    <span class="field-required">*</span>
+                </label>
+                <textarea id="reason" rows="4"
+                    placeholder="اكتب سبب تقديمك بشكل واضح ومفصّل... (20 حرف على الأقل)"
+                    required></textarea>
+                <div class="reason-footer">
+                    <span class="field-error" id="err-reason"></span>
+                    <span class="char-count" id="reason-count">0 / 20 حرف</span>
+                </div>
             </div>
 
             <div class="modal-footer">
-                <button type="submit" class="btn">إرسال الطلب</button>
+                <button type="button" class="btn btn-cancel-form" onclick="closeModal()">إلغاء</button>
+                <button type="submit" class="btn btn-submit-form" id="submit-job-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    إرسال الطلب
+                </button>
             </div>
         </form>
     </div>
@@ -1017,7 +1093,7 @@
 </div>
 
 <!-- ============================================
-     Enhanced AI Chat Bot - Plus Dev v2.0
+     Enhanced AI Chat Bot - Plus Dev
      المساعد الذكي المتطور
      ============================================ -->
 <div id="ai-chat-toggle" class="ai-bubble" onclick="toggleChat()">
@@ -1025,51 +1101,34 @@
 </div>
 
 <div id="ai-chat-window" class="chat-window">
-
-    <!-- رأس الشات -->
+    
     <div class="chat-header">
         <div class="header-content">
-            <div class="header-bot-icon">🤖</div>
-            <div class="header-info">
-                <div class="header-title">مساعد Plus Dev</div>
-                <div class="header-status">
-                    <span class="online-dot"></span>
-                    <span>متصل الآن</span>
-                </div>
-            </div>
+            <span class="online-dot"></span>
+            <span>🤖 مساعد Plus Dev الذكي</span>
         </div>
-        <div class="header-actions">
-            <button class="header-btn" onclick="clearChat()" title="محادثة جديدة">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="1 4 1 10 7 10"></polyline>
-                    <path d="M3.51 15a9 9 0 1 0 .49-3.51"></path>
-                </svg>
-            </button>
-            <button class="header-btn close-btn" onclick="toggleChat()" title="إغلاق">×</button>
-        </div>
+        <button class="close-btn" onclick="toggleChat()" title="إغلاق">×</button>
     </div>
-
-    <!-- جسم الشات -->
+    
     <div id="chat-body" class="chat-body">
         <div class="ai-msg">
             <div class="ai-response">
                 <div class="response-title">👋 مرحبًا بك في Plus Dev!</div>
                 <div class="response-message">
-                    أنا المساعد الذكي للسيرفر، هنا لمساعدتك في أسئلة القوانين وقوانين الرول بلاي والسرقات والعصابات وأي استفسار يخص السيرفر.
+                    أنا المساعد الذكي للسيرفر، هنا لمساعدتك في:
+                    <br>• الإجابة على أسئلة القوانين
+                    <br>• شرح قوانين الرول بلاي
+                    <br>• توضيح أنظمة السرقات والعصابات
+                    <br>• أي استفسار يخص السيرفر
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ذيل الشات -->
     <div class="chat-footer">
-        <div class="input-wrapper">
-            <input type="text" id="ai-input" placeholder="اكتب سؤالك..." autocomplete="off">
-            <span id="char-counter"></span>
-        </div>
+        <input type="text" id="ai-input" placeholder="اكتب سؤالك أو اختر من الأزرار...">
         <button id="send-btn" onclick="askAI()">إرسال</button>
     </div>
-    <div class="chat-footer-info">Plus Dev • المساعد الذكي</div>
 </div>
 
 <!-- Footer -->

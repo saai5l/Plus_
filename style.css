@@ -2447,18 +2447,46 @@ body.light-theme .setting-item {
     gap: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     z-index: 99999;
-    transform: translateY(100px);
+    transform: translateY(20px);
     opacity: 0;
-    transition: all 0.4s cubic-bezier(.22,1,.36,1);
+    transition: all 0.35s cubic-bezier(.22,1,.36,1);
     max-width: 320px;
     pointer-events: none;
+    overflow: hidden;
+}
+.toast-notif::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    border-radius: 0 0 14px 14px;
+    background: rgba(252,120,35,0.6);
+    transform-origin: left;
+    animation: none;
+}
+.toast-notif.show::after {
+    animation: toastProgress 3.8s linear forwards;
+}
+@keyframes toastProgress {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
 }
 .toast-notif.show {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
 }
-.toast-icon { font-size: 1.3rem; }
+/* ألوان حسب النوع */
+.toast-notif[data-type="success"] { border-color: rgba(46,204,113,0.4); }
+.toast-notif[data-type="success"]::after { background: #2ecc71; }
+.toast-notif[data-type="warning"] { border-color: rgba(243,156,18,0.4); }
+.toast-notif[data-type="warning"]::after { background: #f39c12; }
+.toast-notif[data-type="error"] { border-color: rgba(231,76,60,0.4); }
+.toast-notif[data-type="error"]::after { background: #e74c3c; }
+
+.toast-icon { font-size: 1.3rem; flex-shrink: 0; }
 .toast-content {}
 .toast-title { font-size: 0.88rem; font-weight: 800; color: #fff; }
 .toast-msg   { font-size: 0.8rem; color: #888; margin-top: 2px; }
@@ -2827,3 +2855,237 @@ body.light-theme .setting-item {
     transform: scale(1.05);
 }
 
+
+/* ============================================
+   🆕 تحسينات الإصدار الجديد
+   ============================================ */
+
+/* فلاتر لوحة الأدمن */
+.filter-status-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #aaa;
+    padding: 7px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-family: 'Tajawal', sans-serif;
+    transition: all 0.2s ease;
+}
+.filter-status-btn:hover {
+    background: rgba(252,120,35,0.12);
+    border-color: rgba(252,120,35,0.4);
+    color: #fc7823;
+}
+.filter-status-btn.active {
+    background: linear-gradient(135deg, #fc7823, #e05e10);
+    border-color: transparent;
+    color: white;
+}
+.filter-status-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+/* إحصائية المعلق */
+#pending-apps {
+    color: #f39c12;
+}
+
+/* ============================================
+   📋 لوحة الأدمن - تحسينات v2
+   ============================================ */
+.admin-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.admin-table-header h2 {
+    margin: 0;
+}
+.admin-table-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+.filter-status-row {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+.filter-status-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #999;
+    padding: 7px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-family: 'Tajawal', sans-serif;
+    transition: all 0.22s ease;
+    white-space: nowrap;
+}
+.filter-status-btn:hover {
+    background: rgba(252,120,35,0.12);
+    border-color: rgba(252,120,35,0.4);
+    color: #fc7823;
+}
+.filter-status-btn.active {
+    background: linear-gradient(135deg, #fc7823, #e05e10);
+    border-color: transparent;
+    color: white;
+    font-weight: 600;
+}
+/* بطاقة الأدمن - أربع بطاقات */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+}
+@media (max-width: 768px) {
+    .admin-stats { grid-template-columns: repeat(2, 1fr); }
+    .admin-table-header { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+    .admin-stats { grid-template-columns: 1fr 1fr; }
+}
+
+/* ============================================
+   📝 فورم التقديم - تحسينات v2
+   ============================================ */
+.modal-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.modal-job-icon {
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+    background: rgba(252,120,35,0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.modal-subtitle {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 2px 0 0 0;
+}
+.field-required {
+    color: #e74c3c;
+    margin-right: 3px;
+    font-size: 0.85rem;
+}
+.field-hint {
+    display: block;
+    font-size: 0.76rem;
+    color: #666;
+    margin-top: 4px;
+    padding-right: 2px;
+}
+.field-error {
+    display: block;
+    font-size: 0.78rem;
+    color: #e74c3c;
+    margin-top: 4px;
+    padding-right: 2px;
+    min-height: 16px;
+    transition: all 0.2s;
+}
+/* input invalid state */
+.form-group.has-error input,
+.form-group.has-error textarea {
+    border-color: rgba(231,76,60,0.6) !important;
+    box-shadow: 0 0 0 3px rgba(231,76,60,0.1);
+}
+.form-group.has-success input,
+.form-group.has-success textarea {
+    border-color: rgba(46,204,113,0.5) !important;
+}
+/* textarea سبب التقديم */
+#job-form textarea#reason {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.92rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    box-sizing: border-box;
+    min-height: 100px;
+}
+#job-form textarea#reason:focus {
+    border-color: #fc7823;
+    box-shadow: 0 0 0 3px rgba(252,120,35,0.12);
+}
+.reason-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+}
+.char-count {
+    font-size: 0.75rem;
+    color: #666;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+.char-count.ready { color: #2ecc71; }
+/* Discord ID wrapper */
+.locked-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.locked-input-wrapper input {
+    padding-left: 40px !important;
+}
+.lock-icon {
+    position: absolute;
+    left: 14px;
+    color: #555;
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+/* أزرار الفورم */
+.modal-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+.btn-cancel-form {
+    background: rgba(255,255,255,0.07) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    color: #aaa !important;
+    padding: 11px 22px !important;
+}
+.btn-cancel-form:hover {
+    background: rgba(255,255,255,0.12) !important;
+    color: #fff !important;
+}
+.btn-submit-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-submit-form:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
