@@ -104,10 +104,6 @@
                 <i class="fas fa-search-location"></i> تتبع طلبك
             </a>
 
-            <a href="dashboard.html" target="_blank" style="color: #fc7823; font-weight: bold;">
-                <i class="fas fa-chart-bar"></i> 📊 لوحة الطلبات
-            </a>
-
             <a href="#" id="admin-btn" style="display: none;" onclick="showPage('admin-dashboard')">
                 <i class="fas fa-user-shield"></i> لوحة الإدارة
             </a>
@@ -1125,68 +1121,6 @@
         <div class="toast-msg" id="toast-msg"></div>
     </div>
 </div>
-
-<!-- Dashboard Floating Button -->
-<div class="dashboard-bubble" onclick="openDashboard()" title="لوحة الطلبات 📊">
-    <i class="fas fa-chart-bar"></i>
-</div>
-
-<style>
-/* Dashboard Floating Button */
-.dashboard-bubble {
-    position: fixed;
-    bottom: 120px;
-    right: 30px;
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
-    transition: all 0.3s ease;
-    z-index: 9998;
-    font-size: 30px;
-    color: white;
-    animation: pulse-green 2s infinite;
-}
-
-.dashboard-bubble:hover {
-    transform: scale(1.1);
-    box-shadow: 0 12px 35px rgba(46, 204, 113, 0.6);
-}
-
-.dashboard-bubble:active {
-    transform: scale(0.95);
-}
-
-@keyframes pulse-green {
-    0%, 100% {
-        box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
-    }
-    50% {
-        box-shadow: 0 8px 35px rgba(46, 204, 113, 0.7);
-    }
-}
-
-@media (max-width: 768px) {
-    .dashboard-bubble {
-        bottom: 80px;
-        right: 15px;
-        width: 60px;
-        height: 60px;
-        font-size: 25px;
-    }
-}
-</style>
-
-<script>
-function openDashboard() {
-    window.open('dashboard.html', '_blank');
-}
-</script>
 </body>
 </html>
 
