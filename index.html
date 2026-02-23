@@ -145,36 +145,26 @@
 
 <!-- tracking-page -->
 <div id="tracking-page" class="page">
-    <div class="tracking-card">
-        <h2 style="color: #fc7823; text-align: center; margin-bottom: 25px;">
-            <i class="fas fa-clipboard-list"></i> حالة طلب التوظيف
-        </h2>
-        
-        <div id="no-app-message" style="text-align: center; color: #888; padding: 40px;">
-            <i class="fas fa-folder-open" style="font-size: 50px; display: block; margin-bottom: 10px;"></i>
-            <p>لم تقم بتقديم أي طلب حتى الآن.</p>
+    <div class="container">
+        <div class="tracking-hero">
+            <div class="tracking-icon-wrap"><i class="fas fa-clipboard-list"></i></div>
+            <h1>متابعة طلباتك</h1>
+            <p>تابع حالة تقديمك على الوظائف بشكل لحظي</p>
         </div>
 
+        <!-- حالة: لا يوجد طلبات -->
+        <div id="no-app-message" class="tracking-empty">
+            <div class="tracking-empty-icon">📂</div>
+            <h3>لا توجد طلبات</h3>
+            <p>لم تقم بتقديم أي طلب حتى الآن</p>
+            <button class="btn-primary" onclick="showPage('jobs')" style="margin-top:16px;">
+                <i class="fas fa-paper-plane"></i> قدّم على وظيفة الآن
+            </button>
+        </div>
+
+        <!-- قائمة الطلبات -->
         <div id="app-status-info" style="display: none;">
-            <div id="applications-list">
-                <div class="status-row">
-                    <span>الوظيفة المقدم عليها:</span>
-                    <strong id="track-job-name" style="color: #fc7823;">--</strong>
-                </div>
-                <div class="status-row">
-                    <span>رقم الطلب:</span>
-                    <strong id="track-app-id" style="color: #fc7823;">#--</strong>
-                </div>
-                <div class="status-row">
-                    <span>حالة الطلب الحالية:</span>
-                    <span id="track-status-label" class="status-badge">--</span>
-                </div>
-                <hr style="border: 0.1px solid #333; margin: 20px 0;">
-                <div class="status-row" style="flex-direction: column; align-items: flex-start;">
-                    <span style="margin-bottom: 10px;">ملاحظات الإدارة:</span>
-                    <div id="track-admin-note" class="note-area">لا توجد ملاحظات من الإدارة حتى الآن.</div>
-                </div>
-            </div>
+            <div id="applications-list" class="tracking-list"></div>
         </div>
     </div>
 </div>
@@ -200,21 +190,14 @@
             <div class="admin-card">
                 <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
                 <div class="stat-info">
-                    <h3 id="approved-apps" style="color:#2ecc71;">0</h3>
+                    <h3 id="approved-apps">0</h3>
                     <p>مقبول</p>
-                </div>
-            </div>
-            <div class="admin-card">
-                <i class="fas fa-clock" style="color: #f39c12;"></i>
-                <div class="stat-info">
-                    <h3 id="pending-apps" style="color:#f39c12;">0</h3>
-                    <p>قيد الانتظار</p>
                 </div>
             </div>
             <div class="admin-card">
                 <i class="fas fa-times-circle" style="color: #e74c3c;"></i>
                 <div class="stat-info">
-                    <h3 id="rejected-apps" style="color:#e74c3c;">0</h3>
+                    <h3 id="rejected-apps">0</h3>
                     <p>مرفوض</p>
                 </div>
             </div>
@@ -264,35 +247,24 @@
 </div>
 
         <div class="admin-table-container">
-            <div class="admin-table-header">
-                <h2>آخر طلبات التوظيف</h2>
-                <div class="filter-status-row">
-                    <button class="filter-status-btn active" data-status="all" onclick="filterAdminTable('all', this)">الكل</button>
-                    <button class="filter-status-btn" data-status="معلق" onclick="filterAdminTable('معلق', this)">⏳ معلق</button>
-                    <button class="filter-status-btn" data-status="مقبول" onclick="filterAdminTable('مقبول', this)">✅ مقبول</button>
-                    <button class="filter-status-btn" data-status="رفض" onclick="filterAdminTable('رفض', this)">❌ مرفوض</button>
-                </div>
-            </div>
-
+            <h2>آخر طلبات التوظيف</h2>
             <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>رقم الطلب</th>
-                        <th>اسم الشخصية</th>
-                        <th>الوظيفة</th>
-                        <th>ملاحظات الإدارة</th>
-                        <th>الحالة</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody id="jobs-table-body"></tbody>
-            </table>
+<thead>
+    <tr>
+        <th>رقم الطلب</th>
+        <th>اسم الشخصية</th>
+        <th>الوظيفة</th>
+        <th>ملاحظات الإدارة</th> <th>الحالة</th>
+        <th>الإجراءات</th>
+    </tr>
+</thead>
 
-            <div class="admin-table-footer">
-                <button class="btn-clear-all" onclick="clearLogs()">
-                    <i class="fa-solid fa-eraser"></i> تصفير جميع الطلبات
-                </button>
-            </div>
+<button class="btn-clear-all" onclick="clearAllApplications()">
+    <i class="fa-solid fa-eraser"></i> تصفير جميع الطلبات
+</button>
+                <tbody id="jobs-table-body">
+                    </tbody>
+            </table>
         </div>
 
         
@@ -304,45 +276,63 @@
     <div class="container">
 
         <section class="hero-enhanced">
+            <!-- تأثير الشبكة الخلفية -->
+            <div class="hero-grid-bg"></div>
+            <div class="hero-glow-orb orb-1"></div>
+            <div class="hero-glow-orb orb-2"></div>
+
             <div class="hero-content">
                 <div class="hero-badge">
-                    <i class="fas fa-circle" style="font-size:0.5rem; color:#2ecc71;"></i>
-                    السيرفر شغّال الآن
+                    <span class="live-dot"></span>
+                    السيرفر شغّال الآن — 24/7
                 </div>
-                <h1>مرحبًا بك في <span class="orange">Plus Dev</span></h1>
-                <p>سيرفر FiveM احترافي متخصص — سكربتات، شروحات، وتجربة لعب لا مثيل لها</p>
+
+                <h1>
+                    <span class="hero-welcome">مرحبًا بك في</span>
+                    <span class="hero-brand">Plus<span class="brand-dot">.</span>Dev</span>
+                </h1>
+
+                <p class="hero-desc">سيرفر <strong>FiveM</strong> احترافي — سكربتات متطورة، رول بلاي واقعي، وتجربة لعب لا مثيل لها</p>
+
                 <div class="hero-btns">
-                    <button class="btn-primary" onclick="showPage('store')">
-                        <i class="fas fa-store"></i> تصفح المتجر
+                    <button class="btn-primary hero-btn-main" onclick="showPage('store')">
+                        <i class="fas fa-store"></i>
+                        <span>تصفح المتجر</span>
+                        <i class="fas fa-arrow-left btn-arrow"></i>
                     </button>
                     <button class="btn-outline" onclick="showPage('jobs')">
                         <i class="fas fa-paper-plane"></i> قدّم على وظيفة
                     </button>
-                    <button class="btn-outline" onclick="window.open('https://discord.gg/pus','_blank')">
-                        <i class="fab fa-discord"></i> انضم ديسكورد
+                    <button class="btn-outline btn-discord" onclick="window.open('https://discord.gg/pus','_blank')">
+                        <i class="fab fa-discord"></i> انضم للديسكورد
                     </button>
+                </div>
+
+                <!-- شريط الإحصائيات داخل الـ hero -->
+                <div class="hero-stats-row">
+                    <div class="hero-stat">
+                        <span class="hero-stat-num">128</span>
+                        <span class="hero-stat-lbl">لاعب</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-num">500+</span>
+                        <span class="hero-stat-lbl">عضو ديسكورد</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-num">50+</span>
+                        <span class="hero-stat-lbl">سكربت</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-num">24/7</span>
+                        <span class="hero-stat-lbl">تشغيل</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <div class="server-stats-bar container">
-            <div class="stat-bar-item">
-                <span class="stat-bar-num">128</span>
-                <span class="stat-bar-lbl">أقصى عدد لاعبين</span>
-            </div>
-            <div class="stat-bar-item">
-                <span class="stat-bar-num" id="stat-members">500+</span>
-                <span class="stat-bar-lbl">عضو ديسكورد</span>
-            </div>
-            <div class="stat-bar-item">
-                <span class="stat-bar-num">24/7</span>
-                <span class="stat-bar-lbl">السيرفر شغّال</span>
-            </div>
-            <div class="stat-bar-item">
-                <span class="stat-bar-num">50+</span>
-                <span class="stat-bar-lbl">سكربت مثبّت</span>
-            </div>
-        </div>
 
 <section class="social-media">
   <h2>منصات التواصل</h2>
@@ -833,16 +823,27 @@
 <div class="page" id="store">
     <div class="container">
         <div class="store-hero">
+            <div class="store-hero-badge">🛒 المتجر الرسمي</div>
             <h1>متجر <span>Plus Dev</span></h1>
-            <p>سكربتات FiveM احترافية بجودة لا مثيل لها</p>
+            <p>سكربتات FiveM احترافية — جودة مضمونة ودعم فني مستمر</p>
         </div>
 
         <div class="store-filters">
-            <button class="filter-btn active" onclick="filterProducts('all', this)">الكل</button>
-            <button class="filter-btn" onclick="filterProducts('scripts', this)">سكربتات</button>
-            <button class="filter-btn" onclick="filterProducts('systems', this)">أنظمة متكاملة</button>
-            <button class="filter-btn" onclick="filterProducts('maps', this)">خرائط وملفات</button>
-            <button class="filter-btn" onclick="filterProducts('free', this)">مجاني</button>
+            <button class="filter-btn active" onclick="filterProducts('all', this)">
+                <i class="fas fa-border-all"></i> الكل
+            </button>
+            <button class="filter-btn" onclick="filterProducts('scripts', this)">
+                <i class="fas fa-code"></i> سكربتات
+            </button>
+            <button class="filter-btn" onclick="filterProducts('systems', this)">
+                <i class="fas fa-layer-group"></i> أنظمة متكاملة
+            </button>
+            <button class="filter-btn" onclick="filterProducts('maps', this)">
+                <i class="fas fa-map"></i> خرائط وملفات
+            </button>
+            <button class="filter-btn" onclick="filterProducts('free', this)">
+                <i class="fas fa-gift"></i> مجاني
+            </button>
         </div>
 
         <div class="store-grid" id="store-grid">
@@ -854,6 +855,10 @@
                     <div class="product-category">أنظمة متكاملة</div>
                     <div class="product-name">نظام LSPD المتكامل</div>
                     <div class="product-desc">نظام شرطة كامل مع محكمة، سجل، ومطاردات احترافية</div>
+                    <div class="product-meta">
+                        <span class="product-rating">★★★★★ <span class="rating-num">5.0</span></span>
+                        <span class="product-sales">🛒 47 مبيعة</span>
+                    </div>
                     <div class="product-footer">
                         <div class="product-price">
                             <span class="old-price">150$</span>99$
@@ -872,6 +877,10 @@
                     <div class="product-category">سكربتات</div>
                     <div class="product-name">سكربت EMS الطبي</div>
                     <div class="product-desc">نظام إسعاف متكامل مع خيارات علاج واقعية</div>
+                    <div class="product-meta">
+                        <span class="product-rating">★★★★☆ <span class="rating-num">4.8</span></span>
+                        <span class="product-sales">🛒 31 مبيعة</span>
+                    </div>
                     <div class="product-footer">
                         <div class="product-price">45$</div>
                         <button class="buy-btn" onclick="buyProduct('سكربت EMS الطبي', 45)">
@@ -887,6 +896,10 @@
                     <div class="product-category">سكربتات</div>
                     <div class="product-name">نظام السرقات المتقدم</div>
                     <div class="product-desc">بنوك، متاجر، وسرقات منازل بمنطق RP احترافي</div>
+                    <div class="product-meta">
+                        <span class="product-rating">★★★★★ <span class="rating-num">4.9</span></span>
+                        <span class="product-sales">🛒 58 مبيعة</span>
+                    </div>
                     <div class="product-footer">
                         <div class="product-price">75$</div>
                         <button class="buy-btn" onclick="buyProduct('نظام السرقات المتقدم', 75)">
@@ -903,6 +916,10 @@
                     <div class="product-category">أنظمة متكاملة</div>
                     <div class="product-name">حزمة السيرفر الكاملة</div>
                     <div class="product-desc">كل ما تحتاجه لتشغيل سيرفر CFW احترافي من أول يوم</div>
+                    <div class="product-meta">
+                        <span class="product-rating">★★★★★ <span class="rating-num">5.0</span></span>
+                        <span class="product-sales">🛒 12 مبيعة</span>
+                    </div>
                     <div class="product-footer">
                         <div class="product-price">
                             <span class="old-price">500$</span>299$
@@ -920,6 +937,10 @@
                     <div class="product-category">خرائط وملفات</div>
                     <div class="product-name">خريطة مطار مخصصة</div>
                     <div class="product-desc">خريطة مطار MLO مع مواقف وصالات احترافية</div>
+                    <div class="product-meta">
+                        <span class="product-rating">★★★★☆ <span class="rating-num">4.7</span></span>
+                        <span class="product-sales">🛒 19 مبيعة</span>
+                    </div>
                     <div class="product-footer">
                         <div class="product-price">35$</div>
                         <button class="buy-btn" onclick="buyProduct('خريطة مطار مخصصة', 35)">
@@ -930,14 +951,18 @@
             </div>
 
             <div class="product-card" data-cat="free">
-                <span class="product-badge badge-new">🎁 مجاني</span>
+                <span class="product-badge badge-free">🎁 مجاني</span>
                 <div class="product-img-placeholder">📦</div>
                 <div class="product-body">
                     <div class="product-category">مجاني</div>
                     <div class="product-name">سكربت الإعلانات</div>
                     <div class="product-desc">نظام إعلانات داخل السيرفر مع دعم عربي كامل</div>
+                    <div class="product-meta">
+                        <span class="product-rating">★★★★☆ <span class="rating-num">4.6</span></span>
+                        <span class="product-sales">⬇️ 120 تحميل</span>
+                    </div>
                     <div class="product-footer">
-                        <div class="product-price" style="color:#2ecc71;">مجاني</div>
+                        <div class="product-price free-tag">مجاني</div>
                         <button class="buy-btn free" onclick="buyProduct('سكربت الإعلانات', 0)">
                             <i class="fas fa-download"></i> تحميل
                         </button>
@@ -990,97 +1015,39 @@
 <div id="job-modal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <div class="modal-header-content">
-                <div class="modal-job-icon" id="modal-job-icon">📋</div>
-                <div>
-                    <h3 id="modal-title">تقديم على وظيفة</h3>
-                    <p class="modal-subtitle">تأكد من ملء جميع الحقول بدقة</p>
-                </div>
-            </div>
+            <h3 id="modal-title">تقديم على وظيفة</h3>
             <button class="close-modal" onclick="closeModal()">&times;</button>
         </div>
-
-        <form id="job-form" novalidate>
+        <form id="job-form">
             <input type="hidden" id="job-type">
-
-            <!-- اسم الشخصية -->
-            <div class="form-group" id="fg-character-name">
-                <label for="character-name">
-                    <i class="fas fa-user"></i>
-                    اسمك الثلاثي (Character Name)
-                    <span class="field-required">*</span>
-                </label>
-                <input type="text" id="character-name"
-                    placeholder="مثال: Ahmad Al-Rashidi"
-                    autocomplete="off" required>
-                <span class="field-hint">الاسم الذي سجلته في اللعبة</span>
-                <span class="field-error" id="err-name"></span>
-            </div>
-
-            <!-- Steam ID -->
-            <div class="form-group" id="fg-character-id">
-                <label for="character-id">
-                    <i class="fab fa-steam"></i>
-                    Steam ID
-                    <span class="field-required">*</span>
-                </label>
-                <input type="text" id="character-id"
-                    placeholder="steam:110000112345678"
-                    autocomplete="off" required>
-                <span class="field-hint">تجده عبر F8 ثم اكتب: id</span>
-                <span class="field-error" id="err-steam"></span>
-            </div>
-
-            <!-- Discord ID (مقفل) -->
+            
             <div class="form-group">
-                <label for="discord-id-input">
-                    <i class="fab fa-discord"></i>
-                    Discord ID
-                </label>
-                <div class="locked-input-wrapper">
-                    <input type="text" id="discord-id-input"
-                        placeholder="سجّل دخولك لجلب الـ ID تلقائياً"
-                        class="locked-input" readonly>
-                    <span class="lock-icon"><i class="fas fa-lock"></i></span>
-                </div>
-                <span class="field-hint">يُملأ تلقائياً عند تسجيل الدخول</span>
+                <label>أسمك الثلاثي (Character Name)</label>
+                <input type="text" id="character-name" placeholder="اسم شخصيتك في اللعبة / اسمك الحقيقي" required>
             </div>
 
-            <!-- الوقت المتاح -->
-            <div class="form-group" id="fg-phone-number">
-                <label for="phone-number">
-                    <i class="fas fa-clock"></i>
-                    الوقت المتاح يومياً
-                    <span class="field-required">*</span>
-                </label>
-                <input type="text" id="phone-number"
-                    placeholder="مثال: 4-6 ساعات"
-                    required>
-                <span class="field-error" id="err-time"></span>
+            <div class="form-group">
+                <label>Steam - ستيم</label>
+                <input type="text" id="character-id" placeholder="steam:1100001" required>
             </div>
 
-            <!-- سبب التقديم -->
-            <div class="form-group" id="fg-reason">
-                <label for="reason">
-                    <i class="fas fa-pen-to-square"></i>
-                    سبب التقديم
-                    <span class="field-required">*</span>
-                </label>
-                <textarea id="reason" rows="4"
-                    placeholder="اكتب سبب تقديمك بشكل واضح ومفصّل... (20 حرف على الأقل)"
-                    required></textarea>
-                <div class="reason-footer">
-                    <span class="field-error" id="err-reason"></span>
-                    <span class="char-count" id="reason-count">0 / 20 حرف</span>
-                </div>
+            <div class="form-group">
+                <label for="discord-id-input">Discord ID - أيدي الديسكورد</label>
+                <input type="text" id="discord-id-input" placeholder="سجل دخولك لجلب الأيدي" class="locked-input">
+            </div>
+
+            <div class="form-group">
+                <label>Your Available Time - الوقت المتاح</label>
+                <input type="text" id="phone-number" placeholder="مثال: 5-8 ساعات" required>
+            </div>
+
+            <div class="form-group">
+                <label>Reason For Apply - سبب التقديم</label>
+                <input type="text" id="reason" placeholder="اكتب سبب تقديمك هنا..." required>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-cancel-form" onclick="closeModal()">إلغاء</button>
-                <button type="submit" class="btn btn-submit-form" id="submit-job-btn">
-                    <i class="fas fa-paper-plane"></i>
-                    إرسال الطلب
-                </button>
+                <button type="submit" class="btn">إرسال الطلب</button>
             </div>
         </form>
     </div>
