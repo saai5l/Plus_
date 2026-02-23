@@ -917,7 +917,14 @@ function loadUserTrackingData() {
     if (!savedUser) {
         if (noAppMsg) {
             noAppMsg.style.display = 'block';
-            noAppMsg.innerHTML = `<p style="text-align:center; color:#888;">يرجى تسجيل الدخول لتتبع طلباتك</p>`;
+            noAppMsg.innerHTML = `
+                <div class="trk-empty-orbit">
+                    <div class="trk-empty-planet"><i class="fas fa-user-lock"></i></div>
+                    <div class="trk-orbit-ring ring-1"></div>
+                    <div class="trk-orbit-ring ring-2"></div>
+                </div>
+                <h3 class="trk-empty-title">يرجى تسجيل الدخول</h3>
+                <p class="trk-empty-desc">قم بتسجيل الدخول أولاً لتتمكن من تتبع طلباتك.</p>`;
         }
         if (appStatusInfo) appStatusInfo.style.display = 'none';
         return;
@@ -929,7 +936,6 @@ function loadUserTrackingData() {
         if (!data) {
             if (noAppMsg) {
                 noAppMsg.style.display = 'block';
-                noAppMsg.innerHTML = `<p style="text-align:center; color:#888;">لا توجد لديك طلبات سابقة</p>`;
             }
             if (appStatusInfo) appStatusInfo.style.display = 'none';
             return;
@@ -948,30 +954,73 @@ function loadUserTrackingData() {
                 const statusClass = app.status === 'مقبول' ? 'status-approved' : 
                                     app.status === 'رفض' ? 'status-rejected' : 'status-pending';
                 
+                const isApproved = app.status === 'مقبول';
+                const isRejected = app.status === 'رفض';
+                const isPending = !isApproved && !isRejected;
+
+                // Determine step states
+                const step1Class = 'done'; // always submitted
+                const step2Class = isApproved || isRejected ? 'done' : 'active';
+                const step3Class = isApproved ? 'done' : isRejected ? 'done' : '';
+                const line1Class = step2Class === 'done' ? 'filled' : '';
+                const line2Class = step3Class === 'done' ? 'filled' : '';
+
+                const statusIconMap = { 'مقبول': 'fa-check-circle', 'رفض': 'fa-times-circle', 'pending': 'fa-hourglass-half' };
+                const statusIcon = isApproved ? 'fa-check-circle' : isRejected ? 'fa-times-circle' : 'fa-hourglass-half';
+
+                const noteHtml = app.adminNote
+                    ? `<p style="margin:0; color:#c8c8c8;">${app.adminNote}</p>`
+                    : `<div class="trk-notes-empty"><i class="fas fa-inbox"></i><p>لا توجد ملاحظات حالياً</p></div>`;
+
                 listContainer.innerHTML += `
-                    <div class="status-box ${statusClass}">
-                        <div class="status-row">
-                            <span>رقم الطلب:</span>
-                            <strong class="app-number-style">${app.appId}</strong>
+                    <div class="trk-card trk-card-main">
+                        <div class="trk-card-header">
+                            <div class="trk-card-icon-wrap">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div>
+                                <span class="trk-card-label">الوظيفة المقدم عليها</span>
+                                <h3 class="trk-card-title">${app.job}</h3>
+                            </div>
+                            <span class="trk-app-badge">#${app.appId}</span>
                         </div>
-                        <div class="status-row">
-                            <span>الوظيفة:</span>
-                            <strong>${app.job}</strong>
+                        <div class="trk-timeline">
+                            <div class="trk-timeline-label">الحالة الحالية</div>
+                            <div class="trk-status-display">
+                                <div class="trk-status-pulse" style="${isApproved ? 'background:#2ecc71; box-shadow:0 0 12px rgba(46,204,113,0.6)' : isRejected ? 'background:#e74c3c; box-shadow:0 0 12px rgba(231,76,60,0.6)' : ''}"></div>
+                                <span class="status-badge ${statusClass} trk-status-badge-lg">
+                                    <i class="fas ${statusIcon}" style="margin-left:6px;"></i>${app.status}
+                                </span>
+                            </div>
                         </div>
-                        <div class="status-row">
-                            <span>الحالة:</span>
-                            <span class="status-badge ${statusClass}">${app.status}</span>
+                        <div class="trk-steps">
+                            <div class="trk-step ${step1Class}">
+                                <div class="trk-step-dot"><i class="fas fa-paper-plane"></i></div>
+                                <span>تم التقديم</span>
+                            </div>
+                            <div class="trk-step-line ${line1Class}"></div>
+                            <div class="trk-step ${step2Class}">
+                                <div class="trk-step-dot"><i class="fas fa-search"></i></div>
+                                <span>قيد المراجعة</span>
+                            </div>
+                            <div class="trk-step-line ${line2Class}"></div>
+                            <div class="trk-step ${step3Class}">
+                                <div class="trk-step-dot"><i class="fas ${isRejected ? 'fa-times' : 'fa-check'}"></i></div>
+                                <span>القرار النهائي</span>
+                            </div>
                         </div>
-                        <div class="admin-notes-section">
-                            <span class="admin-notes-title">ملاحظات الإدارة:</span>
-                            <p style="margin: 0; font-size: 0.85rem; color: #ccc;">${app.adminNote || 'لا توجد ملاحظات حالياً.'}</p>
+                    </div>
+                    <div class="trk-card trk-card-notes">
+                        <div class="trk-notes-header">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>ملاحظات الإدارة</span>
                         </div>
+                        <div class="trk-notes-body">${noteHtml}</div>
                     </div>`;
             });
         } else {
             if (noAppMsg) {
                 noAppMsg.style.display = 'block';
-                noAppMsg.innerHTML = `<p style="text-align:center; color:#888;">لا توجد لديك طلبات سابقة</p>`;
             }
             if (appStatusInfo) appStatusInfo.style.display = 'none';
         }
