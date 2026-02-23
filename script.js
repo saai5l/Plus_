@@ -40,11 +40,6 @@ function loadAdminIds() {
             staff: { open: true, webhook: "https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ" }
         };
 
-function setBottomNav(activeBtn) {
-    document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
-    if (activeBtn) activeBtn.classList.add('active');
-}
-
 function showPage(pageId) {
   if (pageId === 'admin-dashboard') {
       const savedUser = JSON.parse(localStorage.getItem('user'));
@@ -66,15 +61,11 @@ function showPage(pageId) {
     }
   });
 
-  if (pageId === 'admin-dashboard') loadAdminData();
-  if (pageId === 'tracking-page') loadUserTrackingData();
-
-  // مزامنة الشريط السفلي
-  const pageToNav = { home: 0, rules: 1, jobs: 2, store: 3, tutorials: 4 };
-  const navItems = document.querySelectorAll('.bottom-nav-item');
-  navItems.forEach(b => b.classList.remove('active'));
-  if (pageToNav[pageId] !== undefined && navItems[pageToNav[pageId]]) {
-      navItems[pageToNav[pageId]].classList.add('active');
+  if (pageId === 'admin-dashboard') {
+      loadAdminData();
+  }
+  if (pageId === 'tracking-page') {
+      loadUserTrackingData();
   }
 
   const links = document.querySelectorAll('.nav-links a');
@@ -193,71 +184,119 @@ function closeModal() {
     document.getElementById('job-form').reset();
 }
 
-document.getElementById('job-form').addEventListener('submit', async function(e) {
-    e.preventDefault(); 
-
-    const jobType = document.getElementById('job-type').value;
-    const characterName = document.getElementById('character-name').value;
-    const characterId = document.getElementById('character-id').value; 
-    const phoneNumber = document.getElementById('phone-number').value;
-    const discordUser = document.getElementById('discord-id-input').value; 
-    const reason = document.getElementById('reason').value;
-
-    if (!discordUser) {
-        showNotification('⚠️ سجل دخولك أولاً عبر ديسكورد', true);
-        return;
-    }
-
-
-const counterRef = database.ref('settings/app_counter');
-counterRef.transaction(function(currentValue) {
-    return (currentValue || 200) + 1;
-}).then(function(result) {
-    const currentCounter = result.snapshot.val() - 1;
-    const newAppId = `PLUS-${currentCounter}`;
-    
-    sendApplicationToDiscord(newAppId, jobType, characterName, characterId, phoneNumber, discordUser, reason);
-});
-
-async function sendApplicationToDiscord(newAppId, jobType, characterName, characterId, phoneNumber, discordUser, reason) {
-    const jobTitle = getJobTitle(jobType);
-    const webhookUrl = jobConfig[jobType].webhook;
-
-    const data = {
-        embeds: [{
-            title: `تقديم جديد - ${jobTitle}`,
-            description: `**رقم الطلب:** \`${newAppId}\``, 
-            color: 0xfc7823,
-            fields: [
-                { name: "Name - ألاسم", value: characterName, inline: false },
-                { name: "Steam - ستيم", value: characterId, inline: false },
-                { name: "Discord ID - أيدي الديسكورد", value: `<@${discordUser}>`, inline: false },
-                { name: "Time - الوقت المتاح", value: phoneNumber, inline: false },
-                { name: "Reason - سبب التقديم", value: reason, inline: false }
-            ],
-            footer: { text: "Plus Dev System" },
-            timestamp: new Date()
-        }]
-    };
-
-    try {
-        const response = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
-            showNotification(`✅ تم الإرسال بنجاح! رقمك هو: ${newAppId}`);
-            saveToAdminDashboard(characterName, jobTitle, reason, discordUser, newAppId);
-            closeModal();
-            document.getElementById('job-form').reset();
-            if (typeof loadUserTrackingData === "function") loadUserTrackingData();
-        }
-    } catch (error) {
-        showNotification('❌ حدث خطأ في الاتصال بالديسكورد', true);
+// ── validation بصري للفورم ──
+function setFieldState(groupId, errorId, errorMsg) {
+    const group = document.getElementById(groupId);
+    const errEl = document.getElementById(errorId);
+    if (!group || !errEl) return;
+    if (errorMsg) {
+        group.classList.add('has-error');
+        group.classList.remove('has-success');
+        errEl.textContent = errorMsg;
+    } else {
+        group.classList.remove('has-error');
+        group.classList.add('has-success');
+        errEl.textContent = '';
     }
 }
+function clearFieldStates() {
+    document.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error', 'has-success'));
+    document.querySelectorAll('.field-error').forEach(e => e.textContent = '');
+}
+
+// عداد حروف سبب التقديم
+document.addEventListener('DOMContentLoaded', function() {
+    const reasonEl = document.getElementById('reason');
+    const countEl  = document.getElementById('reason-count');
+    if (reasonEl && countEl) {
+        reasonEl.addEventListener('input', function() {
+            const len = this.value.length;
+            countEl.textContent = `${len} / 20 حرف`;
+            countEl.classList.toggle('ready', len >= 20);
+        });
+    }
+});
+
+document.getElementById('job-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    clearFieldStates();
+
+    const jobType       = document.getElementById('job-type').value;
+    const characterName = document.getElementById('character-name').value.trim();
+    const characterId   = document.getElementById('character-id').value.trim();
+    const phoneNumber   = document.getElementById('phone-number').value.trim();
+    const discordUser   = document.getElementById('discord-id-input').value.trim();
+    const reason        = document.getElementById('reason').value.trim();
+
+    // ── Validation ──
+    let hasError = false;
+    if (!discordUser) { showToast('⚠️', 'يجب تسجيل الدخول', 'سجّل دخولك أولاً عبر ديسكورد'); return; }
+
+    if (characterName.length < 3) { setFieldState('fg-character-name', 'err-name', 'الاسم يجب أن يكون 3 أحرف على الأقل'); hasError = true; }
+    else setFieldState('fg-character-name', 'err-name', null);
+
+    if (!characterId) { setFieldState('fg-character-id', 'err-steam', 'أدخل Steam ID الخاص بك'); hasError = true; }
+    else setFieldState('fg-character-id', 'err-steam', null);
+
+    if (!phoneNumber) { setFieldState('fg-phone-number', 'err-time', 'أدخل الوقت المتاح يومياً'); hasError = true; }
+    else setFieldState('fg-phone-number', 'err-time', null);
+
+    if (reason.length < 20) { setFieldState('fg-reason', 'err-reason', `أضف ${20 - reason.length} حرف على الأقل`); hasError = true; }
+    else setFieldState('fg-reason', 'err-reason', null);
+
+    if (hasError) return;
+
+    // ── إرسال ──
+    const submitBtn = document.getElementById('submit-job-btn');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...'; }
+
+    const counterRef = database.ref('settings/app_counter');
+    counterRef.transaction(cv => (cv || 200) + 1).then(function(result) {
+        const newAppId = `PLUS-${result.snapshot.val() - 1}`;
+        sendApplicationToDiscord(newAppId, jobType, characterName, characterId, phoneNumber, discordUser, reason, submitBtn);
+    }).catch(() => {
+        showToast('❌', 'خطأ', 'فشل الاتصال بقاعدة البيانات');
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب'; }
+    });
+
+    async function sendApplicationToDiscord(newAppId, jobType, characterName, characterId, phoneNumber, discordUser, reason, submitBtn) {
+        const jobTitle   = getJobTitle(jobType);
+        const webhookUrl = jobConfig[jobType].webhook;
+        const data = {
+            embeds: [{
+                title: `تقديم جديد - ${jobTitle}`,
+                description: `**رقم الطلب:** \`${newAppId}\``,
+                color: 0xfc7823,
+                fields: [
+                    { name: "Name - الاسم",               value: characterName,      inline: false },
+                    { name: "Steam - ستيم",               value: characterId,         inline: false },
+                    { name: "Discord ID",                  value: `<@${discordUser}>`, inline: false },
+                    { name: "Time - الوقت المتاح",         value: phoneNumber,         inline: false },
+                    { name: "Reason - سبب التقديم",        value: reason,              inline: false }
+                ],
+                footer: { text: "Plus Dev System" },
+                timestamp: new Date()
+            }]
+        };
+        try {
+            const response = await fetch(webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            if (response.ok) {
+                showToast('✅', 'تم الإرسال!', `رقم طلبك: ${newAppId}`);
+                addNotification('success', 'تم إرسال طلبك!', `رقم الطلب: ${newAppId} — انتظر رد الإدارة`);
+                saveToAdminDashboard(characterName, jobTitle, reason, discordUser, newAppId);
+                closeModal();
+                clearFieldStates();
+                document.getElementById('job-form').reset();
+                const countEl = document.getElementById('reason-count');
+                if (countEl) { countEl.textContent = '0 / 20 حرف'; countEl.classList.remove('ready'); }
+                if (typeof loadUserTrackingData === "function") loadUserTrackingData();
+            } else { throw new Error('webhook error'); }
+        } catch {
+            showToast('❌', 'خطأ', 'فشل الإرسال — تأكد من اتصالك بالإنترنت');
+        } finally {
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب'; }
+        }
+    }
 });
 
 function saveToAdminDashboard(name, job, reason, discordId, appId) {
@@ -313,11 +352,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
     window.addEventListener("load", () => {
-        const loader = document.getElementById("loading-screen");
         setTimeout(() => {
-            loader.classList.add('fade-out');
-            setTimeout(() => { loader.style.display = "none"; }, 500);
-        }, 1800);
+            const loader = document.getElementById("loading-screen");
+            loader.style.display = "none";
+        }, 1500); 
     });
 
 // Live Server code removed
@@ -457,10 +495,7 @@ document.querySelectorAll('.faq-question').forEach(button => {
 });
 
 
-function toggleChat() {
-    const chatWin = document.getElementById('ai-chat-window');
-    chatWin.style.display = (chatWin.style.display === 'none' || chatWin.style.display === '') ? 'flex' : 'none';
-}
+// toggleChat مُعرَّفة في ai-chat-enhanced.js
 
 function similarity(s1, s2) {
     let longer = s1.length < s2.length ? s2 : s1;
@@ -489,61 +524,7 @@ function editDistance(s1, s2) {
     return costs[s2.length];
 }
 
-async function askAI() {
-    const input = document.getElementById('ai-input');
-    const chatBody = document.getElementById('chat-body');
-    const query = input.value.trim().toLowerCase();
-
-    if (!query) return;
-
-    chatBody.innerHTML += `<div class="user-msg">${input.value}</div>`;
-    input.value = '';
-
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'ai-msg';
-    loadingDiv.innerText = 'جاري تحليل سؤالك...';
-    chatBody.appendChild(loadingDiv);
-
-    try {
-        const response = await fetch('laws.json');
-        const laws = await response.json();
-
-        let bestMatch = null;
-        let maxMatches = 0;
-
-        const stopWords = ["ما", "هي", "هو", "كيف", "عن", "في", "قوانين", "قانون"];
-        const searchTerms = query.split(' ').filter(word => !stopWords.includes(word));
-
-        laws.forEach(law => {
-            let matchCount = 0;
-            const lawText = law.toLowerCase();
-            
-            searchTerms.forEach(term => {
-                if (lawText.includes(term)) {
-                    matchCount++;
-                }
-            });
-
-            if (matchCount > maxMatches) {
-                maxMatches = matchCount;
-                bestMatch = law;
-            }
-        });
-
-        setTimeout(() => {
-            if (maxMatches > 0) {
-                loadingDiv.innerHTML = `<strong>Plus Bot:</strong> <br> ${bestMatch}`;
-            } else {
-                loadingDiv.innerText = "❌ لم أجد تفاصيل دقيقة، حاول كتابة كلمات مفتاحية أخرى (مثل: سرقة، خطف، اسعاف).";
-            }
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }, 400);
-
-    } catch (error) {
-        loadingDiv.innerText = "⚠️ حدث خطأ في الاتصال بالقوانين.";
-    }
-}
-
+// askAI مُعرَّفة في ai-chat-enhanced.js
 
 const CLIENT_ID = '1453875994988380373'; 
 const REDIRECT_URI = 'https://saai5l.github.io/Plus_/login.html';
@@ -692,6 +673,27 @@ const mockJobs = [
     { name: "Mshari_X", job: "الميكانيكي", date: "2024/05/18", status: "معلق" }
 ];
 
+let currentAdminFilter = 'all';
+
+function filterAdminTable(status, btn) {
+    currentAdminFilter = status;
+    const rows = document.querySelectorAll('#jobs-table-body tr');
+    rows.forEach(row => {
+        if (status === 'all') {
+            row.style.display = '';
+        } else {
+            const statusCell = row.querySelector('.status-tag');
+            row.style.display = (statusCell && statusCell.textContent.trim() === status) ? '' : 'none';
+        }
+    });
+    document.querySelectorAll('.filter-status-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    else {
+        const activeBtn = document.querySelector(`.filter-status-btn[data-status="${status}"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+    }
+}
+
 function loadAdminData() {
     const tableBody = document.getElementById('jobs-table-body');
     if (!tableBody) return;
@@ -706,14 +708,19 @@ function loadAdminData() {
         if (!data) {
             tableBody.innerHTML = `<tr><td colspan="6" class="empty-msg">لا توجد طلبات تقديم حالياً</td></tr>`;
             if(document.getElementById('total-apps')) document.getElementById('total-apps').textContent = '0';
+            if(document.getElementById('approved-apps')) document.getElementById('approved-apps').textContent = '0';
+            if(document.getElementById('rejected-apps')) document.getElementById('rejected-apps').textContent = '0';
+            if(document.getElementById('pending-apps')) document.getElementById('pending-apps').textContent = '0';
             return;
         }
 
         const apps = Object.values(data);
 
+        // إحصائيات محدّثة
         if(document.getElementById('total-apps')) document.getElementById('total-apps').textContent = apps.length;
         if(document.getElementById('approved-apps')) document.getElementById('approved-apps').textContent = apps.filter(a => a.status === 'مقبول').length;
         if(document.getElementById('rejected-apps')) document.getElementById('rejected-apps').textContent = apps.filter(a => a.status === 'رفض').length;
+        if(document.getElementById('pending-apps')) document.getElementById('pending-apps').textContent = apps.filter(a => a.status === 'معلق').length;
 
         [...apps].reverse().forEach((app) => {
             const statusClass = app.status === 'مقبول' ? 'status-approved' : (app.status === 'رفض' ? 'status-rejected' : 'status-pending');
@@ -738,6 +745,9 @@ function loadAdminData() {
                     </td>
                 </tr>`;
         });
+
+        // تطبيق الفلتر الحالي بعد التحميل
+        if (currentAdminFilter !== 'all') filterAdminTable(currentAdminFilter);
     });
 }
 
@@ -900,20 +910,14 @@ database.ref('jobStatus').on('value', (snapshot) => {
 
 function loadUserTrackingData() {
     const savedUser = JSON.parse(localStorage.getItem('user'));
-    const noAppMsg     = document.getElementById('no-app-message');
+    const noAppMsg = document.getElementById('no-app-message');
     const appStatusInfo = document.getElementById('app-status-info');
     const listContainer = document.getElementById('applications-list');
 
     if (!savedUser) {
         if (noAppMsg) {
-            noAppMsg.style.display = 'flex';
-            noAppMsg.innerHTML = `
-                <div class="tracking-empty-icon">🔒</div>
-                <h3>يرجى تسجيل الدخول</h3>
-                <p>سجّل دخولك عبر ديسكورد لتتبع طلباتك</p>
-                <button class="btn-primary" onclick="login()" style="margin-top:16px;">
-                    <i class="fab fa-discord"></i> تسجيل الدخول
-                </button>`;
+            noAppMsg.style.display = 'block';
+            noAppMsg.innerHTML = `<p style="text-align:center; color:#888;">يرجى تسجيل الدخول لتتبع طلباتك</p>`;
         }
         if (appStatusInfo) appStatusInfo.style.display = 'none';
         return;
@@ -921,61 +925,54 @@ function loadUserTrackingData() {
 
     database.ref('applications').on('value', (snapshot) => {
         const data = snapshot.val();
-
+        
         if (!data) {
-            if (noAppMsg) noAppMsg.style.display = 'flex';
+            if (noAppMsg) {
+                noAppMsg.style.display = 'block';
+                noAppMsg.innerHTML = `<p style="text-align:center; color:#888;">لا توجد لديك طلبات سابقة</p>`;
+            }
             if (appStatusInfo) appStatusInfo.style.display = 'none';
             return;
         }
 
         const allApps = Object.values(data);
-        const myApps  = allApps.filter(a => a.discordId === savedUser.id).reverse();
+        const myApps = allApps.filter(a => a.discordId === savedUser.id).reverse();
 
         if (myApps.length > 0) {
             if (noAppMsg) noAppMsg.style.display = 'none';
             if (appStatusInfo) appStatusInfo.style.display = 'block';
-
-            listContainer.innerHTML = '';
+            
+            listContainer.innerHTML = ''; 
 
             myApps.forEach(app => {
-                const isApproved = app.status === 'مقبول';
-                const isRejected = app.status === 'رفض';
-                const statusClass = isApproved ? 'status-approved' : isRejected ? 'status-rejected' : 'status-pending';
-                const statusIcon  = isApproved ? '✅' : isRejected ? '❌' : '⏳';
-                const statusColor = isApproved ? '#2ecc71' : isRejected ? '#e74c3c' : '#f39c12';
-
+                const statusClass = app.status === 'مقبول' ? 'status-approved' : 
+                                    app.status === 'رفض' ? 'status-rejected' : 'status-pending';
+                
                 listContainer.innerHTML += `
-                    <div class="track-card ${statusClass}">
-                        <div class="track-card-header">
-                            <div class="track-card-id">
-                                <span class="track-label">رقم الطلب</span>
-                                <strong class="track-app-id">${app.appId || '---'}</strong>
-                            </div>
-                            <div class="track-status-pill" style="background:${statusColor}20;border:1px solid ${statusColor}50;color:${statusColor};">
-                                ${statusIcon} ${app.status}
-                            </div>
+                    <div class="status-box ${statusClass}">
+                        <div class="status-row">
+                            <span>رقم الطلب:</span>
+                            <strong class="app-number-style">${app.appId}</strong>
                         </div>
-                        <div class="track-card-body">
-                            <div class="track-info-row">
-                                <i class="fas fa-briefcase" style="color:#fc7823;"></i>
-                                <span class="track-info-label">الوظيفة</span>
-                                <strong>${app.job}</strong>
-                            </div>
-                            <div class="track-info-row">
-                                <i class="fas fa-calendar" style="color:#888;"></i>
-                                <span class="track-info-label">تاريخ التقديم</span>
-                                <span>${app.date || '---'}</span>
-                            </div>
+                        <div class="status-row">
+                            <span>الوظيفة:</span>
+                            <strong>${app.job}</strong>
                         </div>
-                        ${app.adminNote ? `
-                        <div class="track-admin-note">
-                            <div class="track-note-label"><i class="fas fa-comment-dots"></i> ملاحظة الإدارة</div>
-                            <p>${app.adminNote}</p>
-                        </div>` : ''}
+                        <div class="status-row">
+                            <span>الحالة:</span>
+                            <span class="status-badge ${statusClass}">${app.status}</span>
+                        </div>
+                        <div class="admin-notes-section">
+                            <span class="admin-notes-title">ملاحظات الإدارة:</span>
+                            <p style="margin: 0; font-size: 0.85rem; color: #ccc;">${app.adminNote || 'لا توجد ملاحظات حالياً.'}</p>
+                        </div>
                     </div>`;
             });
         } else {
-            if (noAppMsg) noAppMsg.style.display = 'flex';
+            if (noAppMsg) {
+                noAppMsg.style.display = 'block';
+                noAppMsg.innerHTML = `<p style="text-align:center; color:#888;">لا توجد لديك طلبات سابقة</p>`;
+            }
             if (appStatusInfo) appStatusInfo.style.display = 'none';
         }
     });
@@ -1266,15 +1263,30 @@ window.addEventListener('load', checkMobileMenu);
    🍞 TOAST NOTIFICATION
    ============================================ */
 let toastTimer;
-function showToast(icon, title, msg) {
+function showToast(icon, title, msg, type = 'info') {
     const t = document.getElementById('toast-notif');
     if (!t) return;
+
+    // تحديد النوع من الأيقونة تلقائياً إذا لم يُحدَّد
+    if (type === 'info') {
+        if (icon === '✅') type = 'success';
+        else if (icon === '⚠️') type = 'warning';
+        else if (icon === '❌') type = 'error';
+    }
+
     document.getElementById('toast-icon').textContent = icon;
     document.getElementById('toast-title').textContent = title;
     document.getElementById('toast-msg').textContent = msg;
+
+    // تطبيق اللون حسب النوع
+    t.dataset.type = type;
+
+    t.classList.remove('show');
+    void t.offsetWidth; // إعادة تشغيل الأنيميشن
     t.classList.add('show');
+
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3800);
 }
 
 /* ============================================
