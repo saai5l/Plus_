@@ -40,6 +40,11 @@ function loadAdminIds() {
             staff: { open: true, webhook: "https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ" }
         };
 
+function setBottomNav(activeBtn) {
+    document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+    if (activeBtn) activeBtn.classList.add('active');
+}
+
 function showPage(pageId) {
   if (pageId === 'admin-dashboard') {
       const savedUser = JSON.parse(localStorage.getItem('user'));
@@ -61,11 +66,15 @@ function showPage(pageId) {
     }
   });
 
-  if (pageId === 'admin-dashboard') {
-      loadAdminData();
-  }
-  if (pageId === 'tracking-page') {
-      loadUserTrackingData();
+  if (pageId === 'admin-dashboard') loadAdminData();
+  if (pageId === 'tracking-page') loadUserTrackingData();
+
+  // مزامنة الشريط السفلي
+  const pageToNav = { home: 0, rules: 1, jobs: 2, store: 3, tutorials: 4 };
+  const navItems = document.querySelectorAll('.bottom-nav-item');
+  navItems.forEach(b => b.classList.remove('active'));
+  if (pageToNav[pageId] !== undefined && navItems[pageToNav[pageId]]) {
+      navItems[pageToNav[pageId]].classList.add('active');
   }
 
   const links = document.querySelectorAll('.nav-links a');
@@ -304,10 +313,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
     window.addEventListener("load", () => {
+        const loader = document.getElementById("loading-screen");
         setTimeout(() => {
-            const loader = document.getElementById("loading-screen");
-            loader.style.display = "none";
-        }, 1500); 
+            loader.classList.add('fade-out');
+            setTimeout(() => { loader.style.display = "none"; }, 500);
+        }, 1800);
     });
 
 // Live Server code removed

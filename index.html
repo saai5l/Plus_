@@ -43,14 +43,33 @@
 <!-- Loading Screen -->
 <div id="loading-screen">
     <div class="loader-content">
+        <!-- شبكة خلفية -->
+        <div class="loader-grid"></div>
+
+        <!-- الشعار -->
         <div class="logo-wrapper">
             <img src="https://cdn.discordapp.com/avatars/990216490085142578/4b1d6f63ac4b6e1a59a320ef820a2053.png?size=1024" class="loader-logo">
+            <div class="logo-ring ring-1"></div>
+            <div class="logo-ring ring-2"></div>
             <div class="logo-glow"></div>
         </div>
+
+        <!-- النص -->
+        <div class="loader-brand">
+            <span class="loader-brand-plus">Plus</span><span class="loader-brand-dev">Dev</span>
+        </div>
+        <p class="loading-text">جاري التحميل</p>
+
+        <!-- شريط التحميل -->
         <div class="loading-bar-container">
             <div class="loading-bar"></div>
+            <div class="loading-bar-glow"></div>
         </div>
-        <p class="loading-text">PLUS DEV IS LOADING...</p>
+
+        <!-- نقاط -->
+        <div class="loader-dots">
+            <span></span><span></span><span></span>
+        </div>
     </div>
 </div>
 
@@ -118,11 +137,11 @@
             <i class="fas fa-bars" id="menu-icon"></i>
         </button>
         <div class="nav-links" id="nav-links">
-            <a class="active" href="#" onclick="showPage('home')">Home</a>
-            <a href="#" onclick="showPage('rules')">Rules</a>
-            <a href="#" onclick="showPage('tutorials')">Explanations</a>
-            <a href="#" onclick="showPage('jobs')">Apply Jobs</a>
-            <a href="#" onclick="showPage('store')">Store</a>
+            <a class="active" href="#" onclick="showPage('home')">الرئيسية</a>
+            <a href="#" onclick="showPage('rules')">القوانين</a>
+            <a href="#" onclick="showPage('tutorials')">الشروحات</a>
+            <a href="#" onclick="showPage('jobs')">الوظائف</a>
+            <a href="#" onclick="showPage('store')">المتجر</a>
         </div>
 
 <div class="social-links">
@@ -765,52 +784,72 @@
 <!-- TUTORIALS PAGE -->
 <div class="page" id="tutorials">
     <div class="container">
-        <h1><i class="fa-solid fa-clapperboard"></i> الشروحات</h1>
-        <p>شروحات مرئية لمساعدتك في فهم المشتريات</p>
+
+        <div class="tutorials-hero">
+            <div class="tutorials-hero-icon">🎬</div>
+            <h1>الشروحات</h1>
+            <p>فيديوهات تعليمية لمساعدتك في إعداد سيرفرك</p>
+        </div>
 
         <div class="tutorials-grid">
 
             <div class="tutorial-card">
-                <iframe class="tutorial-video"
-                        src="https://www.youtube.com/embed/MSD8MJhnD-I?start=366"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                </iframe>
-
+                <div class="tutorial-thumb">
+                    <iframe class="tutorial-video"
+                            src="https://www.youtube.com/embed/MSD8MJhnD-I?start=366"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                </div>
                 <div class="tutorial-info">
-                    <h3>شرح تركيب داتا بيس</h3>
-                    <p>شرح تركيب داتا بيس عن طريق تطبيق الxampp و heidisql بتفاصيل
-                    </p>
+                    <div class="tutorial-tag">🗄️ قواعد البيانات</div>
+                    <h3>شرح تركيب Database</h3>
+                    <p>شرح تركيب قاعدة البيانات عبر XAMPP و HeidiSQL بتفاصيل كاملة</p>
+                    <div class="tutorial-meta">
+                        <span><i class="fas fa-user"></i> Plus Dev</span>
+                        <span><i class="fas fa-clock"></i> شرح مفصّل</span>
+                    </div>
                 </div>
             </div>
-            
-            
+
             <div class="tutorial-card">
-                <iframe class="tutorial-video"
-                        src="https://www.youtube.com/embed/_PR6CIU_6nM"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                </iframe>
-
+                <div class="tutorial-thumb">
+                    <iframe class="tutorial-video"
+                            src="https://www.youtube.com/embed/_PR6CIU_6nM"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                </div>
                 <div class="tutorial-info">
+                    <div class="tutorial-tag">⚙️ سكربتات</div>
                     <h3>شرح تركيب سكربت</h3>
-                    <p>شرح تركيب سكربت في السيرفر حقك تشغيله في server.cfg او TX Admin </p>
+                    <p>طريقة تشغيل السكربت في server.cfg أو TX Admin خطوة بخطوة</p>
+                    <div class="tutorial-meta">
+                        <span><i class="fas fa-user"></i> Plus Dev</span>
+                        <span><i class="fas fa-clock"></i> شرح مفصّل</span>
+                    </div>
                 </div>
             </div>
 
-                        <div class="tutorial-card">
-                <iframe class="tutorial-video"
-                        src="https://www.youtube.com/embed/jJKpPejTF5I"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                </iframe>
-
+            <div class="tutorial-card">
+                <div class="tutorial-thumb">
+                    <iframe class="tutorial-video"
+                            src="https://www.youtube.com/embed/jJKpPejTF5I"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                </div>
                 <div class="tutorial-info">
-                    <h3>شرح فتح سيرفر</h3>
-                    <p>الشرح عن xampp ,heidisql ,txadmin ,server.cfg ,Database</p>
+                    <div class="tutorial-tag">🚀 بدء من الصفر</div>
+                    <h3>شرح فتح سيرفر كامل</h3>
+                    <p>كل شيء من XAMPP، HeidiSQL، TxAdmin، server.cfg، والـ Database</p>
+                    <div class="tutorial-meta">
+                        <span><i class="fas fa-user"></i> Plus Dev</span>
+                        <span><i class="fas fa-clock"></i> شامل ومفصّل</span>
+                    </div>
                 </div>
             </div>
 
@@ -980,33 +1019,71 @@
         <h1><i class="fa-solid fa-paper-plane"></i> تقديم الوظائف</h1>
         <p>اختر الوظيفة التي ترغب في التقديم عليها</p>
 
-        <div class="jobs-container" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-top:30px;">
-            <div class="job-card" style="border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:30px;background:rgba(15,15,15,0.9);text-align:center;transition:all 0.3s;">
-                <div style="width:65px;height:65px;background:rgba(52,152,219,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.8rem;color:#3498db;">
+        <div class="jobs-page-hero">
+            <div class="jobs-hero-badge">⚡ التقديم مفتوح</div>
+            <h1>انضم لفريق Plus Dev</h1>
+            <p>اختر الوظيفة المناسبة لك وقدّم الآن</p>
+        </div>
+
+        <div class="jobs-container">
+
+            <div class="job-card job-police">
+                <div class="job-card-bg"></div>
+                <div class="job-icon-wrap job-icon-blue">
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h3 style="color:#fff;margin-bottom:8px;">شرطة LSPD</h3>
-                <p style="color:#777;font-size:0.9rem;margin-bottom:20px;line-height:1.6;">انضم إلى الشرطة وحافظ على الأمن والنظام داخل المدينة</p>
-                <button id="btn-police" class="btn" onclick="openJobModal('police')">تقديم الآن</button>
+                <div class="job-info">
+                    <h3>شرطة LSPD</h3>
+                    <p>حافظ على الأمن والنظام، نفّذ القانون، وكن الخط الأول للدفاع عن المدينة</p>
+                    <div class="job-requirements">
+                        <span class="job-req-tag"><i class="fas fa-user"></i> العمر 17+</span>
+                        <span class="job-req-tag"><i class="fas fa-microphone"></i> مايك سليم</span>
+                        <span class="job-req-tag"><i class="fas fa-clock"></i> تواجد منتظم</span>
+                    </div>
+                </div>
+                <button id="btn-police" class="btn job-apply-btn" onclick="openJobModal('police')">
+                    <i class="fas fa-paper-plane"></i> تقديم الآن
+                </button>
             </div>
 
-            <div class="job-card" style="border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:30px;background:rgba(15,15,15,0.9);text-align:center;transition:all 0.3s;">
-                <div style="width:65px;height:65px;background:rgba(46,204,113,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.8rem;color:#2ecc71;">
+            <div class="job-card job-ems">
+                <div class="job-card-bg"></div>
+                <div class="job-icon-wrap job-icon-green">
                     <i class="fa-solid fa-star-of-life"></i>
                 </div>
-                <h3 style="color:#fff;margin-bottom:8px;">فريق EMS</h3>
-                <p style="color:#777;font-size:0.9rem;margin-bottom:20px;line-height:1.6;">انضم إلى الإسعاف وأنقذ الأرواح في حوادث المدينة</p>
-                <button id="btn-ems" class="btn" onclick="openJobModal('ems')">تقديم الآن</button>
+                <div class="job-info">
+                    <h3>فريق EMS</h3>
+                    <p>أنقذ الأرواح، قدّم الإسعاف الفوري، وكن البطل الصامت في حوادث المدينة</p>
+                    <div class="job-requirements">
+                        <span class="job-req-tag"><i class="fas fa-user"></i> العمر 16+</span>
+                        <span class="job-req-tag"><i class="fas fa-bolt"></i> استجابة سريعة</span>
+                        <span class="job-req-tag"><i class="fas fa-heart"></i> تعامل لبق</span>
+                    </div>
+                </div>
+                <button id="btn-ems" class="btn job-apply-btn" onclick="openJobModal('ems')">
+                    <i class="fas fa-paper-plane"></i> تقديم الآن
+                </button>
             </div>
 
-            <div class="job-card" style="border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:30px;background:rgba(15,15,15,0.9);text-align:center;transition:all 0.3s;">
-                <div style="width:65px;height:65px;background:rgba(252,120,35,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.8rem;color:#fc7823;">
+            <div class="job-card job-staff">
+                <div class="job-card-bg"></div>
+                <div class="job-icon-wrap job-icon-orange">
                     <i class="fa-solid fa-user-gear"></i>
                 </div>
-                <h3 style="color:#fff;margin-bottom:8px;">فريق الإدارة</h3>
-                <p style="color:#777;font-size:0.9rem;margin-bottom:20px;line-height:1.6;">انضم للإدارة وساهم في بناء أفضل سيرفر FiveM</p>
-                <button id="btn-staff" class="btn" onclick="openJobModal('staff')">تقديم الآن</button>
+                <div class="job-info">
+                    <h3>فريق الإدارة</h3>
+                    <p>ساهم في بناء السيرفر، أدِر اللاعبين، وكن جزءاً من القرار في Plus Dev</p>
+                    <div class="job-requirements">
+                        <span class="job-req-tag"><i class="fas fa-user"></i> العمر 18+</span>
+                        <span class="job-req-tag"><i class="fas fa-calendar-check"></i> تواجد يومي</span>
+                        <span class="job-req-tag"><i class="fas fa-star"></i> خبرة إدارية</span>
+                    </div>
+                </div>
+                <button id="btn-staff" class="btn job-apply-btn" onclick="openJobModal('staff')">
+                    <i class="fas fa-paper-plane"></i> تقديم الآن
+                </button>
             </div>
+
         </div>
     </div>
 </div>
@@ -1149,6 +1226,30 @@
         </div>
     </div>
 </div>
+
+<!-- Bottom Navigation - Mobile Only -->
+<nav class="bottom-nav" id="bottom-nav">
+    <button class="bottom-nav-item active" onclick="showPage('home'); setBottomNav(this)">
+        <i class="fas fa-home"></i>
+        <span>الرئيسية</span>
+    </button>
+    <button class="bottom-nav-item" onclick="showPage('rules'); setBottomNav(this)">
+        <i class="fas fa-book"></i>
+        <span>القوانين</span>
+    </button>
+    <button class="bottom-nav-item bottom-nav-center" onclick="showPage('jobs'); setBottomNav(this)">
+        <i class="fas fa-paper-plane"></i>
+        <span>وظائف</span>
+    </button>
+    <button class="bottom-nav-item" onclick="showPage('store'); setBottomNav(this)">
+        <i class="fas fa-store"></i>
+        <span>المتجر</span>
+    </button>
+    <button class="bottom-nav-item" onclick="showPage('tutorials'); setBottomNav(this)">
+        <i class="fas fa-play-circle"></i>
+        <span>شروحات</span>
+    </button>
+</nav>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
