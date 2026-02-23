@@ -145,239 +145,158 @@
 
 <!-- tracking-page -->
 <div id="tracking-page" class="page">
-    <div class="tracking-card">
-        <h2 style="color: #fc7823; text-align: center; margin-bottom: 25px;">
-            <i class="fas fa-clipboard-list"></i> حالة طلب التوظيف
-        </h2>
-        
-        <div id="no-app-message" style="text-align: center; color: #888; padding: 40px;">
-            <i class="fas fa-folder-open" style="font-size: 50px; display: block; margin-bottom: 10px;"></i>
-            <p>لم تقم بتقديم أي طلب حتى الآن.</p>
-        </div>
+  <div class="trk-wrapper">
 
-        <div id="app-status-info" style="display: none;">
-            <div id="applications-list">
-                <div class="status-row">
-                    <span>الوظيفة المقدم عليها:</span>
-                    <strong id="track-job-name" style="color: #fc7823;">--</strong>
-                </div>
-                <div class="status-row">
-                    <span>رقم الطلب:</span>
-                    <strong id="track-app-id" style="color: #fc7823;">#--</strong>
-                </div>
-                <div class="status-row">
-                    <span>حالة الطلب الحالية:</span>
-                    <span id="track-status-label" class="status-badge">--</span>
-                </div>
-                <hr style="border: 0.1px solid #333; margin: 20px 0;">
-                <div class="status-row" style="flex-direction: column; align-items: flex-start;">
-                    <span style="margin-bottom: 10px;">ملاحظات الإدارة:</span>
-                    <div id="track-admin-note" class="note-area">لا توجد ملاحظات من الإدارة حتى الآن.</div>
-                </div>
-            </div>
-        </div>
+    <!-- Hero -->
+    <div class="trk-hero">
+      <div class="trk-hero-bg"></div>
+      <div class="trk-hero-content">
+        <div class="trk-hero-icon"><i class="fas fa-satellite-dish"></i></div>
+        <h1 class="trk-hero-title">تتبع طلبك</h1>
+        <p class="trk-hero-sub">ابقَ على اطلاع بحالة طلب التوظيف الخاص بك لحظةً بلحظة</p>
+      </div>
     </div>
+
+    <!-- Empty State -->
+    <div id="no-app-message" class="trk-empty">
+      <div class="trk-empty-orbit">
+        <div class="trk-empty-planet"><i class="fas fa-folder-open"></i></div>
+        <div class="trk-orbit-ring ring-1"></div>
+        <div class="trk-orbit-ring ring-2"></div>
+      </div>
+      <h3 class="trk-empty-title">لا يوجد طلب مقدّم</h3>
+      <p class="trk-empty-desc">لم تقم بتقديم أي طلب توظيف حتى الآن.<br>توجه لصفحة الوظائف وابدأ رحلتك معنا!</p>
+      <button class="trk-empty-cta" onclick="showPage('jobs-page')">
+        <i class="fas fa-briefcase"></i> تصفح الوظائف
+      </button>
+    </div>
+
+    <!-- Cards Container — JS يملأه -->
+    <div id="app-status-info" style="display:none;">
+      <div id="applications-list" class="trk-card-grid"></div>
+    </div>
+
+  </div>
 </div>
 
 <!-- admin-dashboard -->
 <div id="admin-dashboard" class="page">
-
-  <!-- ══════════════════════════════════════
-       ADMIN HERO HEADER
-  ══════════════════════════════════════ -->
-  <div class="adm-hero">
-    <div class="adm-hero-glow"></div>
-    <div class="adm-hero-grid"></div>
-    <div class="adm-hero-inner">
-      <div class="adm-hero-badge">
-        <span class="adm-hero-dot"></span>
-        لوحة تحكم مباشرة
-      </div>
-      <h1 class="adm-hero-title">لوحة الإدارة <span>العليا</span></h1>
-      <p class="adm-hero-sub">مرحباً بك — تحكم كامل بالطلبات والأدمنز وحالة السيرفر</p>
-    </div>
-  </div>
-
-  <div class="adm-container">
-
-    <!-- ══════════════════════════════════════
-         STATS ROW
-    ══════════════════════════════════════ -->
-    <div class="adm-stats-row">
-
-      <div class="adm-stat-card adm-stat-total">
-        <div class="adm-stat-icon"><i class="fas fa-layer-group"></i></div>
-        <div class="adm-stat-info">
-          <span class="adm-stat-num" id="total-apps">0</span>
-          <span class="adm-stat-label">إجمالي التقديمات</span>
+    <section class="admin-hero">
+        <div class="container">
+            <h1>لوحة الإدارة العليا </h1>
+            <p>مرحباً بك يا مدير، إليك ملخص حالة السيرفر والطلبات الحقيقية.</p>
         </div>
-        <div class="adm-stat-shine"></div>
-      </div>
+    </section>
 
-      <div class="adm-stat-card adm-stat-approved">
-        <div class="adm-stat-icon"><i class="fas fa-check-circle"></i></div>
-        <div class="adm-stat-info">
-          <span class="adm-stat-num" id="approved-apps">0</span>
-          <span class="adm-stat-label">مقبول</span>
-        </div>
-        <div class="adm-stat-shine"></div>
-      </div>
-
-      <div class="adm-stat-card adm-stat-pending">
-        <div class="adm-stat-icon"><i class="fas fa-hourglass-half"></i></div>
-        <div class="adm-stat-info">
-          <span class="adm-stat-num" id="pending-apps">0</span>
-          <span class="adm-stat-label">قيد الانتظار</span>
-        </div>
-        <div class="adm-stat-shine"></div>
-      </div>
-
-      <div class="adm-stat-card adm-stat-rejected">
-        <div class="adm-stat-icon"><i class="fas fa-times-circle"></i></div>
-        <div class="adm-stat-info">
-          <span class="adm-stat-num" id="rejected-apps">0</span>
-          <span class="adm-stat-label">مرفوض</span>
-        </div>
-        <div class="adm-stat-shine"></div>
-      </div>
-
-    </div><!-- /adm-stats-row -->
-
-    <!-- ══════════════════════════════════════
-         TWO COLUMN ROW: CONTROLS + MANAGERS
-    ══════════════════════════════════════ -->
-    <div class="adm-two-col">
-
-      <!-- Quick Controls -->
-      <div class="adm-panel adm-panel-controls">
-        <div class="adm-panel-head">
-          <div class="adm-panel-icon"><i class="fas fa-sliders-h"></i></div>
-          <div>
-            <h3 class="adm-panel-title">التحكم السريع</h3>
-            <p class="adm-panel-sub">فتح وإغلاق الوظائف فورياً</p>
-          </div>
-        </div>
-
-        <div class="adm-controls-body">
-          <div class="adm-master-toggle">
-            <div class="adm-master-label">
-              <i class="fas fa-power-off"></i>
-              <span>التحكم الشامل</span>
+    <div class="container admin-grid">
+        <div class="admin-stats">
+            <div class="admin-card">
+                <i class="fas fa-users"></i>
+                <div class="stat-info">
+                    <h3 id="total-apps">0</h3>
+                    <p>إجمالي التقديمات</p>
+                </div>
             </div>
-            <button id="toggle-all" class="adm-toggle-btn adm-toggle-off" onclick="toggleAllJobs()">
-              <span class="adm-toggle-knob"></span>
-            </button>
-          </div>
-
-          <div class="adm-toggle-divider"></div>
-
-          <div class="adm-toggle-row">
-            <div class="adm-toggle-info">
-              <span class="adm-toggle-icon adm-police-icon"><i class="fas fa-shield-alt"></i></span>
-              <span>الشرطة</span>
+            <div class="admin-card">
+                <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
+                <div class="stat-info">
+                    <h3 id="approved-apps" style="color:#2ecc71;">0</h3>
+                    <p>مقبول</p>
+                </div>
             </div>
-            <button id="toggle-police" class="adm-toggle-btn adm-toggle-on" onclick="updateJobStatus('police')">
-              <span class="adm-toggle-knob"></span>
-            </button>
-          </div>
-
-          <div class="adm-toggle-row">
-            <div class="adm-toggle-info">
-              <span class="adm-toggle-icon adm-ems-icon"><i class="fas fa-ambulance"></i></span>
-              <span>الإسعاف</span>
+            <div class="admin-card">
+                <i class="fas fa-clock" style="color: #f39c12;"></i>
+                <div class="stat-info">
+                    <h3 id="pending-apps" style="color:#f39c12;">0</h3>
+                    <p>قيد الانتظار</p>
+                </div>
             </div>
-            <button id="toggle-ems" class="adm-toggle-btn adm-toggle-on" onclick="updateJobStatus('ems')">
-              <span class="adm-toggle-knob"></span>
-            </button>
-          </div>
-
-          <div class="adm-toggle-row">
-            <div class="adm-toggle-info">
-              <span class="adm-toggle-icon adm-staff-icon"><i class="fas fa-user-cog"></i></span>
-              <span>الإدارة</span>
+            <div class="admin-card">
+                <i class="fas fa-times-circle" style="color: #e74c3c;"></i>
+                <div class="stat-info">
+                    <h3 id="rejected-apps" style="color:#e74c3c;">0</h3>
+                    <p>مرفوض</p>
+                </div>
             </div>
-            <button id="toggle-staff" class="adm-toggle-btn adm-toggle-on" onclick="updateJobStatus('staff')">
-              <span class="adm-toggle-knob"></span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Admin Managers -->
-      <div class="adm-panel adm-panel-managers">
-        <div class="adm-panel-head">
-          <div class="adm-panel-icon adm-icon-orange"><i class="fas fa-user-shield"></i></div>
-          <div>
-            <h3 class="adm-panel-title">إدارة الأدمنز</h3>
-            <p class="adm-panel-sub">أضف أو احذف صلاحيات الأدمنز</p>
-          </div>
         </div>
 
-        <div class="adm-add-row">
-          <input type="text" id="new-admin-id"
-            placeholder="أدخل Discord ID..."
-            class="adm-input">
-          <button onclick="addAdminId()" class="adm-add-btn">
+    <!-- ─── قسم إدارة الأدمنز ─── -->
+<div class="admin-managers-section">
+    <h2><i class="fas fa-user-shield"></i> إدارة الأدمنز</h2>
+    <p style="color:#888;font-size:0.85rem;margin-bottom:16px;">أضف أو احذف أدمنز — فقط من يملك الـ Discord ID هنا يقدر يدخل لوحة الإدارة</p>
+
+    <div class="add-admin-row">
+        <input type="text" id="new-admin-id" placeholder="أدخل Discord ID مثل: 123456789012345678"
+            style="flex:1;padding:11px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:Tajawal,sans-serif;font-size:0.9rem;outline:none;">
+        <button onclick="addAdminId()" class="btn-add-admin">
             <i class="fas fa-plus"></i> إضافة
-          </button>
-        </div>
-
-        <div id="admin-ids-list" class="adm-ids-list">
-          <div class="adm-ids-loading"><i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...</div>
-        </div>
-      </div>
-
-    </div><!-- /adm-two-col -->
-
-    <!-- ══════════════════════════════════════
-         APPLICATIONS TABLE
-    ══════════════════════════════════════ -->
-    <div class="adm-panel adm-panel-table">
-      <div class="adm-table-head">
-        <div class="adm-table-title-wrap">
-          <div class="adm-panel-icon"><i class="fas fa-clipboard-list"></i></div>
-          <h3 class="adm-panel-title">طلبات التوظيف</h3>
-        </div>
-        <div class="adm-filters">
-          <button class="adm-filter-btn adm-filter-active" data-status="all" onclick="filterAdminTable('all', this)">
-            <i class="fas fa-th"></i> الكل
-          </button>
-          <button class="adm-filter-btn adm-filter-pending" data-status="معلق" onclick="filterAdminTable('معلق', this)">
-            <i class="fas fa-hourglass-half"></i> معلق
-          </button>
-          <button class="adm-filter-btn adm-filter-approved" data-status="مقبول" onclick="filterAdminTable('مقبول', this)">
-            <i class="fas fa-check"></i> مقبول
-          </button>
-          <button class="adm-filter-btn adm-filter-rejected" data-status="رفض" onclick="filterAdminTable('رفض', this)">
-            <i class="fas fa-times"></i> مرفوض
-          </button>
-        </div>
-      </div>
-
-      <div class="adm-table-wrap">
-        <table class="adm-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>اسم الشخصية</th>
-              <th>الوظيفة</th>
-              <th>ملاحظة</th>
-              <th>الحالة</th>
-              <th>إجراء</th>
-            </tr>
-          </thead>
-          <tbody id="jobs-table-body"></tbody>
-        </table>
-      </div>
-
-      <div class="adm-table-footer">
-        <button class="adm-clear-btn" onclick="clearLogs()">
-          <i class="fas fa-trash-alt"></i> تصفير جميع الطلبات
         </button>
-      </div>
     </div>
 
-  </div><!-- /adm-container -->
+    <div id="admin-ids-list" class="admin-ids-list">
+        <p style="color:#666;text-align:center;padding:10px;">جاري التحميل...</p>
+    </div>
+</div>
+
+<div class="admin-actions">
+    <h2>التحكم السريع</h2>
+    <div class="actions-group">
+        <div class="toggle-container main-control">
+            <span>إغلاق/فتح الكل:</span>
+            <button id="toggle-all" class="toggle-btn" onclick="toggleAllJobs()">OFF</button>
+        </div>
+        
+        <hr style="width: 100%; border: 0.5px solid #333; margin: 15px 0;">
+        
+        <div class="toggle-item">
+            <span>الشرطة:</span>
+            <button id="toggle-police" class="toggle-btn" onclick="updateJobStatus('police')">ON</button>
+        </div>
+        <div class="toggle-item">
+            <span>الإسعاف:</span>
+            <button id="toggle-ems" class="toggle-btn" onclick="updateJobStatus('ems')">ON</button>
+        </div>
+        <div class="toggle-item">
+            <span>الإدارة:</span>
+            <button id="toggle-staff" class="toggle-btn" onclick="updateJobStatus('staff')">ON</button>
+        </div>
+    </div>
+</div>
+
+        <div class="admin-table-container">
+            <div class="admin-table-header">
+                <h2>آخر طلبات التوظيف</h2>
+                <div class="filter-status-row">
+                    <button class="filter-status-btn active" data-status="all" onclick="filterAdminTable('all', this)">الكل</button>
+                    <button class="filter-status-btn" data-status="معلق" onclick="filterAdminTable('معلق', this)">⏳ معلق</button>
+                    <button class="filter-status-btn" data-status="مقبول" onclick="filterAdminTable('مقبول', this)">✅ مقبول</button>
+                    <button class="filter-status-btn" data-status="رفض" onclick="filterAdminTable('رفض', this)">❌ مرفوض</button>
+                </div>
+            </div>
+
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>اسم الشخصية</th>
+                        <th>الوظيفة</th>
+                        <th>ملاحظات الإدارة</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="jobs-table-body"></tbody>
+            </table>
+
+            <div class="admin-table-footer">
+                <button class="btn-clear-all" onclick="clearLogs()">
+                    <i class="fa-solid fa-eraser"></i> تصفير جميع الطلبات
+                </button>
+            </div>
+        </div>
+
+        
+    </div>
 </div>
 
 <!-- HOME PAGE -->
