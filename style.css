@@ -4143,16 +4143,8 @@ body.light-theme .setting-item {
   overflow: hidden;
   pointer-events: none;
 }
-.hero-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.18;
-  animation: orbFloat linear infinite;
-}
-.hero-orb-1 { width: 500px; height: 500px; background: #fc7823; top: -150px; right: -100px; animation-duration: 20s; }
-.hero-orb-2 { width: 350px; height: 350px; background: #e05e10; bottom: -80px; left: -50px; animation-duration: 15s; animation-direction: reverse; }
-.hero-orb-3 { width: 200px; height: 200px; background: #ffb347; top: 40%; left: 45%; animation-duration: 12s; opacity: 0.08; }
+.hero-orb { display: none; }
+.hero-orb-1, .hero-orb-2, .hero-orb-3 { display: none; }
 
 @keyframes orbFloat {
   0%   { transform: translate(0, 0) scale(1); }
