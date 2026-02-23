@@ -686,11 +686,11 @@ function filterAdminTable(status, btn) {
             row.style.display = (statusCell && statusCell.textContent.trim() === status) ? '' : 'none';
         }
     });
-    document.querySelectorAll('.filter-status-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.adm-filter-btn').forEach(b => b.classList.remove('adm-filter-active'));
+    if (btn) btn.classList.add('adm-filter-active');
     else {
-        const activeBtn = document.querySelector(`.filter-status-btn[data-status="${status}"]`);
-        if (activeBtn) activeBtn.classList.add('active');
+        const activeBtn = document.querySelector(`.adm-filter-btn[data-status="${status}"]`);
+        if (activeBtn) activeBtn.classList.add('adm-filter-active');
     }
 }
 
@@ -825,7 +825,7 @@ function pushGlobalNotif(type, title, msg) {
 
 function updateJobStatus(jobType) {
     const btn = document.getElementById(`toggle-${jobType}`);
-    const isCurrentlyOn = btn && btn.innerText === "ON";
+    const isCurrentlyOn = btn && btn.classList.contains('adm-toggle-on');
     
     database.ref('jobStatus/' + jobType).set({
         closed: isCurrentlyOn
@@ -843,7 +843,7 @@ function updateJobStatus(jobType) {
 function toggleAllJobs() {
     const jobs = ['police', 'ems', 'staff'];
     const mainBtn = document.getElementById('toggle-all');
-    const shouldClose = mainBtn && mainBtn.innerText === "ON";
+    const shouldClose = mainBtn && mainBtn.classList.contains('adm-toggle-on');
 
     jobs.forEach(job => {
         database.ref('jobStatus/' + job).set({ closed: shouldClose });
@@ -892,8 +892,7 @@ database.ref('jobStatus').on('value', (snapshot) => {
 
         const adminBtn = document.getElementById(`toggle-${job}`);
         if (adminBtn) {
-            adminBtn.innerText = isClosed ? "OFF" : "ON";
-            adminBtn.className = isClosed ? "toggle-btn off" : "toggle-btn on";
+            adminBtn.className = isClosed ? "adm-toggle-btn adm-toggle-off" : "adm-toggle-btn adm-toggle-on";
         }
 
         if (!isClosed) allClosed = false;
@@ -901,8 +900,7 @@ database.ref('jobStatus').on('value', (snapshot) => {
 
     const mainBtn = document.getElementById('toggle-all');
     if (mainBtn) {
-        mainBtn.innerText = allClosed ? "OFF" : "ON";
-        mainBtn.className = allClosed ? "toggle-btn off" : "toggle-btn on";
+        mainBtn.className = allClosed ? "adm-toggle-btn adm-toggle-off" : "adm-toggle-btn adm-toggle-on";
     }
 });
 
@@ -915,16 +913,28 @@ function loadUserTrackingData() {
     const listContainer = document.getElementById('applications-list');
 
     if (!savedUser) {
-        if (noAppMsg) noAppMsg.style.display = 'flex';
+        if (noAppMsg) {
+            noAppMsg.style.display = 'block';
+            noAppMsg.innerHTML = `
+                <div class="trk-empty-orbit">
+                    <div class="trk-empty-planet"><i class="fas fa-user-lock"></i></div>
+                    <div class="trk-orbit-ring ring-1"></div>
+                    <div class="trk-orbit-ring ring-2"></div>
+                </div>
+                <h3 class="trk-empty-title">يرجى تسجيل الدخول</h3>
+                <p class="trk-empty-desc">قم بتسجيل الدخول أولاً لتتمكن من تتبع طلباتك.</p>`;
+        }
         if (appStatusInfo) appStatusInfo.style.display = 'none';
         return;
     }
 
     database.ref('applications').on('value', (snapshot) => {
         const data = snapshot.val();
-
+        
         if (!data) {
-            if (noAppMsg) noAppMsg.style.display = 'flex';
+            if (noAppMsg) {
+                noAppMsg.style.display = 'block';
+            }
             if (appStatusInfo) appStatusInfo.style.display = 'none';
             return;
         }
@@ -935,74 +945,81 @@ function loadUserTrackingData() {
         if (myApps.length > 0) {
             if (noAppMsg) noAppMsg.style.display = 'none';
             if (appStatusInfo) appStatusInfo.style.display = 'block';
-            listContainer.innerHTML = '';
+            
+            listContainer.innerHTML = ''; 
 
             myApps.forEach(app => {
-                const isApproved = app.status === '\u0645\u0642\u0628\u0648\u0644';
-                const isRejected = app.status === '\u0631\u0641\u0636';
-                const statusClass = isApproved ? 'status-approved' : isRejected ? 'status-rejected' : 'status-pending';
+                const statusClass = app.status === 'مقبول' ? 'status-approved' : 
+                                    app.status === 'رفض' ? 'status-rejected' : 'status-pending';
+                
+                const isApproved = app.status === 'مقبول';
+                const isRejected = app.status === 'رفض';
+                const isPending = !isApproved && !isRejected;
 
-                const pulseColor = isApproved
-                    ? 'background:#2ecc71;box-shadow:0 0 12px rgba(46,204,113,0.6)'
-                    : isRejected
-                    ? 'background:#e74c3c;box-shadow:0 0 12px rgba(231,76,60,0.6)'
-                    : 'background:#f39c12;box-shadow:0 0 12px rgba(243,156,18,0.6)';
+                // Determine step states
+                const step1Class = 'done'; // always submitted
+                const step2Class = isApproved || isRejected ? 'done' : 'active';
+                const step3Class = isApproved ? 'done' : isRejected ? 'done' : '';
+                const line1Class = step2Class === 'done' ? 'filled' : '';
+                const line2Class = step3Class === 'done' ? 'filled' : '';
 
-                const step1 = 'trk-step done';
-                const step2 = (isApproved || isRejected) ? 'trk-step done' : 'trk-step active';
-                const step3 = (isApproved || isRejected) ? 'trk-step done' : 'trk-step';
-                const line1 = (isApproved || isRejected) ? 'trk-step-line filled' : 'trk-step-line';
-                const line2 = (isApproved || isRejected) ? 'trk-step-line filled' : 'trk-step-line';
-                const finalIcon = isRejected ? 'fa-times' : 'fa-check';
+                const statusIconMap = { 'مقبول': 'fa-check-circle', 'رفض': 'fa-times-circle', 'pending': 'fa-hourglass-half' };
+                const statusIcon = isApproved ? 'fa-check-circle' : isRejected ? 'fa-times-circle' : 'fa-hourglass-half';
 
                 const noteHtml = app.adminNote
-                    ? `<p style="margin:0;color:#c8c8c8;line-height:1.7;">${app.adminNote}</p>`
-                    : `<div class="trk-notes-empty"><i class="fas fa-inbox"></i><p>\u0644\u0627 \u062a\u0648\u062c\u062f \u0645\u0644\u0627\u062d\u0638\u0627\u062a \u062d\u0627\u0644\u064a\u0627\u064b</p></div>`;
+                    ? `<p style="margin:0; color:#c8c8c8;">${app.adminNote}</p>`
+                    : `<div class="trk-notes-empty"><i class="fas fa-inbox"></i><p>لا توجد ملاحظات حالياً</p></div>`;
 
                 listContainer.innerHTML += `
-                <div class="trk-card trk-card-main">
-                    <div class="trk-card-header">
-                        <div class="trk-card-icon-wrap"><i class="fas fa-id-card"></i></div>
-                        <div style="flex:1;min-width:0;">
-                            <span class="trk-card-label">\u0627\u0644\u0648\u0638\u064a\u0641\u0629 \u0627\u0644\u0645\u0642\u062f\u0645 \u0639\u0644\u064a\u0647\u0627</span>
-                            <h3 class="trk-card-title">${app.job}</h3>
+                    <div class="trk-card trk-card-main">
+                        <div class="trk-card-header">
+                            <div class="trk-card-icon-wrap">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div>
+                                <span class="trk-card-label">الوظيفة المقدم عليها</span>
+                                <h3 class="trk-card-title">${app.job}</h3>
+                            </div>
+                            <span class="trk-app-badge">#${app.appId}</span>
                         </div>
-                        <span class="trk-app-badge">${app.appId}</span>
+                        <div class="trk-timeline">
+                            <div class="trk-timeline-label">الحالة الحالية</div>
+                            <div class="trk-status-display">
+                                <div class="trk-status-pulse" style="${isApproved ? 'background:#2ecc71; box-shadow:0 0 12px rgba(46,204,113,0.6)' : isRejected ? 'background:#e74c3c; box-shadow:0 0 12px rgba(231,76,60,0.6)' : ''}"></div>
+                                <span class="status-badge ${statusClass} trk-status-badge-lg">
+                                    <i class="fas ${statusIcon}" style="margin-left:6px;"></i>${app.status}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="trk-steps">
+                            <div class="trk-step ${step1Class}">
+                                <div class="trk-step-dot"><i class="fas fa-paper-plane"></i></div>
+                                <span>تم التقديم</span>
+                            </div>
+                            <div class="trk-step-line ${line1Class}"></div>
+                            <div class="trk-step ${step2Class}">
+                                <div class="trk-step-dot"><i class="fas fa-search"></i></div>
+                                <span>قيد المراجعة</span>
+                            </div>
+                            <div class="trk-step-line ${line2Class}"></div>
+                            <div class="trk-step ${step3Class}">
+                                <div class="trk-step-dot"><i class="fas ${isRejected ? 'fa-times' : 'fa-check'}"></i></div>
+                                <span>القرار النهائي</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="trk-timeline">
-                        <div class="trk-timeline-label">\u0627\u0644\u062d\u0627\u0644\u0629 \u0627\u0644\u062d\u0627\u0644\u064a\u0629</div>
-                        <div class="trk-status-display">
-                            <div class="trk-status-pulse" style="${pulseColor}"></div>
-                            <span class="status-badge ${statusClass} trk-status-badge-lg">${app.status}</span>
+                    <div class="trk-card trk-card-notes">
+                        <div class="trk-notes-header">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>ملاحظات الإدارة</span>
                         </div>
-                    </div>
-                    <div class="trk-steps">
-                        <div class="${step1}">
-                            <div class="trk-step-dot"><i class="fas fa-paper-plane"></i></div>
-                            <span>\u062a\u0645 \u0627\u0644\u062a\u0642\u062f\u064a\u0645</span>
-                        </div>
-                        <div class="${line1}"></div>
-                        <div class="${step2}">
-                            <div class="trk-step-dot"><i class="fas fa-search"></i></div>
-                            <span>\u0642\u064a\u062f \u0627\u0644\u0645\u0631\u0627\u062c\u0639\u0629</span>
-                        </div>
-                        <div class="${line2}"></div>
-                        <div class="${step3}">
-                            <div class="trk-step-dot"><i class="fas ${finalIcon}"></i></div>
-                            <span>\u0627\u0644\u0642\u0631\u0627\u0631 \u0627\u0644\u0646\u0647\u0627\u0626\u064a</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="trk-card trk-card-notes">
-                    <div class="trk-notes-header">
-                        <i class="fas fa-comment-dots"></i>
-                        <span>\u0645\u0644\u0627\u062d\u0638\u0627\u062a \u0627\u0644\u0625\u062f\u0627\u0631\u0629</span>
-                    </div>
-                    <div class="trk-notes-body">${noteHtml}</div>
-                </div>`;
+                        <div class="trk-notes-body">${noteHtml}</div>
+                    </div>`;
             });
         } else {
-            if (noAppMsg) noAppMsg.style.display = 'flex';
+            if (noAppMsg) {
+                noAppMsg.style.display = 'block';
+            }
             if (appStatusInfo) appStatusInfo.style.display = 'none';
         }
     });
