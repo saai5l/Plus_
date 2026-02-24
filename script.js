@@ -1496,57 +1496,47 @@ function removeAdminId(key, adminId) {
 
 
 // ============================================
-// نظام تذاكر الدعم — Discord Webhook
+// نظام التذاكر الكامل — Firebase
 // ============================================
 const TICKET_WEBHOOK = 'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ';
-let selectedTicketType = '🚨 مشكلة تقنية';
+let selectedTktType = '🚨 مشكلة تقنية';
+let currentReplyTicketId = null;
+let allTickets = [];
 
+// ── فتح modal التذكرة ──
 function openTicketModal() {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
-    if (!user) {
-        if (typeof showNotification === 'function') showNotification('⚠️ يرجى تسجيل الدخول أولاً', true);
-        return;
-    }
-    // reset
+    if (!user) { showNotification('⚠️ يرجى تسجيل الدخول أولاً', true); return; }
     document.getElementById('tkt-subject').value = '';
     document.getElementById('tkt-body').value = '';
-    document.getElementById('ticket-form-content').style.display = 'block';
-    document.getElementById('ticket-success-content').style.display = 'none';
+    document.getElementById('tkt-form').style.display = 'block';
+    document.getElementById('tkt-success').style.display = 'none';
     document.getElementById('tkt-send-btn').disabled = false;
-    document.getElementById('tkt-send-btn').innerHTML = '<i class="fas fa-paper-plane"></i> إرسال التذكرة';
-    // reset type selection
-    document.querySelectorAll('.tkt-type-opt').forEach((el,i) => {
-        el.classList.toggle('sel', i === 0);
-    });
-    selectedTicketType = '🚨 مشكلة تقنية';
-
+    document.getElementById('tkt-send-btn').innerHTML = '<i class="fas fa-paper-plane"></i> إرسال';
+    selectedTktType = '🚨 مشكلة تقنية';
+    document.querySelectorAll('.tkt-opt').forEach((el,i) => el.classList.toggle('sel', i===0));
     const overlay = document.getElementById('ticket-modal-overlay');
     overlay.style.display = 'flex';
+    // تحقق من ردود الإدمن على تذاكر المستخدم
+    checkUserTicketReplies(user.id);
 }
 
 function closeTicketModal() {
     document.getElementById('ticket-modal-overlay').style.display = 'none';
 }
 
-function selectTktType(el, type) {
-    document.querySelectorAll('.tkt-type-opt').forEach(o => o.classList.remove('sel'));
+function selTkt(el, type) {
+    document.querySelectorAll('.tkt-opt').forEach(o => o.classList.remove('sel'));
     el.classList.add('sel');
-    selectedTicketType = type;
+    selectedTktType = type;
 }
 
+// ── إرسال التذكرة ──
 async function submitTicket() {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     const subject = document.getElementById('tkt-subject').value.trim();
     const body = document.getElementById('tkt-body').value.trim();
-
-    if (!subject) { 
-        if(typeof showNotification === 'function') showNotification('❗ يرجى كتابة عنوان للتذكرة', true);
-        return;
-    }
-    if (!body) { 
-        if(typeof showNotification === 'function') showNotification('❗ يرجى وصف المشكلة', true);
-        return;
-    }
+    if (!subject || !body) { showNotification('❗ يرجى تعبئة جميع الحقول', true); return; }
 
     const btn = document.getElementById('tkt-send-btn');
     btn.disabled = true;
@@ -1554,47 +1544,216 @@ async function submitTicket() {
 
     const ticketId = 'TKT-' + Date.now().toString().slice(-6);
     const now = new Date().toLocaleString('ar-SA');
-
-    const embed = {
-        embeds: [{
-            title: `🎫 تذكرة دعم جديدة — ${ticketId}`,
-            color: 0xfc7823,
-            fields: [
-                { name: '👤 اللاعب', value: `**${user.name || 'غير معروف'}**\nID: \`${user.id || '—'}\``, inline: true },
-                { name: '📂 النوع', value: selectedTicketType, inline: true },
-                { name: '📌 العنوان', value: subject, inline: false },
-                { name: '📝 التفاصيل', value: body, inline: false },
-                { name: '🕐 الوقت', value: now, inline: true },
-            ],
-            thumbnail: { url: user.avatar || '' },
-            footer: { text: 'Plus Dev Support System' },
-            timestamp: new Date().toISOString()
-        }]
+    const ticketData = {
+        id: ticketId,
+        userId: user.id,
+        userName: user.name || 'لاعب',
+        userAvatar: user.avatar || '',
+        type: selectedTktType,
+        subject, body,
+        status: 'open',
+        createdAt: now,
+        timestamp: Date.now(),
+        adminReply: null,
+        repliedAt: null
     };
 
     try {
-        const res = await fetch(TICKET_WEBHOOK, {
+        // حفظ في Firebase
+        await database.ref('tickets/' + ticketId).set(ticketData);
+
+        // إرسال Webhook لـ Discord
+        await fetch(TICKET_WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(embed)
+            body: JSON.stringify({
+                embeds: [{
+                    title: `🎫 تذكرة جديدة — ${ticketId}`,
+                    color: 0xfc7823,
+                    fields: [
+                        { name: '👤 اللاعب', value: `**${user.name}**\nID: \`${user.id}\``, inline: true },
+                        { name: '📂 النوع', value: selectedTktType, inline: true },
+                        { name: '📌 العنوان', value: subject, inline: false },
+                        { name: '📝 التفاصيل', value: body, inline: false },
+                        { name: '🕐 الوقت', value: now, inline: true },
+                    ],
+                    footer: { text: 'Plus Dev Support — ارد من لوحة الإدمن في الموقع' },
+                    timestamp: new Date().toISOString()
+                }]
+            })
         });
 
-        if (res.ok || res.status === 204) {
-            document.getElementById('ticket-form-content').style.display = 'none';
-            document.getElementById('ticket-success-content').style.display = 'block';
-            document.getElementById('tkt-success-id').textContent = 'رقم تذكرتك: ' + ticketId;
-        } else {
-            throw new Error('فشل الإرسال');
-        }
+        document.getElementById('tkt-form').style.display = 'none';
+        document.getElementById('tkt-success').style.display = 'block';
+        document.getElementById('tkt-success-num').textContent = 'رقم تذكرتك: ' + ticketId;
+        document.getElementById('tkt-notif-hint').style.display = 'block';
+
     } catch(e) {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال التذكرة';
-        if(typeof showNotification === 'function') showNotification('❌ فشل الإرسال، تحقق من الاتصال', true);
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال';
+        showNotification('❌ فشل الإرسال، تحقق من الاتصال', true);
     }
 }
 
-// إغلاق عند الضغط خارج النافذة
-document.addEventListener('click', function(e) {
-    const overlay = document.getElementById('ticket-modal-overlay');
-    if (overlay && e.target === overlay) closeTicketModal();
-});
+// ── تحميل التذاكر للإدمن ──
+function loadTickets() {
+    const list = document.getElementById('tickets-list-admin');
+    if (!list) return;
+    list.innerHTML = '<div style="text-align:center;padding:30px;color:rgba(255,255,255,0.3)"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem"></i></div>';
+
+    database.ref('tickets').orderByChild('timestamp').once('value', snap => {
+        const data = snap.val();
+        if (!data) {
+            list.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.25)"><i class="fas fa-ticket-alt" style="font-size:2rem;display:block;margin-bottom:10px;opacity:0.3"></i>لا يوجد تذاكر حتى الآن</div>';
+            document.getElementById('tickets-count-badge').textContent = '0 تذكرة';
+            return;
+        }
+        allTickets = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
+        document.getElementById('tickets-count-badge').textContent = allTickets.length + ' تذكرة';
+        renderTickets(allTickets);
+    });
+}
+
+function renderTickets(tickets) {
+    const list = document.getElementById('tickets-list-admin');
+    if (!list) return;
+    if (!tickets.length) {
+        list.innerHTML = '<div style="text-align:center;padding:30px;color:rgba(255,255,255,0.25)">لا توجد تذاكر بهذه الفئة</div>';
+        return;
+    }
+    list.innerHTML = tickets.map(t => {
+        const isOpen = t.status === 'open';
+        const statusColor = isOpen ? '#3498db' : '#2ecc71';
+        const statusBg = isOpen ? 'rgba(52,152,219,0.1)' : 'rgba(46,204,113,0.1)';
+        const statusText = isOpen ? '🔵 مفتوحة' : '✅ مغلقة';
+        return `
+        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;transition:all 0.2s" onmouseover="this.style.borderColor='rgba(255,255,255,0.12)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+                <span style="background:rgba(252,120,35,0.1);color:#fc7823;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
+                <span style="background:${statusBg};color:${statusColor};border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${statusText}</span>
+                <span style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.4);border-radius:6px;padding:2px 10px;font-size:0.72rem">${t.type}</span>
+              </div>
+              <div style="font-weight:700;font-size:0.9rem;margin-bottom:4px">${t.subject}</div>
+              <div style="color:rgba(255,255,255,0.4);font-size:0.8rem;margin-bottom:6px">${t.body.length > 80 ? t.body.slice(0,80)+'...' : t.body}</div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="color:rgba(255,255,255,0.3);font-size:0.75rem"><i class="fas fa-user" style="margin-left:4px"></i>${t.userName}</span>
+                <span style="color:rgba(255,255,255,0.25);font-size:0.75rem"><i class="fas fa-clock" style="margin-left:4px"></i>${t.createdAt}</span>
+              </div>
+              ${t.adminReply ? `<div style="margin-top:10px;background:rgba(46,204,113,0.06);border:1px solid rgba(46,204,113,0.2);border-radius:8px;padding:10px 12px;font-size:0.82rem;color:#a8e6c3"><i class="fas fa-reply" style="margin-left:6px;color:#2ecc71"></i><strong style="color:#2ecc71">رد الإدمن:</strong> ${t.adminReply}</div>` : ''}
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+              ${isOpen ? `<button onclick="openReplyModal('${t.id}')" style="background:linear-gradient(135deg,#3498db,#2980b9);border:none;color:white;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.8rem;font-weight:700;white-space:nowrap;transition:all 0.2s"><i class="fas fa-reply" style="margin-left:5px"></i>رد</button>` : ''}
+              <button onclick="deleteTicket('${t.id}')" style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);color:#e74c3c;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.8rem;transition:all 0.2s"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+}
+
+function filterTickets(status, btn) {
+    document.querySelectorAll('#tkt-admin-filters .adm-filter-btn').forEach(b => b.classList.remove('adm-filter-active'));
+    btn.classList.add('adm-filter-active');
+    if (status === 'all') renderTickets(allTickets);
+    else renderTickets(allTickets.filter(t => t.status === status));
+}
+
+// ── فتح modal الرد ──
+function openReplyModal(ticketId) {
+    currentReplyTicketId = ticketId;
+    const ticket = allTickets.find(t => t.id === ticketId);
+    if (!ticket) return;
+    document.getElementById('reply-ticket-info').innerHTML = `
+        <strong style="color:white">${ticket.subject}</strong><br>
+        <span style="color:rgba(255,255,255,0.4)">${ticket.userName} — ${ticket.type}</span>`;
+    document.getElementById('reply-body').value = '';
+    document.getElementById('reply-modal-overlay').style.display = 'flex';
+}
+
+function closeReplyModal() {
+    document.getElementById('reply-modal-overlay').style.display = 'none';
+    currentReplyTicketId = null;
+}
+
+// ── إرسال الرد ──
+async function sendAdminReply() {
+    if (!currentReplyTicketId) return;
+    const reply = document.getElementById('reply-body').value.trim();
+    if (!reply) { showNotification('❗ اكتب الرد أولاً', true); return; }
+
+    const btn = document.getElementById('send-reply-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...';
+
+    const ticket = allTickets.find(t => t.id === currentReplyTicketId);
+    const now = new Date().toLocaleString('ar-SA');
+
+    try {
+        await database.ref('tickets/' + currentReplyTicketId).update({
+            adminReply: reply,
+            repliedAt: now,
+            status: 'closed'
+        });
+
+        // إشعار للمستخدم في Firebase
+        await database.ref('userNotifications/' + ticket.userId + '/' + Date.now()).set({
+            title: '💬 رد على تذكرتك',
+            message: `تذكرة (${currentReplyTicketId}): ${reply}`,
+            ticketId: currentReplyTicketId,
+            time: now,
+            read: false
+        });
+
+        showNotification('✅ تم إرسال الرد بنجاح!');
+        closeReplyModal();
+        loadTickets();
+    } catch(e) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الرد';
+        showNotification('❌ فشل الإرسال', true);
+    }
+}
+
+// ── إغلاق التذكرة بدون رد ──
+async function closeTicketByAdmin() {
+    if (!currentReplyTicketId) return;
+    await database.ref('tickets/' + currentReplyTicketId).update({ status: 'closed' });
+    showNotification('✅ تم إغلاق التذكرة');
+    closeReplyModal();
+    loadTickets();
+}
+
+// ── حذف التذكرة ──
+async function deleteTicket(ticketId) {
+    openCustomConfirm('هل تريد حذف هذه التذكرة؟', 'حذف التذكرة', 'fa-trash', async () => {
+        await database.ref('tickets/' + ticketId).remove();
+        allTickets = allTickets.filter(t => t.id !== ticketId);
+        showNotification('🗑️ تم حذف التذكرة');
+        loadTickets();
+        closeConfirmModal();
+    });
+}
+
+// ── فحص ردود الإدمن على تذاكر المستخدم ──
+function checkUserTicketReplies(userId) {
+    database.ref('userNotifications/' + userId).orderByChild('read').equalTo(false).once('value', snap => {
+        const data = snap.val();
+        if (!data) return;
+        const notifs = Object.entries(data);
+        notifs.forEach(([key, notif]) => {
+            if (typeof showNotification === 'function') {
+                showNotification(notif.title + '\n' + notif.message);
+            }
+            // علّم كمقروء
+            database.ref('userNotifications/' + userId + '/' + key).update({ read: true });
+        });
+    });
+}
+
+// تحميل التذاكر تلقائياً عند فتح لوحة الإدمن
+const origLoadAdminData = typeof loadAdminData === 'function' ? loadAdminData : null;
+function loadAdminData() {
+    if (origLoadAdminData) origLoadAdminData();
+    loadTickets();
+}
