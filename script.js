@@ -666,6 +666,26 @@ function updateUI(user) {
             userStatus.innerText = "Player";
             userStatus.style.color = "#aaaaaa";
         }
+
+        // حفظ بيانات Discord للملف الشخصي
+        const existingProfile = JSON.parse(localStorage.getItem('plusdev_profile') || '{}');
+        const isNewSession = existingProfile._lastSession !== new Date().toDateString();
+        const profileData = {
+            discordName: user.name || existingProfile.discordName || '',
+            discordAvatar: user.avatar || existingProfile.discordAvatar || '',
+            discordId: user.id || existingProfile.discordId || '',
+            name: existingProfile.name || user.name || '',
+            char: existingProfile.char || '',
+            rank: existingProfile.rank || 'مواطن عادي',
+            family: existingProfile.family || 'بدون',
+            joinDate: existingProfile.joinDate || new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'long' }),
+            sessions: (existingProfile.sessions || 0) + (isNewSession ? 1 : 0),
+            _lastSession: new Date().toDateString(),
+            questions: existingProfile.questions || 0,
+            lawsRead: existingProfile.lawsRead || 0,
+        };
+        localStorage.setItem('plusdev_profile', JSON.stringify(profileData));
+
         // إشعار الترحيب
         if (typeof initLoginNotification === 'function') initLoginNotification(user);
     } else {
@@ -1494,3 +1514,14 @@ function removeAdminId(key, adminId) {
 }
 
 
+
+// ============================================
+// تتبع الأسئلة في ملف اللاعب الشخصي
+// ============================================
+function trackChatQuestion() {
+    try {
+        const profile = JSON.parse(localStorage.getItem('plusdev_profile') || '{}');
+        profile.questions = (profile.questions || 0) + 1;
+        localStorage.setItem('plusdev_profile', JSON.stringify(profile));
+    } catch(e) {}
+}

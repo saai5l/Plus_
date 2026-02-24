@@ -394,6 +394,7 @@ async function sendMessage() {
   input.value = '';
 
   conversationHistory.push({ role: 'user', text: question, time: new Date() });
+  if (typeof trackChatQuestion === 'function') trackChatQuestion();
 
   addMessage('', false, true);
 
