@@ -1,10 +1,10 @@
 
 const WEBHOOKS = {
-    police:  'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // طلبات الشرطة
-    ems:     'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // طلبات EMS
-    staff:   'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // طلبات الإدارة
-    tickets: 'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // تذاكر الدعم
-    store:   'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // طلبات المتجر
+    police:  'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات الشرطة
+    ems:     'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات EMS
+    staff:   'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات الإدارة
+    tickets: 'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // تذاكر الدعم
+    store:   'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات المتجر
 };
 
 /* ============================================================ */
