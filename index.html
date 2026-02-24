@@ -8,6 +8,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <link href="style.css" rel="stylesheet"/>
 <link href="ai-chat-enhanced.css" rel="stylesheet"/>
+<link href="fivem-profile.css" rel="stylesheet"/>
 <meta content="website" property="og:type"/>
 <meta content="Plus Dev" property="og:site_name"/>
 <meta content="Plus Dev - متجر سكربتات فايف إم احترافية" property="og:title"/>
@@ -96,6 +97,9 @@
 <a href="#" id="track-btn" onclick="showPage('tracking-page')">
 <i class="fas fa-search-location"></i> تتبع طلبك
             </a>
+<a href="#" onclick="showPage('profile-page')">
+<i class="fas fa-gamepad"></i> ملفي في اللعبة
+            </a>
 <a href="javascript:void(0)" onclick="openTicketModal()">
 <i class="fas fa-ticket-alt"></i> فتح تذكرة دعم
             </a>
@@ -117,6 +121,9 @@
 <a href="#" onclick="showPage('tutorials')">Explanations</a>
 <a href="#" onclick="showPage('jobs')">Apply Jobs</a>
 <a href="#" onclick="showPage('store')">Store</a>
+<a href="#" onclick="showPage('profile-page')" id="profile-nav-link" style="display:none;">
+  <i class="fas fa-gamepad" style="margin-left:5px;"></i>Profile
+</a>
 </div>
 <div class="social-links">
 <a class="plus-discord-btn" href="https://discord.gg/pus" target="_blank">
@@ -1374,6 +1381,26 @@
 <button id="send-btn" onclick="askAI()">إرسال</button>
 </div>
 </div>
+<!-- ═══ PROFILE PAGE ═══ -->
+<div class="page" id="profile-page">
+  <div class="container">
+    <div class="profile-page-header">
+      <h1>ملفي في <span>اللعبة</span></h1>
+      <p>بياناتك الحقيقية من سيرفر Plus Dev — QBCore</p>
+      <div class="fivem-online-badge">
+        اللاعبون الآن: <span id="fivem-online-count">...</span>
+      </div>
+    </div>
+    <!-- يتم تعبئته بـ fivem-profile.js -->
+    <div id="fivem-profile-section">
+      <div class="fivem-not-logged">
+        <i class="fas fa-lock"></i>
+        <p>سجّل دخولك عبر ديسكورد لعرض ملفك في اللعبة</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Footer -->
 <div class="container">
 <footer class="footer">
@@ -1421,6 +1448,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="script.js"></script>
 <script src="ai-chat-enhanced.js"></script>
+<script src="fivem-profile.js"></script>
 <div class="toast-notif" id="toast-notif">
 <span class="toast-icon" id="toast-icon">🔔</span>
 <div class="toast-content">

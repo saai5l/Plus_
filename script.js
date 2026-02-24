@@ -648,9 +648,13 @@ function updateUI(user) {
     
     const discordIdInput = document.getElementById('discord-id-input');
 
+    // إظهار/إخفاء رابط Profile
+    const profileNavLink = document.getElementById('profile-nav-link');
+
     if (user) {
         if (loginBtn) loginBtn.style.display = 'none';
         if (userArea) userArea.style.display = 'flex';
+        if (profileNavLink) profileNavLink.style.display = 'flex';
         
         if (userAvatar) userAvatar.src = user.avatar || '';
         if (userDisplayName) userDisplayName.innerText = user.name || '';
@@ -682,6 +686,7 @@ function updateUI(user) {
     } else {
         if (loginBtn) loginBtn.style.display = 'flex';
         if (userArea) userArea.style.display = 'none';
+        if (profileNavLink) profileNavLink.style.display = 'none';
         
         if (discordIdInput) {
             discordIdInput.value = '';

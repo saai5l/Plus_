@@ -1,0 +1,359 @@
+/* ============================================================
+   Plus Dev — FiveM Profile Styles
+   أضف هذا الملف في index.html:
+   <link rel="stylesheet" href="fivem-profile.css">
+   ============================================================ */
+
+/* ===== صفحة الملف الشخصي ===== */
+#profile-page {
+    padding: 20px 0 40px;
+}
+
+.profile-page-header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(252, 120, 35, 0.12);
+}
+
+.profile-page-header h1 {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.profile-page-header h1 span { color: #fc7823; }
+
+.profile-page-header p {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9rem;
+}
+
+/* عداد اللاعبين أونلاين */
+.fivem-online-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(46,204,113,0.1);
+    border: 1px solid rgba(46,204,113,0.25);
+    color: #2ecc71;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.fivem-online-badge::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: #2ecc71;
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%,100% { opacity:1; } 50% { opacity:0.3; }
+}
+
+/* ===== حالات التحميل والأخطاء ===== */
+.fivem-loading,
+.fivem-not-found,
+.fivem-not-logged {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255,255,255,0.4);
+}
+
+.fivem-spinner {
+    width: 44px; height: 44px;
+    border: 3px solid rgba(252,120,35,0.2);
+    border-top-color: #fc7823;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.fivem-not-found i,
+.fivem-not-logged i {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    display: block;
+    color: rgba(252,120,35,0.4);
+}
+
+.fivem-not-found h3 {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 8px;
+}
+
+.fivem-retry-btn {
+    margin-top: 16px;
+    background: rgba(252,120,35,0.12);
+    border: 1px solid rgba(252,120,35,0.3);
+    color: #fc7823;
+    padding: 10px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.25s ease;
+}
+
+.fivem-retry-btn:hover {
+    background: #fc7823;
+    color: #fff;
+}
+
+/* ===== البطاقة الرئيسية ===== */
+.fivem-profile-card {
+    background: linear-gradient(160deg, rgba(20,20,22,0.98), rgba(12,12,14,0.99));
+    border: 1px solid rgba(252,120,35,0.15);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+/* ===== هيدر البطاقة ===== */
+.fivem-card-header {
+    background: linear-gradient(135deg, rgba(252,120,35,0.12), rgba(252,120,35,0.04));
+    padding: 28px 28px 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.fivem-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.fivem-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 3px solid rgba(252,120,35,0.5);
+    box-shadow: 0 0 20px rgba(252,120,35,0.25);
+}
+
+.fivem-online-dot {
+    position: absolute;
+    bottom: 2px; left: 2px;
+    width: 14px; height: 14px;
+    background: #2ecc71;
+    border-radius: 50%;
+    border: 2px solid #0a0a0a;
+    animation: blink 2s infinite;
+}
+
+.fivem-char-name {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 6px;
+    letter-spacing: -0.3px;
+}
+
+.fivem-job-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border: 1px solid;
+    margin-bottom: 6px;
+}
+
+.fivem-job-badge small {
+    opacity: 0.75;
+    font-weight: 500;
+}
+
+.fivem-citizen-id {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.35);
+    margin: 4px 0 0;
+}
+
+.fivem-citizen-id code {
+    background: rgba(252,120,35,0.1);
+    color: #fc7823;
+    padding: 1px 7px;
+    border-radius: 5px;
+    font-size: 0.78rem;
+}
+
+/* ===== شبكة الإحصائيات ===== */
+.fivem-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.04);
+    border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.fivem-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    background: rgba(10,10,12,0.8);
+    transition: background 0.2s;
+}
+
+.fivem-stat-card:hover {
+    background: rgba(252,120,35,0.04);
+}
+
+.fivem-stat-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.fivem-stat-cash .fivem-stat-icon  { background: rgba(46,204,113,0.12);  color: #2ecc71; }
+.fivem-stat-bank .fivem-stat-icon  { background: rgba(52,152,219,0.12);  color: #3498db; }
+.fivem-stat-time .fivem-stat-icon  { background: rgba(252,120,35,0.12);  color: #fc7823; }
+.fivem-stat-phone .fivem-stat-icon { background: rgba(155,89,182,0.12);  color: #9b59b6; }
+
+.fivem-stat-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.fivem-stat-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.35);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.fivem-stat-value {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #f0f0f0;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== شرائط الحيوية ===== */
+.fivem-vitals {
+    padding: 18px 22px;
+    background: rgba(8,8,10,0.6);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fivem-vital-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.fivem-vital-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    width: 65px;
+    flex-shrink: 0;
+    font-weight: 600;
+}
+
+.fivem-vital-label i {
+    margin-left: 5px;
+}
+
+.fivem-vital-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.fivem-vital-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fivem-vital-hunger { background: linear-gradient(90deg, #f39c12, #e67e22); }
+.fivem-vital-thirst { background: linear-gradient(90deg, #3498db, #2980b9); }
+.fivem-vital-stress { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+
+.fivem-vital-pct {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    width: 35px;
+    text-align: left;
+    flex-shrink: 0;
+}
+
+/* ===== فوتر البطاقة ===== */
+.fivem-card-footer {
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    background: rgba(6,6,8,0.5);
+}
+
+.fivem-nationality {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.35);
+}
+
+.fivem-nationality i { margin-left: 5px; color: rgba(252,120,35,0.5); }
+
+.fivem-refresh-btn {
+    background: rgba(252,120,35,0.1);
+    border: 1px solid rgba(252,120,35,0.25);
+    color: #fc7823;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+.fivem-refresh-btn:hover {
+    background: #fc7823;
+    color: #fff;
+}
+
+.fivem-refresh-btn i {
+    margin-left: 5px;
+}
+
+/* ===== موبايل ===== */
+@media (max-width: 600px) {
+    .fivem-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fivem-card-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .fivem-vital-label { width: 50px; font-size: 0.72rem; }
+}
