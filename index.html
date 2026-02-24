@@ -442,9 +442,7 @@
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         TICKETS PANEL — نظام التذاكر
-    ══════════════════════════════════════ -->
+    <!-- تذاكر الدعم -->
     <div class="adm-panel" style="margin-top:20px">
       <div class="adm-table-head">
         <div class="adm-table-title-wrap">
@@ -453,23 +451,16 @@
         </div>
         <div style="display:flex;gap:8px;align-items:center">
           <span id="tickets-count-badge" style="background:rgba(52,152,219,0.15);color:#3498db;border-radius:20px;padding:3px 12px;font-size:0.78rem;font-weight:700">0 تذكرة</span>
-          <button onclick="loadTickets()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);padding:6px 12px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.82rem;transition:all 0.2s" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">
-            <i class="fas fa-sync-alt"></i> تحديث
-          </button>
+          <button onclick="loadTickets()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.82rem"><i class="fas fa-sync-alt"></i> تحديث</button>
         </div>
       </div>
-
       <div style="padding:4px 0 12px;display:flex;gap:8px;flex-wrap:wrap" id="tkt-admin-filters">
         <button class="adm-filter-btn adm-filter-active" onclick="filterTickets('all',this)"><i class="fas fa-th"></i> الكل</button>
-        <button class="adm-filter-btn" style="background:rgba(52,152,219,0.1);color:#3498db;border-color:rgba(52,152,219,0.3)" onclick="filterTickets('open',this)"><i class="fas fa-envelope-open"></i> مفتوحة</button>
-        <button class="adm-filter-btn" style="background:rgba(46,204,113,0.1);color:#2ecc71;border-color:rgba(46,204,113,0.3)" onclick="filterTickets('closed',this)"><i class="fas fa-check-circle"></i> مغلقة</button>
+        <button class="adm-filter-btn" onclick="filterTickets('open',this)" style="color:#3498db"><i class="fas fa-envelope-open"></i> مفتوحة</button>
+        <button class="adm-filter-btn" onclick="filterTickets('closed',this)" style="color:#2ecc71"><i class="fas fa-check-circle"></i> مغلقة</button>
       </div>
-
-      <div id="tickets-list-admin" style="display:flex;flex-direction:column;gap:10px;max-height:500px;overflow-y:auto;padding-left:4px">
-        <div style="text-align:center;padding:40px;color:rgba(255,255,255,0.25)">
-          <i class="fas fa-ticket-alt" style="font-size:2rem;display:block;margin-bottom:10px;opacity:0.3"></i>
-          اضغط "تحديث" لتحميل التذاكر
-        </div>
+      <div id="tickets-list-admin" style="max-height:500px;overflow-y:auto">
+        <div style="text-align:center;padding:40px;color:rgba(255,255,255,0.25)"><i class="fas fa-ticket-alt" style="font-size:2rem;display:block;margin-bottom:10px;opacity:0.3"></i>اضغط "تحديث" لتحميل التذاكر</div>
       </div>
     </div>
 
@@ -804,12 +795,12 @@
           </div>
           <div class="law-item-new law-item-ban">
             <div class="law-num">VDM</div>
-            <div class="law-text-new"><strong>Vehicle Deathmatch:</strong> يمنع منعاً باتاً استخدام المركبة كسلاح — باند نهائي.</div>
+            <div class="law-text-new"><strong>VDM</strong> يمنع منعاً باتاً استخدام المركبة كسلاح — باند نهائي.</div>
             <button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button>
           </div>
           <div class="law-item-new law-item-ban">
             <div class="law-num">RDM</div>
-            <div class="law-text-new"><strong>Random Deathmatch:</strong> القتل العشوائي ممنوع تماماً — يجب وجود سبب درامي واضح.</div>
+            <div class="law-text-new"><strong>RDM</strong> القتل العشوائي ممنوع تماماً — يجب وجود سبب درامي واضح.</div>
             <button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button>
           </div>
         </div>
@@ -1487,7 +1478,6 @@
 <script src="script.js"></script>
 <script src="ai-chat-enhanced.js"></script>
 
-<!-- Toast Notification -->
 <div class="toast-notif" id="toast-notif">
     <span class="toast-icon" id="toast-icon">🔔</span>
     <div class="toast-content">
@@ -1496,30 +1486,25 @@
     </div>
 </div>
 
-<!-- ===== TICKET MODAL (للمستخدم) ===== -->
+<!-- modal التذكرة للمستخدم -->
 <div id="ticket-modal-overlay" onclick="if(event.target===this)closeTicketModal()" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;">
-  <div style="background:linear-gradient(160deg,#111114,#0d0d10);border:1px solid rgba(252,120,35,0.25);border-radius:22px;padding:30px 28px;width:90%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,0.8);font-family:'Tajawal',sans-serif;position:relative;animation:tktUp 0.35s cubic-bezier(0.34,1.56,0.64,1);">
+  <div style="background:linear-gradient(160deg,#111114,#0d0d10);border:1px solid rgba(252,120,35,0.25);border-radius:22px;padding:30px 28px;width:90%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,0.8);font-family:'Tajawal',sans-serif;position:relative;animation:tktUp 0.35s cubic-bezier(0.34,1.56,0.64,1)">
     <style>
       @keyframes tktUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-      .tkt-label{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:6px;display:block;margin-top:12px}
-      .tkt-input,.tkt-textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;padding:11px 14px;border-radius:11px;font-family:'Tajawal',sans-serif;font-size:0.88rem;outline:none;box-sizing:border-box;transition:border-color 0.2s}
-      .tkt-input:focus,.tkt-textarea:focus{border-color:#fc7823}
-      .tkt-textarea{resize:vertical;min-height:90px;margin-top:0}
-      .tkt-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 4px}
       .tkt-opt{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 6px;cursor:pointer;text-align:center;transition:all 0.2s;color:rgba(255,255,255,0.45);font-size:0.78rem;font-family:'Tajawal',sans-serif}
       .tkt-opt:hover{border-color:rgba(252,120,35,0.3);background:rgba(252,120,35,0.06)}
       .tkt-opt.sel{border-color:#fc7823;background:rgba(252,120,35,0.12);color:#fc7823;font-weight:700}
       .tkt-opt .ico{font-size:1.2rem;display:block;margin-bottom:3px}
+      .tkt-inp{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;padding:11px 14px;border-radius:11px;font-family:'Tajawal',sans-serif;font-size:0.88rem;outline:none;box-sizing:border-box;transition:border-color 0.2s;margin-top:6px}
+      .tkt-inp:focus{border-color:#fc7823}
     </style>
-
-    <button onclick="closeTicketModal()" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.07);border:none;color:rgba(255,255,255,0.4);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center">✕</button>
+    <button onclick="closeTicketModal()" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.07);border:none;color:rgba(255,255,255,0.4);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:0.9rem">✕</button>
 
     <div id="tkt-form">
       <div style="font-size:1.05rem;font-weight:900;color:#fc7823;margin-bottom:4px"><i class="fas fa-ticket-alt" style="margin-left:7px"></i>فتح تذكرة دعم</div>
-      <div style="color:rgba(255,255,255,0.35);font-size:0.8rem;margin-bottom:16px">سيتم إرسال تذكرتك لفريق الدعم مباشرةً</div>
-
-      <label class="tkt-label">نوع المشكلة</label>
-      <div class="tkt-type-grid">
+      <div style="color:rgba(255,255,255,0.35);font-size:0.8rem;margin-bottom:14px">سيتم إرسال تذكرتك لفريق الدعم مباشرةً</div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:8px">نوع المشكلة</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
         <div class="tkt-opt sel" onclick="selTkt(this,'🚨 مشكلة تقنية')"><span class="ico">🚨</span>مشكلة تقنية</div>
         <div class="tkt-opt" onclick="selTkt(this,'⚖️ شكوى لاعب')"><span class="ico">⚖️</span>شكوى لاعب</div>
         <div class="tkt-opt" onclick="selTkt(this,'💰 مشكلة متجر')"><span class="ico">💰</span>مشكلة متجر</div>
@@ -1527,18 +1512,13 @@
         <div class="tkt-opt" onclick="selTkt(this,'🏢 طلب وظيفة')"><span class="ico">🏢</span>طلب وظيفة</div>
         <div class="tkt-opt" onclick="selTkt(this,'💬 أخرى')"><span class="ico">💬</span>أخرى</div>
       </div>
-
-      <label class="tkt-label">عنوان التذكرة</label>
-      <input class="tkt-input" id="tkt-subject" placeholder="مثال: مشكلة في التسجيل"/>
-
-      <label class="tkt-label">وصف المشكلة</label>
-      <textarea class="tkt-textarea" id="tkt-body" placeholder="اشرح مشكلتك بالتفصيل..." style="margin-top:6px"></textarea>
-
-      <div style="display:flex;gap:10px;margin-top:16px">
-        <button id="tkt-send-btn" onclick="submitTicket()" style="flex:1;background:linear-gradient(135deg,#fc7823,#d95c0d);border:none;color:white;padding:12px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.92rem;font-weight:700;transition:all 0.25s;display:flex;align-items:center;justify-content:center;gap:8px">
-          <i class="fas fa-paper-plane"></i> إرسال
-        </button>
-        <button onclick="closeTicketModal()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);padding:12px 18px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.9rem">إلغاء</button>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:2px">عنوان التذكرة</div>
+      <input class="tkt-inp" id="tkt-subject" placeholder="مثال: مشكلة في التسجيل"/>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin:10px 0 2px">وصف المشكلة</div>
+      <textarea class="tkt-inp" id="tkt-body" placeholder="اشرح مشكلتك بالتفصيل..." style="resize:vertical;min-height:90px"></textarea>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button id="tkt-send-btn" onclick="submitTicket()" style="flex:1;background:linear-gradient(135deg,#fc7823,#d95c0d);border:none;color:white;padding:12px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.92rem;font-weight:700"><i class="fas fa-paper-plane"></i> إرسال</button>
+        <button onclick="closeTicketModal()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);padding:12px 16px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif">إلغاء</button>
       </div>
     </div>
 
@@ -1546,34 +1526,24 @@
       <span style="font-size:3rem">✅</span>
       <div style="font-size:1.1rem;font-weight:700;color:#2ecc71;margin:12px 0 6px">تم إرسال تذكرتك!</div>
       <div id="tkt-success-num" style="color:rgba(255,255,255,0.4);font-size:0.85rem"></div>
-      <div style="color:rgba(255,255,255,0.35);font-size:0.82rem;margin-top:4px">سيرد عليك فريق الدعم قريباً 🙏</div>
-      <div id="tkt-notif-hint" style="display:none;background:rgba(252,120,35,0.1);border:1px solid rgba(252,120,35,0.25);border-radius:10px;padding:10px 14px;margin-top:14px;font-size:0.82rem;color:#fc7823">
-        🔔 ستصلك إشعار عند رد الإدمن على تذكرتك
-      </div>
+      <div id="tkt-notif-hint" style="display:none;background:rgba(252,120,35,0.1);border:1px solid rgba(252,120,35,0.25);border-radius:10px;padding:10px 14px;margin-top:14px;font-size:0.82rem;color:#fc7823">🔔 ستصلك إشعار عند رد الإدمن</div>
       <button onclick="closeTicketModal()" style="margin-top:18px;background:linear-gradient(135deg,#fc7823,#d95c0d);border:none;color:white;padding:11px 28px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700">حسناً</button>
     </div>
   </div>
 </div>
 
-<!-- ===== REPLY MODAL (للإدمن) ===== -->
+<!-- modal الرد للإدمن -->
 <div id="reply-modal-overlay" onclick="if(event.target===this)closeReplyModal()" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;">
   <div style="background:linear-gradient(160deg,#111114,#0d0d10);border:1px solid rgba(52,152,219,0.25);border-radius:22px;padding:28px;width:90%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,0.8);font-family:'Tajawal',sans-serif;position:relative;animation:tktUp 0.3s cubic-bezier(0.34,1.56,0.64,1)">
-    <button onclick="closeReplyModal()" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.07);border:none;color:rgba(255,255,255,0.4);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center">✕</button>
-
-    <div style="font-size:1.05rem;font-weight:900;color:#3498db;margin-bottom:4px"><i class="fas fa-reply" style="margin-left:7px"></i>الرد على التذكرة</div>
-    <div id="reply-ticket-info" style="color:rgba(255,255,255,0.35);font-size:0.8rem;margin-bottom:16px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:8px"></div>
-
-    <label style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:6px;display:block">ردك على اللاعب</label>
-    <textarea id="reply-body" placeholder="اكتب ردك هنا..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;padding:11px 14px;border-radius:11px;font-family:'Tajawal',sans-serif;font-size:0.88rem;outline:none;box-sizing:border-box;resize:vertical;min-height:100px;transition:border-color 0.2s" onfocus="this.style.borderColor='#3498db'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
-
+    <button onclick="closeReplyModal()" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.07);border:none;color:rgba(255,255,255,0.4);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:0.9rem">✕</button>
+    <div style="font-size:1.05rem;font-weight:900;color:#3498db;margin-bottom:10px"><i class="fas fa-reply" style="margin-left:7px"></i>الرد على التذكرة</div>
+    <div id="reply-ticket-info" style="color:rgba(255,255,255,0.35);font-size:0.82rem;margin-bottom:14px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:8px"></div>
+    <div style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:6px">ردك على اللاعب</div>
+    <textarea id="reply-body" placeholder="اكتب ردك هنا..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;padding:11px 14px;border-radius:11px;font-family:'Tajawal',sans-serif;font-size:0.88rem;outline:none;box-sizing:border-box;resize:vertical;min-height:100px" onfocus="this.style.borderColor='#3498db'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
     <div style="display:flex;gap:10px;margin-top:14px">
-      <button id="send-reply-btn" onclick="sendAdminReply()" style="flex:1;background:linear-gradient(135deg,#3498db,#2980b9);border:none;color:white;padding:12px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.9rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.25s">
-        <i class="fas fa-paper-plane"></i> إرسال الرد
-      </button>
-      <button id="close-ticket-btn" onclick="closeTicketByAdmin()" style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.3);color:#2ecc71;padding:12px 16px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.88rem;transition:all 0.2s">
-        <i class="fas fa-check"></i> إغلاق
-      </button>
-      <button onclick="closeReplyModal()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);padding:12px 14px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.9rem">إلغاء</button>
+      <button id="send-reply-btn" onclick="sendAdminReply()" style="flex:1;background:linear-gradient(135deg,#3498db,#2980b9);border:none;color:white;padding:12px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.9rem;font-weight:700"><i class="fas fa-paper-plane"></i> إرسال الرد</button>
+      <button onclick="closeTicketByAdmin()" style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.3);color:#2ecc71;padding:12px 14px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.88rem"><i class="fas fa-check"></i> إغلاق</button>
+      <button onclick="closeReplyModal()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);padding:12px 14px;border-radius:12px;cursor:pointer;font-family:'Tajawal',sans-serif">إلغاء</button>
     </div>
   </div>
 </div>

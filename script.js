@@ -1503,7 +1503,6 @@ let selectedTktType = '🚨 مشكلة تقنية';
 let currentReplyTicketId = null;
 let allTickets = [];
 
-// ── فتح modal التذكرة ──
 function openTicketModal() {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     if (!user) { showNotification('⚠️ يرجى تسجيل الدخول أولاً', true); return; }
@@ -1515,9 +1514,7 @@ function openTicketModal() {
     document.getElementById('tkt-send-btn').innerHTML = '<i class="fas fa-paper-plane"></i> إرسال';
     selectedTktType = '🚨 مشكلة تقنية';
     document.querySelectorAll('.tkt-opt').forEach((el,i) => el.classList.toggle('sel', i===0));
-    const overlay = document.getElementById('ticket-modal-overlay');
-    overlay.style.display = 'flex';
-    // تحقق من ردود الإدمن على تذاكر المستخدم
+    document.getElementById('ticket-modal-overlay').style.display = 'flex';
     checkUserTicketReplies(user.id);
 }
 
@@ -1531,7 +1528,6 @@ function selTkt(el, type) {
     selectedTktType = type;
 }
 
-// ── إرسال التذكرة ──
 async function submitTicket() {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     const subject = document.getElementById('tkt-subject').value.trim();
@@ -1544,6 +1540,7 @@ async function submitTicket() {
 
     const ticketId = 'TKT-' + Date.now().toString().slice(-6);
     const now = new Date().toLocaleString('ar-SA');
+
     const ticketData = {
         id: ticketId,
         userId: user.id,
@@ -1559,10 +1556,8 @@ async function submitTicket() {
     };
 
     try {
-        // حفظ في Firebase
         await database.ref('tickets/' + ticketId).set(ticketData);
 
-        // إرسال Webhook لـ Discord
         await fetch(TICKET_WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1591,11 +1586,10 @@ async function submitTicket() {
     } catch(e) {
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال';
-        showNotification('❌ فشل الإرسال، تحقق من الاتصال', true);
+        showNotification('❌ فشل الإرسال', true);
     }
 }
 
-// ── تحميل التذاكر للإدمن ──
 function loadTickets() {
     const list = document.getElementById('tickets-list-admin');
     if (!list) return;
@@ -1627,7 +1621,7 @@ function renderTickets(tickets) {
         const statusBg = isOpen ? 'rgba(52,152,219,0.1)' : 'rgba(46,204,113,0.1)';
         const statusText = isOpen ? '🔵 مفتوحة' : '✅ مغلقة';
         return `
-        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;transition:all 0.2s" onmouseover="this.style.borderColor='rgba(255,255,255,0.12)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
+        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;margin-bottom:8px">
           <div style="display:flex;align-items:flex-start;gap:12px">
             <div style="flex:1;min-width:0">
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">
@@ -1637,15 +1631,15 @@ function renderTickets(tickets) {
               </div>
               <div style="font-weight:700;font-size:0.9rem;margin-bottom:4px">${t.subject}</div>
               <div style="color:rgba(255,255,255,0.4);font-size:0.8rem;margin-bottom:6px">${t.body.length > 80 ? t.body.slice(0,80)+'...' : t.body}</div>
-              <div style="display:flex;align-items:center;gap:10px">
+              <div style="display:flex;gap:10px">
                 <span style="color:rgba(255,255,255,0.3);font-size:0.75rem"><i class="fas fa-user" style="margin-left:4px"></i>${t.userName}</span>
                 <span style="color:rgba(255,255,255,0.25);font-size:0.75rem"><i class="fas fa-clock" style="margin-left:4px"></i>${t.createdAt}</span>
               </div>
               ${t.adminReply ? `<div style="margin-top:10px;background:rgba(46,204,113,0.06);border:1px solid rgba(46,204,113,0.2);border-radius:8px;padding:10px 12px;font-size:0.82rem;color:#a8e6c3"><i class="fas fa-reply" style="margin-left:6px;color:#2ecc71"></i><strong style="color:#2ecc71">رد الإدمن:</strong> ${t.adminReply}</div>` : ''}
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
-              ${isOpen ? `<button onclick="openReplyModal('${t.id}')" style="background:linear-gradient(135deg,#3498db,#2980b9);border:none;color:white;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.8rem;font-weight:700;white-space:nowrap;transition:all 0.2s"><i class="fas fa-reply" style="margin-left:5px"></i>رد</button>` : ''}
-              <button onclick="deleteTicket('${t.id}')" style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);color:#e74c3c;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.8rem;transition:all 0.2s"><i class="fas fa-trash"></i></button>
+              ${isOpen ? `<button onclick="openReplyModal('${t.id}')" style="background:linear-gradient(135deg,#3498db,#2980b9);border:none;color:white;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.8rem;font-weight:700"><i class="fas fa-reply" style="margin-left:5px"></i>رد</button>` : ''}
+              <button onclick="deleteTicket('${t.id}')" style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);color:#e74c3c;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.8rem"><i class="fas fa-trash"></i></button>
             </div>
           </div>
         </div>`;
@@ -1659,7 +1653,6 @@ function filterTickets(status, btn) {
     else renderTickets(allTickets.filter(t => t.status === status));
 }
 
-// ── فتح modal الرد ──
 function openReplyModal(ticketId) {
     currentReplyTicketId = ticketId;
     const ticket = allTickets.find(t => t.id === ticketId);
@@ -1676,7 +1669,6 @@ function closeReplyModal() {
     currentReplyTicketId = null;
 }
 
-// ── إرسال الرد ──
 async function sendAdminReply() {
     if (!currentReplyTicketId) return;
     const reply = document.getElementById('reply-body').value.trim();
@@ -1691,21 +1683,15 @@ async function sendAdminReply() {
 
     try {
         await database.ref('tickets/' + currentReplyTicketId).update({
-            adminReply: reply,
-            repliedAt: now,
-            status: 'closed'
+            adminReply: reply, repliedAt: now, status: 'closed'
         });
-
-        // إشعار للمستخدم في Firebase
         await database.ref('userNotifications/' + ticket.userId + '/' + Date.now()).set({
             title: '💬 رد على تذكرتك',
             message: `تذكرة (${currentReplyTicketId}): ${reply}`,
             ticketId: currentReplyTicketId,
-            time: now,
-            read: false
+            time: now, read: false
         });
-
-        showNotification('✅ تم إرسال الرد بنجاح!');
+        showNotification('✅ تم إرسال الرد!');
         closeReplyModal();
         loadTickets();
     } catch(e) {
@@ -1715,7 +1701,6 @@ async function sendAdminReply() {
     }
 }
 
-// ── إغلاق التذكرة بدون رد ──
 async function closeTicketByAdmin() {
     if (!currentReplyTicketId) return;
     await database.ref('tickets/' + currentReplyTicketId).update({ status: 'closed' });
@@ -1724,36 +1709,33 @@ async function closeTicketByAdmin() {
     loadTickets();
 }
 
-// ── حذف التذكرة ──
 async function deleteTicket(ticketId) {
     openCustomConfirm('هل تريد حذف هذه التذكرة؟', 'حذف التذكرة', 'fa-trash', async () => {
         await database.ref('tickets/' + ticketId).remove();
         allTickets = allTickets.filter(t => t.id !== ticketId);
         showNotification('🗑️ تم حذف التذكرة');
-        loadTickets();
         closeConfirmModal();
+        loadTickets();
     });
 }
 
-// ── فحص ردود الإدمن على تذاكر المستخدم ──
 function checkUserTicketReplies(userId) {
     database.ref('userNotifications/' + userId).orderByChild('read').equalTo(false).once('value', snap => {
         const data = snap.val();
         if (!data) return;
-        const notifs = Object.entries(data);
-        notifs.forEach(([key, notif]) => {
-            if (typeof showNotification === 'function') {
-                showNotification(notif.title + '\n' + notif.message);
-            }
-            // علّم كمقروء
+        Object.entries(data).forEach(([key, notif]) => {
+            showNotification(notif.title + ' — ' + notif.message);
             database.ref('userNotifications/' + userId + '/' + key).update({ read: true });
         });
     });
 }
 
-// تحميل التذاكر تلقائياً عند فتح لوحة الإدمن
-const origLoadAdminData = typeof loadAdminData === 'function' ? loadAdminData : null;
-function loadAdminData() {
-    if (origLoadAdminData) origLoadAdminData();
-    loadTickets();
-}
+// ── تحميل التذاكر تلقائياً عند فتح لوحة الإدمن ──
+// نضيف الاستدعاء في showPage مباشرة بدل override
+const _origShowPage = showPage;
+window.showPage = function(pageId) {
+    _origShowPage(pageId);
+    if (pageId === 'admin-dashboard') {
+        setTimeout(loadTickets, 500);
+    }
+};
