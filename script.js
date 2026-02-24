@@ -1737,6 +1737,10 @@ function checkUserTicketReplies(userId) {
 // نضيف الاستدعاء في showPage مباشرة بدل override
 const _origShowPage = showPage;
 window.showPage = function(pageId) {
+    _origShowPage(pageId);
+    if (pageId === 'admin-dashboard') loadTickets();
+};
+
 // ── تحميل تذاكر المستخدم في صفحة التتبع ──
 function loadMyTickets(userId) {
     const section = document.getElementById('my-tickets-section');
