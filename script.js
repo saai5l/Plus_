@@ -980,8 +980,9 @@ function loadUserTrackingData() {
         return;
     }
 
-    // تحميل تذاكر المستخدم
+    // تحميل تذاكر المستخدم وطلبات المتجر
     loadMyTickets(savedUser.id);
+    loadMyOrders(savedUser.id);
 
     database.ref('applications').on('value', (snapshot) => {
         const data = snapshot.val();
@@ -1191,20 +1192,323 @@ function filterProducts(cat, btn) {
     });
 }
 
-function buyProduct(name, price) {
+/* ============================================
+   🛒 STORE — FULL PURCHASE SYSTEM
+   ============================================ */
+
+let _pendingProduct = null; // { name, price, cat, emoji }
+
+// ── فتح modal تفاصيل المنتج ──
+function openProductModal(name, price, cat, emoji, desc, featuresStr, oldPrice) {
+    document.getElementById('pm-emoji').textContent = emoji;
+    document.getElementById('pm-name').textContent = name;
+    document.getElementById('pm-desc').textContent = desc;
+    document.getElementById('pm-cat-badge').textContent =
+        cat === 'systems' ? 'أنظمة متكاملة' :
+        cat === 'scripts' ? 'سكربتات' :
+        cat === 'maps'    ? 'خرائط وملفات' : 'مجاني';
+
+    // Old price
+    const oldEl = document.getElementById('pm-old-price');
+    oldEl.textContent = oldPrice || '';
+
+    // Price
+    const priceEl = document.getElementById('pm-price');
+    if (price === 0) {
+        priceEl.textContent = 'مجاني 🎁';
+        priceEl.style.color = '#2ecc71';
+    } else {
+        priceEl.textContent = price + '$';
+        priceEl.style.color = '#fc7823';
+    }
+
+    // Features
+    const featEl = document.getElementById('pm-features');
+    featEl.innerHTML = featuresStr.split(',').map(f => f.trim()).filter(Boolean).map(f =>
+        `<span class="prod-modal-feature"><i class="fas fa-check"></i>${f}</span>`
+    ).join('');
+
+    // Buy button style
+    const buyBtn = document.getElementById('pm-buy-btn');
+    if (price === 0) {
+        buyBtn.innerHTML = '<i class="fas fa-download"></i> تحميل مجاني';
+        buyBtn.className = 'prod-modal-buy-btn prod-modal-free-btn';
+    } else {
+        buyBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> اشتري الآن';
+        buyBtn.className = 'prod-modal-buy-btn';
+    }
+
+    _pendingProduct = { name, price, cat, emoji };
+    document.getElementById('product-modal-overlay').style.display = 'flex';
+}
+
+function closeProductModal() {
+    document.getElementById('product-modal-overlay').style.display = 'none';
+}
+
+function triggerBuyFromModal() {
+    if (!_pendingProduct) return;
+    closeProductModal();
+    buyProduct(_pendingProduct.name, _pendingProduct.price, _pendingProduct.cat, _pendingProduct.emoji);
+}
+
+// ── نظام الشراء ──
+function buyProduct(name, price, cat, emoji) {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     if (!user) {
         showToast('⚠️', 'يجب تسجيل الدخول', 'سجّل دخولك أولاً للشراء');
-        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        setTimeout(() => { window.location.href = 'login.html'; }, 1400);
         return;
     }
+
     if (price === 0) {
+        // تحميل مجاني مباشر
         showToast('✅', 'تم التحميل!', `تم تحميل "${name}" بنجاح`);
         addNotification('success', 'تحميل مجاني', `تم تحميل "${name}" بنجاح`);
-    } else {
-        showToast('🛒', 'طلب الشراء', `سيتم التواصل معك قريباً لإتمام شراء "${name}" بسعر ${price}$`);
-        addNotification('info', 'طلب شراء جديد', `طلبك على "${name}" — ${price}$ قيد المعالجة`);
+        saveFreeDownload(name, emoji, user);
+        return;
     }
+
+    // فتح modal التأكيد
+    _pendingProduct = { name, price, cat, emoji: emoji || '📦' };
+    document.getElementById('purch-step-confirm').style.display = 'block';
+    document.getElementById('purch-step-success').style.display = 'none';
+    document.getElementById('purch-note').value = '';
+
+    document.getElementById('purch-product-info').innerHTML = `
+        <span class="purch-product-emoji">${emoji || '📦'}</span>
+        <div>
+            <div class="purch-product-name">${name}</div>
+            <div class="purch-product-price">${price}$</div>
+        </div>
+    `;
+
+    // Discord name
+    const discordEl = document.getElementById('purch-discord-name');
+    discordEl.textContent = `سيتم التواصل مع: ${user.username || user.global_name || 'حسابك'} عبر ديسكورد`;
+
+    document.getElementById('purchase-modal-overlay').style.display = 'flex';
+}
+
+function closePurchaseModal() {
+    document.getElementById('purchase-modal-overlay').style.display = 'none';
+    _pendingProduct = null;
+}
+
+async function confirmPurchase() {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (!user || !_pendingProduct) return;
+
+    const btn = document.getElementById('purch-confirm-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+
+    const orderId = 'ORD-' + Date.now().toString().slice(-7);
+    const note = document.getElementById('purch-note').value.trim();
+    const now = new Date().toLocaleString('ar-SA');
+
+    const orderData = {
+        id: orderId,
+        productName: _pendingProduct.name,
+        productEmoji: _pendingProduct.emoji,
+        productCat: _pendingProduct.cat,
+        price: _pendingProduct.price,
+        userId: user.id,
+        userName: user.username || user.global_name || 'مجهول',
+        userAvatar: user.avatar || '',
+        note: note || '',
+        status: 'pending',
+        createdAt: now,
+        timestamp: Date.now()
+    };
+
+    try {
+        await database.ref('orders/' + orderId).set(orderData);
+
+        // إشعار للمستخدم
+        await database.ref('userNotifications/' + user.id + '/' + Date.now()).set({
+            title: '🛒 تم استلام طلبك',
+            message: `طلبك على "${_pendingProduct.name}" — ${_pendingProduct.price}$ قيد المعالجة`,
+            orderId,
+            time: now,
+            read: false
+        });
+
+        // عرض النجاح
+        document.getElementById('purch-step-confirm').style.display = 'none';
+        document.getElementById('purch-step-success').style.display = 'block';
+
+        const badge = document.getElementById('purch-order-id');
+        badge.innerHTML = `<i class="fas fa-box"></i> ${orderId} <i class="fas fa-copy" style="font-size:0.75rem;opacity:0.6"></i>`;
+        badge.onclick = () => {
+            navigator.clipboard.writeText(orderId);
+            badge.style.background = 'rgba(252,120,35,0.15)';
+            badge.style.borderColor = 'rgba(252,120,35,0.4)';
+            badge.style.color = '#fc7823';
+            setTimeout(() => {
+                badge.style.background = '';
+                badge.style.borderColor = '';
+                badge.style.color = '';
+            }, 1500);
+        };
+
+        addNotification('success', 'تم استلام طلبك', `رقم الطلب: ${orderId}`);
+        showToast('✅', 'تم استلام طلبك!', `رقم الطلب: ${orderId}`);
+
+    } catch(e) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-check"></i> تأكيد الطلب';
+        showToast('❌', 'فشل الإرسال', 'حاول مرة أخرى');
+    }
+}
+
+async function saveFreeDownload(name, emoji, user) {
+    const orderId = 'DL-' + Date.now().toString().slice(-7);
+    const now = new Date().toLocaleString('ar-SA');
+    try {
+        await database.ref('orders/' + orderId).set({
+            id: orderId,
+            productName: name,
+            productEmoji: emoji || '📦',
+            productCat: 'free',
+            price: 0,
+            userId: user.id,
+            userName: user.username || user.global_name || 'مجهول',
+            note: '',
+            status: 'completed',
+            createdAt: now,
+            timestamp: Date.now()
+        });
+    } catch(e) {}
+}
+
+// ── عرض طلبات المستخدم في صفحة التتبع ──
+function loadMyOrders(userId) {
+    const section = document.getElementById('my-orders-section');
+    const list = document.getElementById('my-orders-list');
+    if (!section || !list) return;
+
+    database.ref('orders').orderByChild('userId').equalTo(userId).on('value', snap => {
+        const data = snap.val();
+        if (!data) { section.style.display = 'none'; return; }
+
+        const orders = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+        section.style.display = 'block';
+
+        const statusMap = {
+            pending:   { label: '⏳ قيد المعالجة', color: '#f39c12', bg: 'rgba(243,156,18,0.1)'  },
+            completed: { label: '✅ مكتمل',         color: '#2ecc71', bg: 'rgba(46,204,113,0.1)' },
+            cancelled: { label: '❌ ملغي',          color: '#e74c3c', bg: 'rgba(231,76,60,0.1)'  }
+        };
+
+        list.innerHTML = orders.map(o => {
+            const s = statusMap[o.status] || statusMap.pending;
+            return `
+            <div style="background:rgba(14,14,16,0.97);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:16px 18px;transition:all 0.3s;">
+              <div style="display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div style="width:44px;height:44px;border-radius:12px;background:rgba(252,120,35,0.1);border:1px solid rgba(252,120,35,0.2);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">${o.productEmoji}</div>
+                  <div>
+                    <div style="font-weight:700;font-size:0.95rem">${o.productName}</div>
+                    <div style="color:rgba(255,255,255,0.3);font-size:0.75rem;margin-top:2px">${o.createdAt}</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+                  <span style="background:rgba(252,120,35,0.1);color:#fc7823;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
+                  <span style="font-size:1.1rem;font-weight:900;color:#fc7823">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
+                  <span style="background:${s.bg};color:${s.color};border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${s.label}</span>
+                </div>
+              </div>
+              ${o.note ? `<div style="margin-top:10px;color:rgba(255,255,255,0.3);font-size:0.8rem;background:rgba(255,255,255,0.03);border-radius:8px;padding:8px 12px"><i class="fas fa-comment" style="margin-left:5px"></i>${o.note}</div>` : ''}
+            </div>`;
+        }).join('');
+    });
+}
+
+// ── طلبات المتجر في لوحة الأدمن ──
+let allOrders = [];
+
+function loadOrders() {
+    database.ref('orders').orderByChild('timestamp').once('value', snap => {
+        const data = snap.val();
+        allOrders = data ? Object.values(data).sort((a, b) => b.timestamp - a.timestamp) : [];
+        document.getElementById('orders-count-badge').textContent = allOrders.length + ' طلب';
+        renderOrders(allOrders);
+    });
+}
+
+function filterOrders(status, btn) {
+    document.querySelectorAll('#orders-admin-filters .adm-filter-btn').forEach(b => b.classList.remove('adm-filter-active'));
+    btn.classList.add('adm-filter-active');
+    renderOrders(status === 'all' ? allOrders : allOrders.filter(o => o.status === status));
+}
+
+function renderOrders(list) {
+    const el = document.getElementById('orders-list-admin');
+    if (!list.length) {
+        el.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.25)"><i class="fas fa-box" style="font-size:2rem;display:block;margin-bottom:10px;opacity:0.3"></i>لا يوجد طلبات</div>`;
+        return;
+    }
+
+    const statusMap = {
+        pending:   { label: 'قيد المعالجة', color: '#f39c12', bg: 'rgba(243,156,18,0.12)'  },
+        completed: { label: 'مكتمل',         color: '#2ecc71', bg: 'rgba(46,204,113,0.12)' },
+        cancelled: { label: 'ملغي',          color: '#e74c3c', bg: 'rgba(231,76,60,0.12)'  }
+    };
+
+    el.innerHTML = list.map(o => {
+        const s = statusMap[o.status] || statusMap.pending;
+        return `
+        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:1.6rem">${o.productEmoji}</span>
+              <div>
+                <div style="font-weight:700;font-size:0.9rem">${o.productName}</div>
+                <div style="color:rgba(255,255,255,0.3);font-size:0.75rem;margin-top:2px">${o.userName} · ${o.createdAt}</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(252,120,35,0.1);color:#fc7823;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
+              <span style="font-weight:900;color:#fc7823">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
+              <span style="background:${s.bg};color:${s.color};border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${s.label}</span>
+              ${o.status === 'pending' ? `
+              <button onclick="updateOrderStatus('${o.id}','completed')" style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.2);color:#2ecc71;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.78rem"><i class="fas fa-check"></i> إتمام</button>
+              <button onclick="updateOrderStatus('${o.id}','cancelled')" style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);color:#e74c3c;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.78rem"><i class="fas fa-times"></i> إلغاء</button>` : ''}
+              <button onclick="deleteOrder('${o.id}')" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.3);padding:5px 10px;border-radius:7px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.78rem"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+          ${o.note ? `<div style="margin-top:8px;color:rgba(255,255,255,0.3);font-size:0.78rem;background:rgba(255,255,255,0.02);border-radius:7px;padding:7px 10px"><i class="fas fa-comment" style="margin-left:5px"></i>${o.note}</div>` : ''}
+        </div>`;
+    }).join('');
+}
+
+async function updateOrderStatus(orderId, newStatus) {
+    await database.ref('orders/' + orderId).update({ status: newStatus });
+    const order = allOrders.find(o => o.id === orderId);
+    if (order && order.userId) {
+        const now = new Date().toLocaleString('ar-SA');
+        const msgMap = { completed: 'تم إتمام طلبك ✅', cancelled: 'تم إلغاء طلبك ❌' };
+        await database.ref('userNotifications/' + order.userId + '/' + Date.now()).set({
+            title: msgMap[newStatus] || 'تحديث الطلب',
+            message: `طلبك على "${order.productName}" — ${newStatus === 'completed' ? 'اكتمل' : 'ألغي'}`,
+            orderId,
+            time: now,
+            read: false
+        });
+    }
+    showNotification(newStatus === 'completed' ? '✅ تم إتمام الطلب' : '❌ تم إلغاء الطلب');
+    loadOrders();
+}
+
+async function deleteOrder(orderId) {
+    openCustomConfirm('هل تريد حذف هذا الطلب؟', 'حذف الطلب', 'fa-trash', async () => {
+        await database.ref('orders/' + orderId).remove();
+        allOrders = allOrders.filter(o => o.id !== orderId);
+        showNotification('🗑️ تم حذف الطلب');
+        closeConfirmModal();
+        loadOrders();
+    });
 }
 
 /* ============================================
@@ -1583,22 +1887,7 @@ async function submitTicket() {
 
         document.getElementById('tkt-form').style.display = 'none';
         document.getElementById('tkt-success').style.display = 'block';
-        document.getElementById('tkt-success-num').innerHTML = `
-            <span style="color:rgba(255,255,255,0.4);font-size:0.8rem;">رقم تذكرتك</span><br>
-            <span style="
-                display:inline-flex;align-items:center;gap:8px;
-                background:rgba(252,120,35,0.12);
-                border:1px solid rgba(252,120,35,0.35);
-                border-radius:10px;padding:8px 16px;margin-top:6px;
-                font-size:1rem;font-weight:900;color:#fc7823;
-                letter-spacing:0.05em;cursor:pointer;
-                transition:background 0.2s;
-            " onclick="navigator.clipboard.writeText('${ticketId}').then(()=>{ this.style.background='rgba(46,204,113,0.15)'; this.style.borderColor='rgba(46,204,113,0.4)'; this.style.color='#2ecc71'; setTimeout(()=>{ this.style.background='rgba(252,120,35,0.12)'; this.style.borderColor='rgba(252,120,35,0.35)'; this.style.color='#fc7823'; },1500); })" title="انسخ الرقم">
-                <i class="fas fa-ticket-alt"></i>
-                ${ticketId}
-                <i class="fas fa-copy" style="font-size:0.75rem;opacity:0.6;"></i>
-            </span>
-        `;
+        document.getElementById('tkt-success-num').textContent = 'رقم تذكرتك: ' + ticketId;
         document.getElementById('tkt-notif-hint').style.display = 'block';
 
     } catch(e) {
@@ -1753,7 +2042,7 @@ function checkUserTicketReplies(userId) {
 const _origShowPage = showPage;
 window.showPage = function(pageId) {
     _origShowPage(pageId);
-    if (pageId === 'admin-dashboard') loadTickets();
+    if (pageId === 'admin-dashboard') { loadTickets(); loadOrders(); }
 };
 
 // ── تحميل تذاكر المستخدم في صفحة التتبع ──
