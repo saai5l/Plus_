@@ -666,26 +666,6 @@ function updateUI(user) {
             userStatus.innerText = "Player";
             userStatus.style.color = "#aaaaaa";
         }
-
-        // حفظ بيانات Discord للملف الشخصي
-        const existingProfile = JSON.parse(localStorage.getItem('plusdev_profile') || '{}');
-        const isNewSession = existingProfile._lastSession !== new Date().toDateString();
-        const profileData = {
-            discordName: user.name || existingProfile.discordName || '',
-            discordAvatar: user.avatar || existingProfile.discordAvatar || '',
-            discordId: user.id || existingProfile.discordId || '',
-            name: existingProfile.name || user.name || '',
-            char: existingProfile.char || '',
-            rank: existingProfile.rank || 'مواطن عادي',
-            family: existingProfile.family || 'بدون',
-            joinDate: existingProfile.joinDate || new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'long' }),
-            sessions: (existingProfile.sessions || 0) + (isNewSession ? 1 : 0),
-            _lastSession: new Date().toDateString(),
-            questions: existingProfile.questions || 0,
-            lawsRead: existingProfile.lawsRead || 0,
-        };
-        localStorage.setItem('plusdev_profile', JSON.stringify(profileData));
-
         // إشعار الترحيب
         if (typeof initLoginNotification === 'function') initLoginNotification(user);
     } else {
@@ -1516,12 +1496,105 @@ function removeAdminId(key, adminId) {
 
 
 // ============================================
-// تتبع الأسئلة في ملف اللاعب الشخصي
+// نظام تذاكر الدعم — Discord Webhook
 // ============================================
-function trackChatQuestion() {
-    try {
-        const profile = JSON.parse(localStorage.getItem('plusdev_profile') || '{}');
-        profile.questions = (profile.questions || 0) + 1;
-        localStorage.setItem('plusdev_profile', JSON.stringify(profile));
-    } catch(e) {}
+const TICKET_WEBHOOK = 'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ';
+let selectedTicketType = '🚨 مشكلة تقنية';
+
+function openTicketModal() {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (!user) {
+        if (typeof showNotification === 'function') showNotification('⚠️ يرجى تسجيل الدخول أولاً', true);
+        return;
+    }
+    // reset
+    document.getElementById('tkt-subject').value = '';
+    document.getElementById('tkt-body').value = '';
+    document.getElementById('ticket-form-content').style.display = 'block';
+    document.getElementById('ticket-success-content').style.display = 'none';
+    document.getElementById('tkt-send-btn').disabled = false;
+    document.getElementById('tkt-send-btn').innerHTML = '<i class="fas fa-paper-plane"></i> إرسال التذكرة';
+    // reset type selection
+    document.querySelectorAll('.tkt-type-opt').forEach((el,i) => {
+        el.classList.toggle('sel', i === 0);
+    });
+    selectedTicketType = '🚨 مشكلة تقنية';
+
+    const overlay = document.getElementById('ticket-modal-overlay');
+    overlay.style.display = 'flex';
 }
+
+function closeTicketModal() {
+    document.getElementById('ticket-modal-overlay').style.display = 'none';
+}
+
+function selectTktType(el, type) {
+    document.querySelectorAll('.tkt-type-opt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel');
+    selectedTicketType = type;
+}
+
+async function submitTicket() {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const subject = document.getElementById('tkt-subject').value.trim();
+    const body = document.getElementById('tkt-body').value.trim();
+
+    if (!subject) { 
+        if(typeof showNotification === 'function') showNotification('❗ يرجى كتابة عنوان للتذكرة', true);
+        return;
+    }
+    if (!body) { 
+        if(typeof showNotification === 'function') showNotification('❗ يرجى وصف المشكلة', true);
+        return;
+    }
+
+    const btn = document.getElementById('tkt-send-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+
+    const ticketId = 'TKT-' + Date.now().toString().slice(-6);
+    const now = new Date().toLocaleString('ar-SA');
+
+    const embed = {
+        embeds: [{
+            title: `🎫 تذكرة دعم جديدة — ${ticketId}`,
+            color: 0xfc7823,
+            fields: [
+                { name: '👤 اللاعب', value: `**${user.name || 'غير معروف'}**\nID: \`${user.id || '—'}\``, inline: true },
+                { name: '📂 النوع', value: selectedTicketType, inline: true },
+                { name: '📌 العنوان', value: subject, inline: false },
+                { name: '📝 التفاصيل', value: body, inline: false },
+                { name: '🕐 الوقت', value: now, inline: true },
+            ],
+            thumbnail: { url: user.avatar || '' },
+            footer: { text: 'Plus Dev Support System' },
+            timestamp: new Date().toISOString()
+        }]
+    };
+
+    try {
+        const res = await fetch(TICKET_WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(embed)
+        });
+
+        if (res.ok || res.status === 204) {
+            document.getElementById('ticket-form-content').style.display = 'none';
+            document.getElementById('ticket-success-content').style.display = 'block';
+            document.getElementById('tkt-success-id').textContent = 'رقم تذكرتك: ' + ticketId;
+        } else {
+            throw new Error('فشل الإرسال');
+        }
+    } catch(e) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال التذكرة';
+        if(typeof showNotification === 'function') showNotification('❌ فشل الإرسال، تحقق من الاتصال', true);
+    }
+}
+
+// إغلاق عند الضغط خارج النافذة
+document.addEventListener('click', function(e) {
+    const overlay = document.getElementById('ticket-modal-overlay');
+    if (overlay && e.target === overlay) closeTicketModal();
+});
