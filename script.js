@@ -1583,7 +1583,22 @@ async function submitTicket() {
 
         document.getElementById('tkt-form').style.display = 'none';
         document.getElementById('tkt-success').style.display = 'block';
-        document.getElementById('tkt-success-num').textContent = 'رقم تذكرتك: ' + ticketId;
+        document.getElementById('tkt-success-num').innerHTML = `
+            <span style="color:rgba(255,255,255,0.4);font-size:0.8rem;">رقم تذكرتك</span><br>
+            <span style="
+                display:inline-flex;align-items:center;gap:8px;
+                background:rgba(252,120,35,0.12);
+                border:1px solid rgba(252,120,35,0.35);
+                border-radius:10px;padding:8px 16px;margin-top:6px;
+                font-size:1rem;font-weight:900;color:#fc7823;
+                letter-spacing:0.05em;cursor:pointer;
+                transition:background 0.2s;
+            " onclick="navigator.clipboard.writeText('${ticketId}').then(()=>{ this.style.background='rgba(46,204,113,0.15)'; this.style.borderColor='rgba(46,204,113,0.4)'; this.style.color='#2ecc71'; setTimeout(()=>{ this.style.background='rgba(252,120,35,0.12)'; this.style.borderColor='rgba(252,120,35,0.35)'; this.style.color='#fc7823'; },1500); })" title="انسخ الرقم">
+                <i class="fas fa-ticket-alt"></i>
+                ${ticketId}
+                <i class="fas fa-copy" style="font-size:0.75rem;opacity:0.6;"></i>
+            </span>
+        `;
         document.getElementById('tkt-notif-hint').style.display = 'block';
 
     } catch(e) {
