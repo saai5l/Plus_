@@ -1,3 +1,14 @@
+
+const WEBHOOKS = {
+    police:  'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // طلبات الشرطة
+    ems:     'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // طلبات EMS
+    staff:   'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // طلبات الإدارة
+    tickets: 'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // تذاكر الدعم
+    store:   'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ', // طلبات المتجر
+};
+
+/* ============================================================ */
+
 const firebaseConfig = {
     apiKey: "AIzaSyB5r_RltNkExAb3wHhgfMuCWPg_GzEd_Ok",
     authDomain: "planning-with-ai-60a3c.firebaseapp.com",
@@ -35,9 +46,9 @@ function loadAdminIds() {
 }
 
         const jobConfig = {
-            police: { open: true, webhook: "https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ" },
-            ems: { open: true, webhook: "https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ" },
-            staff: { open: true, webhook: "https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ" }
+            police: { open: true, webhook: WEBHOOKS.police },
+            ems: { open: true, webhook: WEBHOOKS.ems },
+            staff: { open: true, webhook: WEBHOOKS.staff }
         };
 
 function showPage(pageId) {
@@ -1315,6 +1326,7 @@ async function confirmPurchase() {
         price: _pendingProduct.price,
         userId: user.id,
         userName: user.username || user.global_name || 'مجهول',
+        discordId: user.id,
         userAvatar: user.avatar || '',
         note: note || '',
         status: 'pending',
@@ -1324,6 +1336,29 @@ async function confirmPurchase() {
 
     try {
         await database.ref('orders/' + orderId).set(orderData);
+
+        // ── إشعار ديسكورد webhook ──
+        const STORE_WEBHOOK = WEBHOOKS.store;
+        fetch(STORE_WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                embeds: [{
+                    title: '🛒 طلب شراء جديد',
+                    color: 0xfc7823,
+                    fields: [
+                        { name: '📦 المنتج',     value: _pendingProduct.emoji + ' ' + _pendingProduct.name, inline: true  },
+                        { name: '💰 السعر',      value: _pendingProduct.price + '$',                        inline: true  },
+                        { name: '🆔 رقم الطلب',  value: '`' + orderId + '`',                               inline: false },
+                        { name: '👤 المستخدم',   value: (user.username || user.global_name || 'مجهول'),    inline: true  },
+                        { name: '🔖 Discord ID', value: '<@' + user.id + '> `' + user.id + '`',            inline: true  },
+                        ...(note ? [{ name: '📝 ملاحظة', value: note, inline: false }] : [])
+                    ],
+                    footer: { text: 'Plus Dev Store • ' + now },
+                    thumbnail: { url: user.avatar ? 'https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.png?size=64' : '' }
+                }]
+            })
+        }).catch(() => {});
 
         // إشعار للمستخدم
         await database.ref('userNotifications/' + user.id + '/' + Date.now()).set({
@@ -1466,6 +1501,7 @@ function renderOrders(list) {
               <div>
                 <div style="font-weight:700;font-size:0.9rem">${o.productName}</div>
                 <div style="color:rgba(255,255,255,0.3);font-size:0.75rem;margin-top:2px">${o.userName} · ${o.createdAt}</div>
+                <div style="color:rgba(252,120,35,0.6);font-size:0.72rem;margin-top:2px;display:flex;align-items:center;gap:4px"><i class="fab fa-discord" style="color:#5865f2"></i> <code style="background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.2);border-radius:4px;padding:1px 6px;color:#a0a9ff;font-size:0.7rem">${o.discordId || o.userId || '—'}</code></div>
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -1805,7 +1841,7 @@ function removeAdminId(key, adminId) {
 // ============================================
 // نظام التذاكر الكامل — Firebase
 // ============================================
-const TICKET_WEBHOOK = 'https://discord.com/api/webhooks/1462742583515156668/p-BwPQ1WMi6fj8NhAGa0W9GtZFXNwU5Gkas_pQAkqnJVHPJrLvOU7sWLg-YzedUmwZwJ';
+const TICKET_WEBHOOK = WEBHOOKS.tickets;
 let selectedTktType = '🚨 مشكلة تقنية';
 let currentReplyTicketId = null;
 let allTickets = [];
