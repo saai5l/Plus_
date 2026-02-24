@@ -980,6 +980,9 @@ function loadUserTrackingData() {
         return;
     }
 
+    // تحميل تذاكر المستخدم
+    loadMyTickets(savedUser.id);
+
     database.ref('applications').on('value', (snapshot) => {
         const data = snapshot.val();
         
@@ -1734,8 +1737,71 @@ function checkUserTicketReplies(userId) {
 // نضيف الاستدعاء في showPage مباشرة بدل override
 const _origShowPage = showPage;
 window.showPage = function(pageId) {
-    _origShowPage(pageId);
-    if (pageId === 'admin-dashboard') {
-        setTimeout(loadTickets, 500);
-    }
-};
+// ── تحميل تذاكر المستخدم في صفحة التتبع ──
+function loadMyTickets(userId) {
+    const section = document.getElementById('my-tickets-section');
+    const list = document.getElementById('my-tickets-list');
+    if (!section || !list) return;
+
+    database.ref('tickets').orderByChild('userId').equalTo(userId).on('value', snap => {
+        const data = snap.val();
+
+        if (!data) {
+            section.style.display = 'none';
+            return;
+        }
+
+        const tickets = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+        section.style.display = 'block';
+
+        list.innerHTML = tickets.map(t => {
+            const isOpen = t.status === 'open';
+            const hasReply = !!t.adminReply;
+
+            return `
+            <div style="background:rgba(16,16,20,0.95);border:1px solid ${hasReply ? 'rgba(46,204,113,0.3)' : 'rgba(255,255,255,0.07)'};border-radius:16px;padding:18px 20px;transition:all 0.3s;${hasReply ? 'box-shadow:0 0 20px rgba(46,204,113,0.08)' : ''}">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:36px;height:36px;border-radius:10px;background:rgba(252,120,35,0.1);border:1px solid rgba(252,120,35,0.2);display:flex;align-items:center;justify-content:center;color:#fc7823;font-size:0.9rem;flex-shrink:0">
+                    <i class="fas fa-ticket-alt"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight:700;font-size:0.92rem">${t.subject}</div>
+                    <div style="color:rgba(255,255,255,0.35);font-size:0.75rem;margin-top:2px">${t.type} · ${t.createdAt}</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+                  <span style="background:rgba(252,120,35,0.1);color:#fc7823;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
+                  <span style="background:${isOpen ? 'rgba(52,152,219,0.1)' : 'rgba(46,204,113,0.1)'};color:${isOpen ? '#3498db' : '#2ecc71'};border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">
+                    ${isOpen ? '🔵 مفتوحة' : '✅ مغلقة'}
+                  </span>
+                </div>
+              </div>
+
+              <!-- نص المشكلة -->
+              <div style="background:rgba(255,255,255,0.03);border-radius:10px;padding:12px 14px;font-size:0.84rem;color:rgba(255,255,255,0.5);margin-bottom:${hasReply ? '12px' : '0'}">
+                ${t.body}
+              </div>
+
+              <!-- رد الإدمن -->
+              ${hasReply ? `
+              <div style="background:rgba(46,204,113,0.06);border:1px solid rgba(46,204,113,0.2);border-radius:10px;padding:14px 16px;margin-top:4px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                  <div style="width:28px;height:28px;border-radius:50%;background:rgba(46,204,113,0.15);display:flex;align-items:center;justify-content:center">
+                    <i class="fas fa-shield-alt" style="color:#2ecc71;font-size:0.75rem"></i>
+                  </div>
+                  <div>
+                    <span style="color:#2ecc71;font-weight:700;font-size:0.82rem">رد الإدارة</span>
+                    <span style="color:rgba(255,255,255,0.3);font-size:0.72rem;margin-right:8px">${t.repliedAt || ''}</span>
+                  </div>
+                </div>
+                <p style="margin:0;color:#c8f0d0;font-size:0.88rem;line-height:1.6">${t.adminReply}</p>
+              </div>` : `
+              <div style="margin-top:10px;display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.25);font-size:0.8rem">
+                <i class="fas fa-clock"></i> في انتظار رد الإدارة...
+              </div>`}
+            </div>`;
+        }).join('');
+    });
+}
+
