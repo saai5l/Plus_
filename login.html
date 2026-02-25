@@ -22,9 +22,6 @@
       --text-muted:   #777;
       --discord:      #5865F2;
       --discord-dark: #4752c4;
-      --steam:        #1b2838;
-      --steam-light:  #2a475e;
-      --steam-accent: #66c0f4;
       --radius:       14px;
       --tr:           all 0.3s ease;
     }
@@ -113,7 +110,7 @@
     .tab {
       flex:1; padding:9px 0;
       border:none; border-radius:7px;
-      font-family:'Tajawal',sans-serif; font-size:.82rem; font-weight:700;
+      font-family:'Tajawal',sans-serif; font-size:.9rem; font-weight:700;
       color:var(--text-muted); background:transparent; cursor:pointer;
       transition: var(--tr);
     }
@@ -161,40 +158,6 @@
     .discord-btn:hover::after { opacity:1; }
     .discord-btn i { font-size:1.25rem; }
     .discord-note { font-size:.8rem; color:var(--text-muted); text-align:center; margin-top:12px; line-height:1.55; }
-
-    /* ─── Steam button ─── */
-    .steam-btn {
-      width:100%; display:flex; align-items:center; justify-content:center; gap:11px;
-      padding:14px; background:linear-gradient(135deg,#1b2838,#2a475e);
-      border:1px solid rgba(102,192,244,0.2); border-radius:var(--radius); color:#c6d4df;
-      font-family:'Tajawal',sans-serif; font-size:1.05rem; font-weight:800;
-      cursor:pointer; transition:var(--tr);
-      box-shadow: 0 6px 20px rgba(27,40,56,0.6);
-      position:relative; overflow:hidden; margin-bottom:12px;
-    }
-    .steam-btn::after { content:''; position:absolute; inset:0; background:rgba(102,192,244,.08); opacity:0; transition:opacity .3s; }
-    .steam-btn:hover  { transform:translateY(-2px); box-shadow:0 10px 28px rgba(102,192,244,.2); border-color:rgba(102,192,244,0.45); color:#fff; }
-    .steam-btn:hover::after { opacity:1; }
-    .steam-btn img { width:22px; height:22px; filter:brightness(1.2); }
-
-    /* ─── Steam link banner ─── */
-    .steam-link-banner {
-      display:none; padding:13px 15px;
-      background:linear-gradient(135deg,rgba(27,40,56,.9),rgba(42,71,94,.6));
-      border:1px solid rgba(102,192,244,.3); border-radius:12px; margin-bottom:18px;
-      font-size:.84rem; color:var(--text-muted); line-height:1.6;
-    }
-    .steam-link-banner.on { display:block; }
-    .steam-link-banner strong { color:#66c0f4; }
-
-    /* ─── Connected badge ─── */
-    .linked-badge {
-      display:inline-flex; align-items:center; gap:6px;
-      background:rgba(46,204,113,.1); border:1px solid rgba(46,204,113,.25);
-      color:#5dda8f; padding:4px 10px; border-radius:20px; font-size:.78rem; font-weight:700;
-      margin-top:8px;
-    }
-    .linked-badge.steam-badge { background:rgba(102,192,244,.1); border-color:rgba(102,192,244,.25); color:#66c0f4; }
 
     /* ─── Divider ─── */
     .div {
@@ -292,6 +255,105 @@
     }
     .back:hover { color:var(--primary); }
 
+    /* ─── Register steps indicator ─── */
+    .steps {
+      display:flex; align-items:center; justify-content:center;
+      gap:0; margin-bottom:26px;
+    }
+    .step-item {
+      display:flex; flex-direction:column; align-items:center; gap:5px;
+      position:relative;
+    }
+    .step-circle {
+      width:34px; height:34px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.82rem; font-weight:800;
+      background:rgba(255,255,255,.06); border:2px solid rgba(255,255,255,.1);
+      color:var(--text-muted); transition:var(--tr);
+    }
+    .step-item.active   .step-circle { background:var(--primary); border-color:var(--primary); color:#fff; box-shadow:0 0 16px rgba(252,120,35,.4); }
+    .step-item.done     .step-circle { background:rgba(46,204,113,.15); border-color:#2ecc71; color:#2ecc71; }
+    .step-label { font-size:.7rem; color:var(--text-muted); white-space:nowrap; }
+    .step-item.active .step-label { color:var(--primary); font-weight:700; }
+    .step-item.done   .step-label { color:#2ecc71; }
+    .step-line {
+      flex:1; height:2px; min-width:28px;
+      background:rgba(255,255,255,.07);
+      margin-bottom:18px; transition:background .4s;
+    }
+    .step-line.done { background:rgba(46,204,113,.35); }
+
+    /* ─── Linking cards ─── */
+    .link-cards { display:flex; flex-direction:column; gap:11px; margin-bottom:18px; }
+
+    .lcard {
+      display:flex; align-items:center; gap:14px;
+      padding:14px 16px; border-radius:14px;
+      border:1.5px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      cursor:pointer; transition:var(--tr); position:relative; overflow:hidden;
+    }
+    .lcard::after { content:''; position:absolute; inset:0; opacity:0; transition:opacity .3s; }
+    .lcard:hover  { transform:translateY(-2px); }
+
+    .lcard.discord-card { border-color:rgba(88,101,242,.25); }
+    .lcard.discord-card:hover { background:rgba(88,101,242,.07); border-color:rgba(88,101,242,.5); box-shadow:0 6px 24px rgba(88,101,242,.15); }
+    .lcard.steam-card   { border-color:rgba(102,192,244,.18); }
+    .lcard.steam-card:hover { background:rgba(102,192,244,.06); border-color:rgba(102,192,244,.4); box-shadow:0 6px 24px rgba(102,192,244,.12); }
+    .lcard.skip-card    { border-color:rgba(255,255,255,.06); cursor:default; }
+    .lcard.skip-card:hover { transform:none; }
+
+    .lcard-icon {
+      width:44px; height:44px; border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.25rem; flex-shrink:0;
+    }
+    .discord-card .lcard-icon { background:rgba(88,101,242,.15); color:#5865F2; }
+    .steam-card   .lcard-icon { background:rgba(102,192,244,.12); color:#66c0f4; }
+
+    .lcard-info { flex:1; min-width:0; }
+    .lcard-title { font-weight:800; color:#e0e0e0; font-size:.93rem; margin-bottom:2px; }
+    .lcard-desc  { font-size:.78rem; color:var(--text-muted); line-height:1.45; }
+
+    .lcard-arrow { color:rgba(255,255,255,.2); font-size:.85rem; transition:var(--tr); }
+    .lcard:hover .lcard-arrow { color:var(--primary); transform:translateX(-4px); }
+
+    .lcard.linked-done { border-color:rgba(46,204,113,.35); background:rgba(46,204,113,.05); cursor:default; }
+    .lcard.linked-done:hover { transform:none; box-shadow:none; }
+    .lcard.linked-done .lcard-title { color:#5dda8f; }
+    .lcard.linked-done .lcard-arrow { color:#5dda8f; }
+
+    /* success finish */
+    .finish-box {
+      text-align:center; padding:8px 0 4px;
+      animation:pan .4s ease;
+    }
+    .finish-icon {
+      width:64px; height:64px; border-radius:50%;
+      background:rgba(46,204,113,.12); border:2px solid rgba(46,204,113,.3);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.8rem; margin:0 auto 16px; color:#2ecc71;
+      animation:popIn .5s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+    .finish-box h3 { font-size:1.15rem; font-weight:900; color:#fff; margin-bottom:6px; }
+    .finish-box p  { font-size:.84rem; color:var(--text-muted); margin-bottom:18px; }
+    .finish-links  { display:flex; gap:8px; margin-top:6px; }
+    .fl-btn {
+      flex:1; padding:10px; border-radius:10px; border:none;
+      font-family:'Tajawal',sans-serif; font-size:.88rem; font-weight:800;
+      cursor:pointer; transition:var(--tr);
+    }
+    .fl-primary { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; box-shadow:0 4px 14px rgba(252,120,35,.3); }
+    .fl-primary:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(252,120,35,.4); }
+    .fl-ghost   { background:rgba(255,255,255,.06); color:var(--text-muted); }
+    .fl-ghost:hover { background:rgba(255,255,255,.11); color:#fff; }
+
+    /* password strength */
+    .pw-strength { margin-top:6px; display:flex; gap:4px; align-items:center; }
+    .pw-bar { flex:1; height:3px; border-radius:4px; background:rgba(255,255,255,.07); transition:background .3s; }
+    .pw-label { font-size:.72rem; color:var(--text-muted); min-width:40px; text-align:left; }
+
     @media (max-width:480px) {
       .card { margin:14px; padding:30px 20px 26px; border-radius:18px; }
       .logo img { width:58px; height:58px; }
@@ -317,14 +379,14 @@
 
   <!-- Tabs -->
   <div class="tabs">
-    <button class="tab on" onclick="switchTab('discord')">
+    <button class="tab on" id="tab-discord" onclick="switchTab('discord')">
       <i class="fab fa-discord"></i> ديسكورد
     </button>
-    <button class="tab" onclick="switchTab('steam')">
-      <i class="fab fa-steam"></i> ستيم
+    <button class="tab" id="tab-email" onclick="switchTab('email')">
+      <i class="fas fa-envelope"></i> دخول
     </button>
-    <button class="tab" onclick="switchTab('email')">
-      <i class="fas fa-envelope"></i> إيميل
+    <button class="tab" id="tab-register" onclick="switchTab('register')">
+      <i class="fas fa-user-plus"></i> حساب جديد
     </button>
   </div>
 
@@ -340,45 +402,6 @@
     <p class="discord-note">
       سيتم جلب إيميلك من ديسكورد تلقائياً وحفظه، عشان تقدر تسجل دخول بالإيميل لاحقاً وتلاقي بياناتك موجودة.
     </p>
-  </div>
-
-  <!-- ══ Steam Panel ══ -->
-  <div class="panel" id="p-steam">
-
-    <!-- Steam link banner (show when steam linked to discord) -->
-    <div class="steam-link-banner" id="steam-link-banner">
-      <i class="fab fa-discord" style="color:#9da7fb;margin-left:5px"></i>
-      <strong>وجدنا حساب ديسكورد بنفس الإيميل!</strong><br>
-      تبغى تربط حساب ستيم مع ديسكورد عشان تسجل بكلتا الطريقتين؟
-      <div class="link-actions">
-        <button class="lbtn lbtn-y" onclick="confirmSteamLink()">
-          <i class="fab fa-discord"></i> نعم، ارتبط
-        </button>
-        <button class="lbtn lbtn-n" onclick="dismissSteamLink()">ستيم فقط</button>
-      </div>
-    </div>
-
-    <button class="steam-btn" onclick="loginSteam()">
-      <img src="https://store.steampowered.com/favicon.ico" alt="Steam">
-      تسجيل الدخول عبر Steam
-    </button>
-
-    <p class="discord-note">
-      سيتم تحويلك لصفحة ستيم للتحقق. بعد العودة، سنحاول ربط حسابك بالديسكورد تلقائياً إذا نفس الإيميل.
-    </p>
-
-    <!-- Steam profile preview (shown after login) -->
-    <div id="steam-preview" style="display:none;margin-top:14px;padding:13px;background:rgba(27,40,56,0.6);border:1px solid rgba(102,192,244,0.2);border-radius:12px;">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <img id="steam-avatar" src="" style="width:44px;height:44px;border-radius:50%;border:2px solid rgba(102,192,244,0.4);">
-        <div>
-          <div id="steam-name" style="font-weight:700;color:#c6d4df;font-size:.95rem;"></div>
-          <div id="steam-id-display" style="font-size:.75rem;color:rgba(255,255,255,.3);margin-top:2px;"></div>
-          <span class="linked-badge steam-badge"><i class="fab fa-steam"></i> متصل</span>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <!-- ══ Email Panel ══ -->
@@ -428,8 +451,139 @@
     </form>
 
     <div class="sw">
-      ما عندك حساب؟ <a href="#" onclick="switchTab('discord');return false">سجّل عبر ديسكورد</a>
+      ما عندك حساب؟ <a href="#" onclick="switchTab('register');return false">أنشئ حساب جديد</a>
     </div>
+  </div>
+
+  <!-- ══ Register Panel ══ -->
+  <div class="panel" id="p-register">
+
+    <!-- Steps -->
+    <div class="steps" id="reg-steps">
+      <div class="step-item active" id="step1-item">
+        <div class="step-circle" id="s1">1</div>
+        <div class="step-label">البيانات</div>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-item" id="step2-item">
+        <div class="step-circle" id="s2">2</div>
+        <div class="step-label">الربط</div>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-item" id="step3-item">
+        <div class="step-circle" id="s3"><i class="fas fa-check" style="font-size:.7rem"></i></div>
+        <div class="step-label">تم!</div>
+      </div>
+    </div>
+
+    <!-- Step 1: Account info -->
+    <div id="reg-step1">
+      <form id="rf" onsubmit="submitRegister(event)" novalidate>
+
+        <div class="fg">
+          <label for="reg-name">الاسم المستعار</label>
+          <div class="iw">
+            <input type="text" id="reg-name" placeholder="مثال: Wolf_X" autocomplete="nickname" required>
+            <i class="fas fa-user ic"></i>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label for="reg-em">البريد الإلكتروني</label>
+          <div class="iw">
+            <input type="email" id="reg-em" placeholder="example@gmail.com" autocomplete="email" required>
+            <i class="fas fa-envelope ic"></i>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label for="reg-pw">كلمة المرور</label>
+          <div class="iw">
+            <input type="password" id="reg-pw" placeholder="6 أحرف على الأقل" oninput="checkStrength(this.value)" required>
+            <i class="fas fa-lock ic"></i>
+            <button type="button" class="eye" onclick="toggleRegPw()" title="إظهار/إخفاء">
+              <i class="fas fa-eye" id="reg-eye"></i>
+            </button>
+          </div>
+          <div class="pw-strength">
+            <div class="pw-bar" id="pb1"></div>
+            <div class="pw-bar" id="pb2"></div>
+            <div class="pw-bar" id="pb3"></div>
+            <div class="pw-bar" id="pb4"></div>
+            <span class="pw-label" id="pw-lbl">—</span>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label for="reg-pw2">تأكيد كلمة المرور</label>
+          <div class="iw">
+            <input type="password" id="reg-pw2" placeholder="••••••••" required>
+            <i class="fas fa-lock ic"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="sbtn" id="reg-sbtn">
+          إنشاء الحساب <i class="fas fa-arrow-left" style="margin-right:6px;font-size:.85rem"></i>
+        </button>
+      </form>
+
+      <div class="sw" style="margin-top:14px">
+        عندك حساب؟ <a href="#" onclick="switchTab('email');return false">سجّل دخولك</a>
+      </div>
+    </div>
+
+    <!-- Step 2: Link accounts -->
+    <div id="reg-step2" style="display:none">
+
+      <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:16px;text-align:center;line-height:1.6">
+        حسابك جاهز! 🎉<br>
+        <span style="font-size:.8rem;color:#555">اربط حساباتك عشان ما تخسر أي بيانات</span>
+      </p>
+
+      <div class="link-cards">
+
+        <!-- Discord card -->
+        <div class="lcard discord-card" id="link-discord-card" onclick="linkDiscordFromRegister()">
+          <div class="lcard-icon"><i class="fab fa-discord"></i></div>
+          <div class="lcard-info">
+            <div class="lcard-title">ربط ديسكورد</div>
+            <div class="lcard-desc">سجّل بديسكورد لدمج بياناتك وصورتك</div>
+          </div>
+          <i class="fas fa-chevron-left lcard-arrow"></i>
+        </div>
+
+        <!-- Steam card -->
+        <div class="lcard steam-card" id="link-steam-card" onclick="linkSteamFromRegister()">
+          <div class="lcard-icon">
+            <img src="https://store.steampowered.com/favicon.ico" style="width:22px;height:22px;filter:brightness(1.3)">
+          </div>
+          <div class="lcard-info">
+            <div class="lcard-title">ربط ستيم</div>
+            <div class="lcard-desc">اربط حساب ستيم عشان تسجل بطريقتين</div>
+          </div>
+          <i class="fas fa-chevron-left lcard-arrow"></i>
+        </div>
+
+      </div>
+
+      <button class="sbtn" onclick="finishRegister()" style="margin-top:4px">
+        تخطى وأكمل <i class="fas fa-forward" style="margin-right:6px;font-size:.82rem"></i>
+      </button>
+    </div>
+
+    <!-- Step 3: Done -->
+    <div id="reg-step3" style="display:none">
+      <div class="finish-box">
+        <div class="finish-icon">🎮</div>
+        <h3>أهلاً وسهلاً!</h3>
+        <p id="finish-msg">حسابك جاهز، جاري تحويلك للموقع…</p>
+        <div class="finish-links" id="finish-links" style="display:none">
+          <button class="fl-btn fl-ghost" onclick="redirectHome()">الصفحة الرئيسية</button>
+          <button class="fl-btn fl-primary" onclick="redirectHome()">ابدأ الآن 🚀</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- Footer -->
@@ -462,12 +616,10 @@ const REDIRECT_URI = 'https://saai5l.github.io/Plus_/login.html';
 
 /* ════════════════════ TABS ════════════════════ */
 function switchTab(t){
-  const tabs=document.querySelectorAll('.tab');
-  const order=['discord','steam','email'];
-  tabs.forEach((b,i)=>b.classList.toggle('on',order[i]===t));
-  document.getElementById('p-discord').classList.toggle('on',t==='discord');
-  document.getElementById('p-steam').classList.toggle('on',t==='steam');
-  document.getElementById('p-email').classList.toggle('on',t==='email');
+  ['discord','email','register'].forEach(id=>{
+    document.getElementById('tab-'+id)?.classList.toggle('on',id===t);
+    document.getElementById('p-'+id)?.classList.toggle('on',id===t);
+  });
   clearAlert();
 }
 
@@ -491,12 +643,130 @@ function togglePw(){
   e.className='fas fa-'+(i.type==='text'?'eye-slash':'eye');
 }
 
-/* ════════════════════ STEAM LOGIN (OpenID) ════════════════════ */
-// Steam OpenID 2.0 — redirect to Steam, Steam returns steamid in URL
+/* ════════════════════ REGISTER ════════════════════ */
+let _regUser = null; // الحساب الجديد المسجّل مؤقتاً
+
+function goRegStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('reg-step'+i).style.display = i===n?'block':'none';
+    const item = document.getElementById('step'+i+'-item');
+    item.classList.toggle('active', i===n);
+    item.classList.toggle('done', i<n);
+    if(i<n){
+      const circle = document.getElementById('s'+i);
+      circle.innerHTML = '<i class="fas fa-check" style="font-size:.7rem"></i>';
+    }
+  });
+  if(n>1) document.getElementById('line1').classList.add('done');
+  if(n>2) document.getElementById('line2').classList.add('done');
+}
+
+function checkStrength(v){
+  const bars  = [1,2,3,4].map(i=>document.getElementById('pb'+i));
+  const label = document.getElementById('pw-lbl');
+  const colors= ['#e74c3c','#e67e22','#f1c40f','#2ecc71'];
+  const texts = ['ضعيفة','وسط','جيدة','قوية'];
+  let score = 0;
+  if(v.length>=6)  score++;
+  if(v.length>=10) score++;
+  if(/[A-Z]/.test(v)||/[^a-zA-Z0-9]/.test(v)) score++;
+  if(v.length>=14) score++;
+  score = Math.max(v.length>0?1:0, score);
+  bars.forEach((b,i)=>{ b.style.background = i<score ? colors[score-1] : 'rgba(255,255,255,.07)'; });
+  label.textContent = v.length===0?'—':texts[score-1]||texts[0];
+  label.style.color = v.length===0?'var(--text-muted)':colors[score-1];
+}
+
+function toggleRegPw(){
+  const i=document.getElementById('reg-pw');
+  const e=document.getElementById('reg-eye');
+  i.type=i.type==='password'?'text':'password';
+  e.className='fas fa-'+(i.type==='text'?'eye-slash':'eye');
+}
+
+async function submitRegister(e){
+  e.preventDefault(); clearAlert();
+  const name = document.getElementById('reg-name').value.trim();
+  const email= document.getElementById('reg-em').value.trim().toLowerCase();
+  const pass = document.getElementById('reg-pw').value;
+  const pass2= document.getElementById('reg-pw2').value;
+  const btn  = document.getElementById('reg-sbtn');
+
+  if(!name||!email||!pass||!pass2){ showAlert('يرجى تعبئة جميع الحقول.'); return; }
+  if(pass.length<6){ showAlert('كلمة المرور 6 أحرف على الأقل.'); return; }
+  if(pass!==pass2){ showAlert('كلمتا المرور غير متطابقتين.'); return; }
+
+  const accounts = getAccounts();
+  if(accounts[email]){ showAlert('هذا الإيميل مستخدم مسبقاً — سجّل دخولك.','inf'); switchTab('email'); return; }
+
+  btn.disabled=true;
+  btn.innerHTML='جاري الإنشاء <span class="spin"></span>';
+
+  _regUser = {
+    id:      'em_'+Date.now(),
+    name,
+    avatar:  `https://cdn.discordapp.com/embed/avatars/${Math.floor(Math.random()*5)}.png`,
+    email,
+    loginVia:'email'
+  };
+  saveAccount(email, pass, _regUser);
+
+  // احفظ الجلسة مؤقتاً
+  localStorage.setItem('user',        JSON.stringify(_regUser));
+  localStorage.setItem('plusdev_user',JSON.stringify(_regUser));
+
+  btn.disabled=false;
+  btn.innerHTML='إنشاء الحساب <i class="fas fa-arrow-left" style="margin-right:6px;font-size:.85rem"></i>';
+
+  clearAlert();
+  goRegStep(2);
+}
+
+/* ربط ديسكورد من صفحة التسجيل */
+function linkDiscordFromRegister(){
+  // احفظ إشارة إننا جايين من register عشان نرجع
+  sessionStorage.setItem('reg_linking','discord');
+  loginDiscord();
+}
+
+/* ربط ستيم من صفحة التسجيل */
+function linkSteamFromRegister(){
+  sessionStorage.setItem('reg_linking','steam');
+  loginSteam();
+}
+
+/* بعد الربط الناجح — علّم الكارد ✓ */
+function markLinked(type){
+  const card = document.getElementById('link-'+type+'-card');
+  if(!card) return;
+  card.classList.add('linked-done');
+  card.onclick=null;
+  card.querySelector('.lcard-title').innerHTML =
+    (type==='discord'?'<i class="fab fa-discord" style="margin-left:5px"></i>':'<i class="fab fa-steam" style="margin-left:5px"></i>')+
+    ' تم الربط ✓';
+  card.querySelector('.lcard-arrow').className='fas fa-check-circle';
+  card.querySelector('.lcard-arrow').style.color='#2ecc71';
+}
+
+function finishRegister(){
+  goRegStep(3);
+  document.getElementById('finish-msg').textContent =
+    'حسابك جاهز! جاري تحويلك للموقع…';
+  setTimeout(redirectHome, 1800);
+}
+
+/* ════════════════════ DISCORD LOGIN ════════════════════ */
+function loginDiscord(){
+  const scope=encodeURIComponent('identify email');
+  window.location.href=`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}`+
+    `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${scope}`;
+}
+
+/* ════════════════════ STEAM LOGIN ════════════════════ */
 function loginSteam(){
   const returnTo = encodeURIComponent(REDIRECT_URI + '?steam=1');
   const realm    = encodeURIComponent(REDIRECT_URI.split('/').slice(0,3).join('/'));
-  const steamUrl =
+  window.location.href =
     `https://steamcommunity.com/openid/login` +
     `?openid.ns=${encodeURIComponent('http://specs.openid.net/auth/2.0')}` +
     `&openid.mode=checkid_setup` +
@@ -504,159 +774,6 @@ function loginSteam(){
     `&openid.realm=${realm}` +
     `&openid.identity=${encodeURIComponent('http://specs.openid.net/auth/2.0/identifier_select')}` +
     `&openid.claimed_id=${encodeURIComponent('http://specs.openid.net/auth/2.0/identifier_select')}`;
-  window.location.href = steamUrl;
-}
-
-// بعد الرجوع من ستيم — استخرج steamId من URL
-function handleSteamCallback(params) {
-  // Steam يرجع: openid.claimed_id = https://steamcommunity.com/openid/id/STEAMID64
-  const claimedId = params.get('openid.claimed_id') || '';
-  const match = claimedId.match(/\/(\d{17})$/);
-  if (!match) {
-    showAlert('فشل التحقق من ستيم، جرب مرة ثانية.');
-    switchTab('steam');
-    return;
-  }
-  const steamId = match[1];
-
-  // جلب بيانات الملف الشخصي عبر Steam API proxy (CORS-friendly)
-  // نستخدم Steam Web API بدون key بشكل محدود — أو نعرض ما عندنا
-  processSteamLogin(steamId);
-}
-
-let pendingSteamLink = null;
-
-async function processSteamLogin(steamId) {
-  showAlert('جاري معالجة تسجيل ستيم…', 'inf');
-  switchTab('steam');
-
-  // نحاول نجيب profile info
-  let steamName = 'مستخدم ستيم';
-  let steamAvatar = `https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg`;
-
-  // نحاول Steam API عبر allorigins proxy
-  try {
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=NOKEY&steamids=${steamId}`)}`;
-    const r = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
-    const j = await r.json();
-    const parsed = JSON.parse(j.contents);
-    const p = parsed?.response?.players?.[0];
-    if (p) {
-      steamName   = p.personaname || steamName;
-      steamAvatar = p.avatarfull  || steamAvatar;
-    }
-  } catch { /* نكمل بدون بيانات تفصيلية */ }
-
-  // احفظ Steam session
-  const steamData = {
-    steamId,
-    name:    steamName,
-    avatar:  steamAvatar,
-    loginVia:'steam'
-  };
-
-  // اعرض Preview
-  const prev = document.getElementById('steam-preview');
-  if (prev) {
-    document.getElementById('steam-avatar').src = steamAvatar;
-    document.getElementById('steam-name').textContent = steamName;
-    document.getElementById('steam-id-display').textContent = 'Steam ID: ' + steamId;
-    prev.style.display = 'block';
-  }
-
-  // تحقق — هل عنده ديسكورد مرتبط بنفس الـ steamId أو إيميل مرتبط
-  const existingLink = getSteamLink(steamId);
-  if (existingLink) {
-    // مرتبط مسبقاً — سجّل دخوله مباشرة
-    const du = JSON.parse(localStorage.getItem('pd_discord_users') || '{}');
-    const dc = du[existingLink] || null;
-    if (dc) {
-      const merged = { ...dc, steamId, loginVia: 'both' };
-      loginOk(merged, true, 'أهلاً ' + merged.name + '! تم التحقق عبر ستيم 🎮');
-      return;
-    }
-  }
-
-  // هل فيه حساب ديسكورد له إيميل مرتبط يطابق Steam profile؟
-  // (نعرض بانر الربط حتى يختار)
-  pendingSteamLink = { steamId, steamName, steamAvatar };
-
-  const allDiscord = JSON.parse(localStorage.getItem('pd_discord_users') || '{}');
-  const hasDiscord = Object.keys(allDiscord).length > 0;
-
-  if (hasDiscord) {
-    document.getElementById('steam-link-banner').classList.add('on');
-    showAlert('وجدنا حساب ديسكورد — شوف الخيارات أعلاه.', 'inf');
-  } else {
-    // لا يوجد ديسكورد — سجّل دخول بستيم مباشرة
-    const user = {
-      id:      'steam_' + steamId,
-      name:    steamName,
-      avatar:  steamAvatar,
-      steamId: steamId,
-      loginVia:'steam'
-    };
-    saveSteamLink(steamId, null);
-    loginOk(user, true, 'أهلاً ' + steamName + '! جاري التحويل 🎮');
-  }
-}
-
-function confirmSteamLink() {
-  if (!pendingSteamLink) return;
-  const { steamId, steamName, steamAvatar } = pendingSteamLink;
-
-  // جيب آخر حساب ديسكورد
-  const allDiscord = JSON.parse(localStorage.getItem('pd_discord_users') || '{}');
-  const discordId  = Object.keys(allDiscord).pop();
-  const dc         = allDiscord[discordId] || {};
-
-  const merged = {
-    id:       discordId || ('steam_' + steamId),
-    name:     dc.name || steamName,
-    avatar:   dc.avatar || steamAvatar,
-    email:    dc.email || null,
-    steamId:  steamId,
-    discordId:discordId || null,
-    loginVia: 'both'
-  };
-
-  saveSteamLink(steamId, discordId);
-  document.getElementById('steam-link-banner').classList.remove('on');
-  loginOk(merged, true, 'تم ربط ستيم بالديسكورد! 🎮🔗');
-  pendingSteamLink = null;
-}
-
-function dismissSteamLink() {
-  if (!pendingSteamLink) return;
-  const { steamId, steamName, steamAvatar } = pendingSteamLink;
-  const user = {
-    id:      'steam_' + steamId,
-    name:    steamName,
-    avatar:  steamAvatar,
-    steamId: steamId,
-    loginVia:'steam'
-  };
-  saveSteamLink(steamId, null);
-  document.getElementById('steam-link-banner').classList.remove('on');
-  loginOk(user, true);
-  pendingSteamLink = null;
-}
-
-function saveSteamLink(steamId, discordId) {
-  const l = JSON.parse(localStorage.getItem('pd_steam_links') || '{}');
-  l[steamId] = discordId;
-  localStorage.setItem('pd_steam_links', JSON.stringify(l));
-}
-
-function getSteamLink(steamId) {
-  return (JSON.parse(localStorage.getItem('pd_steam_links') || '{}'))[steamId] || null;
-}
-
-
-function loginDiscord(){
-  const scope=encodeURIComponent('identify email');
-  window.location.href=`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}`+
-    `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${scope}`;
 }
 
 /* ════════════════════ HANDLE DISCORD CALLBACK ════════════════════ */
@@ -665,12 +782,35 @@ window.addEventListener('load',()=>{
   const token=frag.get('access_token');
   const urlParams = new URLSearchParams(window.location.search);
 
-  // ── Steam OpenID callback ──
-  if(urlParams.get('steam') === '1' && urlParams.get('openid.mode') === 'id_res'){
-    showAlert('جاري التحقق من ستيم…','inf');
-    switchTab('steam');
+  /* ── Steam OpenID callback ── */
+  if(urlParams.get('steam')==='1' && urlParams.get('openid.mode')==='id_res'){
+    const claimedId = urlParams.get('openid.claimed_id')||'';
+    const match = claimedId.match(/\/(\d{17})$/);
     window.history.replaceState({},document.title,window.location.pathname);
-    handleSteamCallback(urlParams);
+    if(match){
+      const steamId = match[1];
+      const fromReg = sessionStorage.getItem('reg_linking');
+      if(fromReg==='steam'){
+        sessionStorage.removeItem('reg_linking');
+        /* ربط ستيم بالحساب المسجّل */
+        const saved = JSON.parse(localStorage.getItem('plusdev_user')||'null');
+        if(saved){
+          const merged = { ...saved, steamId, loginVia: saved.loginVia==='discord'?'both':'steam' };
+          localStorage.setItem('user',         JSON.stringify(merged));
+          localStorage.setItem('plusdev_user', JSON.stringify(merged));
+          saveSteamLink(steamId, saved.discordId||null);
+          switchTab('register');
+          goRegStep(2);
+          markLinked('steam');
+          showAlert('تم ربط ستيم بنجاح! 🎮','ok');
+          return;
+        }
+      }
+      /* دخول عادي بستيم */
+      processSteamLogin(steamId);
+    } else {
+      showAlert('فشل التحقق من ستيم، جرب مرة ثانية.');
+    }
     return;
   }
 
@@ -725,7 +865,6 @@ function handleDiscordUser(u){
 
   /* Save main user session */
   localStorage.setItem('plusdev_user', JSON.stringify(userData));
-  /* Backward compat with script.js */
   localStorage.setItem('user', JSON.stringify(userData));
 
   /* Cache Discord data for later merging */
@@ -735,6 +874,31 @@ function handleDiscordUser(u){
 
   /* Save email → discordId mapping if email available */
   if(email) saveEmailLink(email, u.id);
+
+  /* ── هل جايين من صفحة التسجيل؟ ── */
+  const fromReg = sessionStorage.getItem('reg_linking');
+  if(fromReg==='discord'){
+    sessionStorage.removeItem('reg_linking');
+    // أدمج مع الحساب المسجّل مسبقاً
+    const saved = JSON.parse(localStorage.getItem('plusdev_user')||'null');
+    if(saved && saved.email){
+      const merged = {
+        ...saved,
+        id:        u.id,
+        avatar:    avatar,
+        discordId: u.id,
+        loginVia:  'both'
+      };
+      localStorage.setItem('user',         JSON.stringify(merged));
+      localStorage.setItem('plusdev_user', JSON.stringify(merged));
+      // أعد للتسجيل وعلّم الكارد
+      switchTab('register');
+      goRegStep(2);
+      markLinked('discord');
+      showAlert('تم ربط ديسكورد بنجاح! 🎉','ok');
+      return;
+    }
+  }
 
   loginOk(userData, true, 'مرحباً '+userData.name+'! جاري التحويل…');
 }
@@ -862,6 +1026,30 @@ function loginOk(user,rem,msg){
   setTimeout(redirectHome, 1200);
 }
 function redirectHome(){ window.location.href='https://saai5l.github.io/Plus_/index.html'; }
+
+/* ════════════════════ STEAM HELPERS ════════════════════ */
+function saveSteamLink(steamId, discordId){
+  const l=JSON.parse(localStorage.getItem('pd_steam_links')||'{}');
+  l[steamId]=discordId;
+  localStorage.setItem('pd_steam_links',JSON.stringify(l));
+}
+function getSteamLink(steamId){
+  return (JSON.parse(localStorage.getItem('pd_steam_links')||'{}')||{})[steamId]||null;
+}
+async function processSteamLogin(steamId){
+  showAlert('جاري معالجة تسجيل ستيم…','inf');
+  let steamName='مستخدم ستيم';
+  let steamAvatar='https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
+  try{
+    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=NOKEY&steamids=${steamId}`)}`,{signal:AbortSignal.timeout(5000)});
+    const j=await r.json();
+    const p=JSON.parse(j.contents)?.response?.players?.[0];
+    if(p){steamName=p.personaname||steamName;steamAvatar=p.avatarfull||steamAvatar;}
+  }catch{}
+  const user={id:'steam_'+steamId,name:steamName,avatar:steamAvatar,steamId,loginVia:'steam'};
+  saveSteamLink(steamId,null);
+  loginOk(user,true,'أهلاً '+steamName+'! جاري التحويل 🎮');
+}
 
 /* ════════════════════ STORAGE HELPERS ════════════════════ */
 function saveEmailLink(email,discordId){
