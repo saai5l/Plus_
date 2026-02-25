@@ -260,10 +260,45 @@
       .logo img { width:58px; height:58px; }
       .logo h1 { font-size:1.28rem; }
     }
+
+    /* ─── Enhanced background orbs ─── */
+    .orb {
+      position: fixed; border-radius: 50%; pointer-events: none; filter: blur(80px);
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+    .orb-1 { width:400px; height:400px; background:rgba(252,120,35,0.07); top:-100px; right:-100px; animation-delay:0s; }
+    .orb-2 { width:300px; height:300px; background:rgba(88,101,242,0.05); bottom:-80px; left:-80px; animation-delay:-4s; }
+    .orb-3 { width:200px; height:200px; background:rgba(252,120,35,0.04); top:50%; left:10%; animation-delay:-2s; }
+    @keyframes orbFloat {
+      0%,100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* ─── Server info bar ─── */
+    .server-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+      background: rgba(10,10,12,0.95);
+      border-top: 1px solid rgba(252,120,35,0.15);
+      backdrop-filter: blur(20px);
+      padding: 10px 24px;
+      display: flex; align-items: center; justify-content: center; gap: 28px;
+      flex-wrap: wrap;
+    }
+    .sbar-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: .78rem; color: rgba(255,255,255,0.4);
+    }
+    .sbar-item i { color: #fc7823; font-size: .75rem; }
+    .sbar-dot { width:7px; height:7px; background:#2ecc71; border-radius:50%; animation: blink2 2s infinite; }
+    @keyframes blink2 { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .sbar-online { color: #2ecc71; font-weight: 700; }
   </style>
 </head>
 <body>
 <div class="bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
 
 <a href="index.html" class="back">
   <i class="fas fa-arrow-right"></i> الرئيسية
@@ -635,5 +670,14 @@ function hash(s){
   return h.toString(36);
 }
 </script>
+
+<!-- Server Status Bar -->
+<div class="server-bar">
+  <div class="sbar-item"><div class="sbar-dot"></div><span class="sbar-online">السيرفر شغّال الآن</span></div>
+  <div class="sbar-item"><i class="fas fa-users"></i><span>128 لاعب كحد أقصى</span></div>
+  <div class="sbar-item"><i class="fab fa-discord"></i><span>500+ عضو ديسكورد</span></div>
+  <div class="sbar-item"><i class="fas fa-shield-alt"></i><span>FiveM CFW</span></div>
+</div>
+
 </body>
 </html>

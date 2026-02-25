@@ -60,32 +60,51 @@ function showPage(pageId) {
   }
 
   const pages = document.querySelectorAll('.page');
-  pages.forEach(page => {
-    if (page.id === pageId) {
-      page.classList.add('active', 'fade-in');
-      page.classList.remove('fade-out');
-    } else if (page.classList.contains('active')) {
-      page.classList.remove('fade-in');
-      page.classList.add('fade-out');
-      setTimeout(() => { page.classList.remove('active'); }, 300); 
-    }
-  });
+  const currentPage = document.querySelector('.page.active');
 
-  if (pageId === 'admin-dashboard') {
-      loadAdminData();
-  }
-  if (pageId === 'tracking-page') {
-      loadUserTrackingData();
+  if (currentPage && currentPage.id === pageId) return;
+
+  // Overlay transition effect
+  let overlay = document.getElementById('page-transition-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'page-transition-overlay';
+    overlay.style.cssText = `
+      position:fixed;inset:0;z-index:99997;pointer-events:none;
+      background:linear-gradient(135deg,rgba(252,120,35,0.08),rgba(0,0,0,0.5));
+      opacity:0;transition:opacity 0.2s ease;
+    `;
+    document.body.appendChild(overlay);
   }
 
-  const links = document.querySelectorAll('.nav-links a');
-  links.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('onclick') === `showPage('${pageId}')`) {
-      link.classList.add('active');
-    }
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  overlay.style.opacity = '1';
+
+  setTimeout(() => {
+    pages.forEach(page => {
+      if (page.id === pageId) {
+        page.classList.add('active');
+        page.style.animation = 'pageSlideIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards';
+      } else if (page.classList.contains('active')) {
+        page.classList.remove('active');
+        page.style.animation = '';
+      }
+    });
+
+    overlay.style.opacity = '0';
+
+    if (pageId === 'admin-dashboard') loadAdminData();
+    if (pageId === 'tracking-page') loadUserTrackingData();
+
+    const links = document.querySelectorAll('.nav-links a');
+    links.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('onclick') === `showPage('${pageId}')`) {
+        link.classList.add('active');
+      }
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 150);
 }
 
         function showLawSection(sectionId, clickedTab) {
@@ -1202,6 +1221,19 @@ function filterProducts(cat, btn) {
     });
 }
 
+function filterProductsTab(cat, btn) {
+    document.querySelectorAll('#store .laws-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.product-card').forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+            card.style.display = '';
+            card.style.animation = 'fadeInUp2 0.4s ease both';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
 /* ============================================
    🛒 STORE — FULL PURCHASE SYSTEM
    ============================================ */
@@ -2147,3 +2179,56 @@ function loadMyTickets(userId) {
         }).join('');
     });
 }
+
+// ===== Tutorials Tabs =====
+function showTutSection(sectionId, clickedTab) {
+  // Only affect tut- sections to avoid conflicting with law sections
+  document.querySelectorAll('#tutorials .law-section').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(sectionId);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('#tutorials .laws-tab').forEach(btn => btn.classList.remove('active'));
+  if (clickedTab) clickedTab.classList.add('active');
+}
+
+// ===== Jobs Tabs =====
+function showJobSection(sectionId, clickedTab) {
+  document.querySelectorAll('#jobs .law-section').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(sectionId);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('#jobs .laws-tab').forEach(btn => btn.classList.remove('active'));
+  if (clickedTab) clickedTab.classList.add('active');
+}
+
+// ============================================
+// Scroll Reveal Animation
+// ============================================
+function initScrollReveal() {
+  const targets = document.querySelectorAll(
+    '.feature-card-v2, .update-card-v2, .job-card-new, .tutorial-card-new, .law-item-new'
+  );
+
+  if (!targets.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  targets.forEach(el => observer.observe(el));
+}
+
+// Re-run reveal when switching pages
+const _origShowPageReveal = window.showPage || showPage;
+window.showPage = function(pageId) {
+  _origShowPageReveal(pageId);
+  setTimeout(initScrollReveal, 300);
+};
+
+// Run on first load
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(initScrollReveal, 500);
+});
