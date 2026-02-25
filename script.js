@@ -92,7 +92,7 @@ function showPage(pageId) {
 
     overlay.style.opacity = '0';
 
-    if (pageId === 'admin-dashboard') loadAdminData();
+    if (pageId === 'admin-dashboard') { loadAdminData(); loadTickets(); loadOrders(); }
     if (pageId === 'tracking-page') loadUserTrackingData();
 
     const links = document.querySelectorAll('.nav-links a');
@@ -725,10 +725,6 @@ window.onclick = function(event) {
 }
 
 
-function updateJobStatus(job) {
-    alert("تم تحديث حالة تقديم " + job + " بنجاح (برمجياً)");
-}
-
 function clearLogs() {
     openCustomConfirm(
         "تحذير: هل أنت متأكد من مسح جميع سجلات التقديم من السحابة نهائياً؟",
@@ -811,11 +807,17 @@ function loadAdminData() {
 
         [...apps].reverse().forEach((app) => {
             const statusClass = app.status === 'مقبول' ? 'status-approved' : (app.status === 'رفض' ? 'status-rejected' : 'status-pending');
+            const discordDisplay = app.discordId ? `<div style="font-size:0.7rem;color:rgba(88,101,242,0.8);margin-top:2px"><i class="fab fa-discord" style="margin-left:3px"></i>${app.discordId}</div>` : '';
+            const dateDisplay = app.date ? `<div style="font-size:0.7rem;color:rgba(255,255,255,0.25);margin-top:2px"><i class="fas fa-clock" style="margin-left:3px"></i>${app.date}</div>` : '';
             
             tableBody.innerHTML += `
                 <tr>
                     <td class="app-id-cell">${app.appId || '---'}</td>
-                    <td class="user-name">${app.name}</td>
+                    <td class="user-name">
+                        ${app.name}
+                        ${discordDisplay}
+                        ${dateDisplay}
+                    </td>
                     <td class="job-type">${app.job}</td>
                     <td>
                         <textarea id="admin-note-${app.appId}" 
@@ -1190,20 +1192,37 @@ function logoutUser() {
 }
 
 function executeDecision(appId, status) {
-    const noteInput = document.getElementById(`admin-note-${appId}`);
-    const adminNote = noteInput ? noteInput.value : "";
+    const noteInput = document.getElementById("admin-note-" + appId);
+    const adminNote = noteInput ? noteInput.value.trim() : "";
 
-    database.ref('applications/' + appId).update({
-        status: status,
-        adminNote: adminNote
-    })
-    .then(() => {
-        closeConfirmModal();
-        const statusText = status === 'مقبول' ? 'قبول' : 'رفض';
-        showNotification(`تم ${statusText} الطلب بنجاح`);
+    database.ref("applications/" + appId).once("value").then(snap => {
+        const app = snap.val();
+        if (!app) throw new Error("الطلب غير موجود");
 
-    })
-    .catch((error) => {
+        return database.ref("applications/" + appId).update({
+            status: status,
+            adminNote: adminNote,
+            decidedAt: new Date().toLocaleString("ar-SA")
+        }).then(() => {
+            // إشعار شخصي للمستخدم عبر Firebase
+            const userId = app.discordId || app.userId;
+            if (userId) {
+                const icon = status === "مقبول" ? "✅" : "❌";
+                const msgLabel = status === "مقبول" ? "تم قبول طلبك" : "تم رفض طلبك";
+                const noteMsg = adminNote ? (" — ملاحظة الإدارة: " + adminNote) : "";
+                database.ref("userNotifications/" + userId + "/" + Date.now()).set({
+                    title: icon + " " + msgLabel + " — " + app.job,
+                    message: msgLabel + " على وظيفة " + app.job + noteMsg,
+                    appId: appId,
+                    time: new Date().toLocaleString("ar-SA"),
+                    read: false
+                });
+            }
+            closeConfirmModal();
+            const statusText = status === "مقبول" ? "قبول" : "رفض";
+            showNotification("✅ تم " + statusText + " الطلب بنجاح");
+        });
+    }).catch(error => {
         console.error("خطأ في تحديث الحالة:", error);
         showNotification("حدث خطأ أثناء حفظ القرار", true);
     });
@@ -2111,12 +2130,7 @@ function checkUserTicketReplies(userId) {
 }
 
 // ── تحميل التذاكر تلقائياً عند فتح لوحة الإدمن ──
-// نضيف الاستدعاء في showPage مباشرة بدل override
-const _origShowPage = showPage;
-window.showPage = function(pageId) {
-    _origShowPage(pageId);
-    if (pageId === 'admin-dashboard') { loadTickets(); loadOrders(); }
-};
+// loadTickets و loadOrders يُستدعيان من showPage مباشرة
 
 // ── تحميل تذاكر المستخدم في صفحة التتبع ──
 function loadMyTickets(userId) {
