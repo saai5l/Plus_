@@ -224,18 +224,22 @@ async function updateOnlineCount() {
     }
 }
 
-// ============================================================
-// تحميل تلقائي عند فتح صفحة الملف الشخصي
-// ============================================================
-const _origShowPage = typeof showPage === 'function' ? showPage : null;
+/// تحميل تلقائي عند فتح صفحة الملف الشخصي
+document.addEventListener('DOMContentLoaded', () => {
+    updateOnlineCount();
 
-function showPage(pageId) {
-    if (_origShowPage) _origShowPage(pageId);
-    if (pageId === 'profile-page') {
-        setTimeout(loadFiveMProfile, 200);
-        setTimeout(updateOnlineCount, 200);
-    }
-}
+    // مراقبة الضغط على رابط Profile
+    document.querySelectorAll('a[onclick]').forEach(link => {
+        link.addEventListener('click', function() {
+            const onclick = this.getAttribute('onclick');
+            if (onclick && onclick.includes('profile-page')) {
+                setTimeout(loadFiveMProfile, 300);
+                setTimeout(updateOnlineCount, 300);
+            }
+        });
+    });
+});
+
 
 // تحديث عداد أونلاين عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
