@@ -971,15 +971,40 @@ function pushGlobalNotif(type, title, msg) {
 
 function updateJobStatus(jobType) {
     const btn = document.getElementById(`toggle-${jobType}`);
-    const isCurrentlyOn = btn && btn.classList.contains('adm-toggle-on');
-    
-    database.ref('jobStatus/' + jobType).set({
-        closed: isCurrentlyOn
-    });
+    if (!btn) return;
 
-    // إرسال إشعار عام للكل
+    const isCurrentlyOn = btn.classList.contains('adm-toggle-on');
+    const shouldClose = isCurrentlyOn; // إذا كان مفتوح → أغلقه
+
+    // تحديث Firebase
+    database.ref('jobStatus/' + jobType).set({ closed: shouldClose });
+
+    // تحديث الزر بصريًا فورًا
+    btn.className = shouldClose ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
+
+    // تحديث زر player
+    const playerBtn = document.getElementById(`btn-${jobType}`);
+    if (playerBtn) {
+        playerBtn.innerText = shouldClose ? 'تم إغلاق التقديم' : 'تقديم الآن';
+        playerBtn.style.backgroundColor = shouldClose ? '#444' : '#fc7823';
+        playerBtn.disabled = shouldClose;
+        playerBtn.style.cursor = shouldClose ? 'not-allowed' : 'pointer';
+    }
+
+    // تحديث زر toggle-all بناءً على حالة الكل
+    const jobs = ['police', 'ems', 'staff', 'gang'];
+    const allClosed = jobs.every(job => {
+        const b = document.getElementById(`toggle-${job}`);
+        return b && b.classList.contains('adm-toggle-off');
+    });
+    const mainBtn = document.getElementById('toggle-all');
+    if (mainBtn) {
+        mainBtn.className = allClosed ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
+    }
+
+    // إشعار عام
     const jobLabel = jobNames[jobType] || jobType;
-    if (isCurrentlyOn) {
+    if (shouldClose) {
         pushGlobalNotif('warning', `🔒 إغلاق التقديم — ${jobLabel}`, `تم إغلاق باب التقديم على وظيفة ${jobLabel} مؤقتاً من قِبل الإدارة.`);
     } else {
         pushGlobalNotif('success', `🟢 فُتح التقديم — ${jobLabel}`, `فُتح باب التقديم على وظيفة ${jobLabel}! لا تفوّت الفرصة وقدّم الآن.`);
@@ -989,13 +1014,30 @@ function updateJobStatus(jobType) {
 function toggleAllJobs() {
     const jobs = ['police', 'ems', 'staff', 'gang'];
     const mainBtn = document.getElementById('toggle-all');
-    const shouldClose = mainBtn && mainBtn.classList.contains('adm-toggle-on');
+    if (!mainBtn) return;
 
+    const shouldClose = mainBtn.classList.contains('adm-toggle-on');
+
+    // تحديث Firebase + الأزرار فورًا
     jobs.forEach(job => {
         database.ref('jobStatus/' + job).set({ closed: shouldClose });
+
+        const btn = document.getElementById(`toggle-${job}`);
+        if (btn) btn.className = shouldClose ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
+
+        const playerBtn = document.getElementById(`btn-${job}`);
+        if (playerBtn) {
+            playerBtn.innerText = shouldClose ? 'تم إغلاق التقديم' : 'تقديم الآن';
+            playerBtn.style.backgroundColor = shouldClose ? '#444' : '#fc7823';
+            playerBtn.disabled = shouldClose;
+            playerBtn.style.cursor = shouldClose ? 'not-allowed' : 'pointer';
+        }
     });
 
-    // إشعار عام للكل
+    // تحديث زر toggle-all نفسه
+    mainBtn.className = shouldClose ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
+
+    // إشعار عام
     if (shouldClose) {
         pushGlobalNotif('warning', '🔒 تم إغلاق جميع التقديمات', 'تم إغلاق التقديم على جميع الوظائف مؤقتاً');
     } else {
