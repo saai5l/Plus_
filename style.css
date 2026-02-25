@@ -156,8 +156,9 @@ transform: translateY(0);
 }
 
 .nav-links a.active {
-    background-color: var(--accent-color);
-    color: var(--lighter-color);
+    background-color: rgba(252, 120, 35, 0.12);
+    color: var(--accent-color);
+    border: 1px solid rgba(252, 120, 35, 0.25);
 }
 
 .social-links a {
@@ -7180,4 +7181,44 @@ body {
   .hero-enhanced { min-height: 100dvh; border-radius: 0; }
   .hero-content  { padding: 40px 20px; }
   .laws-hero     { padding: 40px 20px !important; border-radius: 16px !important; }
+}
+
+/* ══ Gang expand button ══ */
+.adm-gangs-expand-btn {
+  width: 100%;
+  background: rgba(180,0,0,0.08);
+  border: 1px dashed rgba(180,0,0,0.25);
+  color: #cc4444;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 8px;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.adm-gangs-expand-btn:hover {
+  background: rgba(180,0,0,0.15);
+  border-color: rgba(180,0,0,0.4);
+}
+.adm-gang-row { padding: 7px 0; }
+.adm-gangs-list {
+  animation: fadeIn 0.3s ease;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-left: 4px;
+}
+.adm-gangs-list::-webkit-scrollbar { width: 3px; }
+.adm-gangs-list::-webkit-scrollbar-thumb { background: rgba(252,120,35,0.3); border-radius: 4px; }
+
+/* badge مغلق */
+.job-status-badge.closed {
+  background: rgba(231,76,60,0.15);
+  border: 1px solid rgba(231,76,60,0.3);
+  color: #e74c3c;
 }

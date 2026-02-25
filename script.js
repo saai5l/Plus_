@@ -953,8 +953,29 @@ const jobNames = {
     police: 'شرطة LSPD',
     ems: 'فريق EMS',
     staff: 'فريق الإدارة',
-    gang: 'انضمام عصابة'
+    gang: 'العصابات (الكل)',
+    gang_families: 'Families', gang_scrap: 'Scrap', gang_gsg: 'GSG',
+    gang_ms13: 'MS13', gang_yakuza: 'Yakuza', gang_neighborhood: 'NeighborHood',
+    gang_crips: 'Crips', gang_11street: '11 Street', gang_lostmc: 'Lost MC',
+    gang_soa: 'SOA', gang_quietless: 'Quietless', gang_altufahi: 'Altufahi',
+    gang_deathline: 'Deathline', gang_18street: '18 Street', gang_oldschool: 'OldSchool',
+    gang_darkness: 'Darkness', gang_nortenos: '14 Norteños', gang_elpatron: 'el-patron',
+    gang_vagos: 'VAGOS', gang_26yard: '26 YARD', gang_boomers: 'BOOMERS', gang_elmundo: 'ElMundo'
 };
+
+const allGangs = ['gang_families','gang_scrap','gang_gsg','gang_ms13','gang_yakuza',
+    'gang_neighborhood','gang_crips','gang_11street','gang_lostmc','gang_soa',
+    'gang_quietless','gang_altufahi','gang_deathline','gang_18street','gang_oldschool',
+    'gang_darkness','gang_nortenos','gang_elpatron','gang_vagos','gang_26yard',
+    'gang_boomers','gang_elmundo'];
+
+function toggleGangsExpand() {
+    const list = document.getElementById('adm-gangs-list');
+    const icon = document.getElementById('gangs-expand-icon');
+    const isHidden = list.style.display === 'none';
+    list.style.display = isHidden ? 'block' : 'none';
+    icon.className = isHidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+}
 
 function pushGlobalNotif(type, title, msg) {
     // يحفظ الإشعار في Firebase ليصل لكل المستخدمين
@@ -973,41 +994,19 @@ function updateJobStatus(jobType) {
     const btn = document.getElementById(`toggle-${jobType}`);
     if (!btn) return;
 
-    const isCurrentlyOn = btn.classList.contains('adm-toggle-on');
-    const shouldClose = isCurrentlyOn; // إذا كان مفتوح → أغلقه
-
-    // تحديث Firebase
+    const shouldClose = btn.classList.contains('adm-toggle-on');
     database.ref('jobStatus/' + jobType).set({ closed: shouldClose });
 
-    // تحديث الزر بصريًا فورًا
-    btn.className = shouldClose ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
-
-    // تحديث زر player
-    const playerBtn = document.getElementById(`btn-${jobType}`);
-    if (playerBtn) {
-        playerBtn.innerText = shouldClose ? 'تم إغلاق التقديم' : 'تقديم الآن';
-        playerBtn.style.backgroundColor = shouldClose ? '#444' : '#fc7823';
-        playerBtn.disabled = shouldClose;
-        playerBtn.style.cursor = shouldClose ? 'not-allowed' : 'pointer';
+    // لو ضغط "العصابات الكل" → يغلق/يفتح كل الفردية أيضًا
+    if (jobType === 'gang') {
+        allGangs.forEach(g => database.ref('jobStatus/' + g).set({ closed: shouldClose }));
     }
 
-    // تحديث زر toggle-all بناءً على حالة الكل
-    const jobs = ['police', 'ems', 'staff', 'gang'];
-    const allClosed = jobs.every(job => {
-        const b = document.getElementById(`toggle-${job}`);
-        return b && b.classList.contains('adm-toggle-off');
-    });
-    const mainBtn = document.getElementById('toggle-all');
-    if (mainBtn) {
-        mainBtn.className = allClosed ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
-    }
-
-    // إشعار عام
     const jobLabel = jobNames[jobType] || jobType;
     if (shouldClose) {
-        pushGlobalNotif('warning', `🔒 إغلاق التقديم — ${jobLabel}`, `تم إغلاق باب التقديم على وظيفة ${jobLabel} مؤقتاً من قِبل الإدارة.`);
+        pushGlobalNotif('warning', `🔒 إغلاق التقديم — ${jobLabel}`, `تم إغلاق باب التقديم على ${jobLabel} مؤقتاً.`);
     } else {
-        pushGlobalNotif('success', `🟢 فُتح التقديم — ${jobLabel}`, `فُتح باب التقديم على وظيفة ${jobLabel}! لا تفوّت الفرصة وقدّم الآن.`);
+        pushGlobalNotif('success', `🟢 فُتح التقديم — ${jobLabel}`, `فُتح باب التقديم على ${jobLabel}! قدّم الآن.`);
     }
 }
 
@@ -1018,26 +1017,9 @@ function toggleAllJobs() {
 
     const shouldClose = mainBtn.classList.contains('adm-toggle-on');
 
-    // تحديث Firebase + الأزرار فورًا
-    jobs.forEach(job => {
-        database.ref('jobStatus/' + job).set({ closed: shouldClose });
+    jobs.forEach(job => database.ref('jobStatus/' + job).set({ closed: shouldClose }));
+    allGangs.forEach(g => database.ref('jobStatus/' + g).set({ closed: shouldClose }));
 
-        const btn = document.getElementById(`toggle-${job}`);
-        if (btn) btn.className = shouldClose ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
-
-        const playerBtn = document.getElementById(`btn-${job}`);
-        if (playerBtn) {
-            playerBtn.innerText = shouldClose ? 'تم إغلاق التقديم' : 'تقديم الآن';
-            playerBtn.style.backgroundColor = shouldClose ? '#444' : '#fc7823';
-            playerBtn.disabled = shouldClose;
-            playerBtn.style.cursor = shouldClose ? 'not-allowed' : 'pointer';
-        }
-    });
-
-    // تحديث زر toggle-all نفسه
-    mainBtn.className = shouldClose ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
-
-    // إشعار عام
     if (shouldClose) {
         pushGlobalNotif('warning', '🔒 تم إغلاق جميع التقديمات', 'تم إغلاق التقديم على جميع الوظائف مؤقتاً');
     } else {
@@ -1096,19 +1078,26 @@ database.ref('jobStatus').on('value', (snapshot) => {
         }
     });
 
-    // تحديث العصابات كلها بناءً على حالة gang
-    const gangClosed = statuses['gang'] ? statuses['gang'].closed : false;
-    document.querySelectorAll('[data-job^="gang_"]').forEach(btn => {
-        btn.innerHTML = gangClosed
-            ? '<i class="fas fa-lock"></i> تم إغلاق التقديم'
-            : 'تقديم الآن';
-        btn.style.opacity = gangClosed ? '0.6' : '';
-        btn.style.cursor = gangClosed ? 'not-allowed' : 'pointer';
-        btn.disabled = gangClosed;
-    });
-    document.querySelectorAll('[class*="job-gang"] .job-status-badge').forEach(badge => {
-        badge.textContent = gangClosed ? 'مغلق' : 'متاح';
-        badge.className = `job-status-badge ${gangClosed ? 'closed' : 'open'}`;
+    // تحديث كل عصابة بشكل مستقل
+    allGangs.forEach(gang => {
+        const isClosed = statuses[gang]?.closed || false;
+
+        document.querySelectorAll(`[data-job="${gang}"]`).forEach(btn => {
+            btn.innerHTML = isClosed ? '<i class="fas fa-lock"></i> تم إغلاق التقديم' : 'تقديم الآن';
+            btn.style.opacity = isClosed ? '0.6' : '';
+            btn.style.cursor = isClosed ? 'not-allowed' : 'pointer';
+            btn.disabled = isClosed;
+        });
+
+        // badge العصابة
+        const gangClass = gang.replace('gang_', 'job-gang-');
+        document.querySelectorAll(`.${gangClass} .job-status-badge`).forEach(badge => {
+            badge.textContent = isClosed ? 'مغلق' : 'متاح';
+            badge.className = `job-status-badge ${isClosed ? 'closed' : 'open'}`;
+        });
+
+        const adminBtn = document.getElementById(`toggle-${gang}`);
+        if (adminBtn) adminBtn.className = isClosed ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
     });
 
     const mainBtn = document.getElementById('toggle-all');
