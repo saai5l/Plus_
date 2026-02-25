@@ -6206,3 +6206,80 @@ body.light-theme .setting-item {
   backdrop-filter: blur(20px);
   box-shadow: 0 4px 30px rgba(0,0,0,0.5);
 }
+
+/* ============================================
+   Admin Dashboard — Missing Classes Fix
+   ============================================ */
+
+.adm-section-gap { margin-top: 20px; }
+
+/* Icon color variants */
+.adm-icon-blue  { background: rgba(52,152,219,0.15) !important; color: #3498db !important; }
+.adm-icon-green { background: rgba(46,204,113,0.15) !important; color: #2ecc71 !important; }
+
+/* Header actions row (refresh + badge) */
+.adm-head-actions {
+  display: flex; gap: 8px; align-items: center;
+}
+
+/* Count badges */
+.adm-count-badge {
+  border-radius: 20px; padding: 3px 12px;
+  font-size: 0.78rem; font-weight: 700;
+}
+.adm-badge-blue  { background: rgba(52,152,219,0.15); color: #3498db; }
+.adm-badge-green { background: rgba(46,204,113,0.12); color: #2ecc71; }
+
+/* Refresh button */
+.adm-refresh-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5);
+  padding: 6px 14px; border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.82rem;
+  transition: all 0.25s;
+  display: flex; align-items: center; gap: 6px;
+}
+.adm-refresh-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.8);
+  border-color: rgba(255,255,255,0.18);
+}
+
+/* Sub filters row */
+.adm-sub-filters {
+  padding: 4px 0 12px;
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+
+/* Blue filter variant */
+.adm-filter-blue:hover {
+  color: #3498db !important;
+  border-color: rgba(52,152,219,0.35) !important;
+  background: rgba(52,152,219,0.08) !important;
+}
+
+/* List wrap */
+.adm-list-wrap {
+  max-height: 500px;
+  overflow-y: auto;
+}
+.adm-list-wrap::-webkit-scrollbar { width: 4px; }
+.adm-list-wrap::-webkit-scrollbar-thumb { background: rgba(252,120,35,0.3); border-radius: 4px; }
+
+/* Empty state in list */
+.adm-list-empty {
+  text-align: center;
+  padding: 40px;
+  color: rgba(255,255,255,0.2);
+  display: flex; flex-direction: column;
+  align-items: center; gap: 12px;
+  font-size: 0.88rem;
+}
+.adm-list-empty i {
+  font-size: 2rem;
+  display: block;
+  opacity: 0.3;
+}

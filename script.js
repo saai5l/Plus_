@@ -802,6 +802,12 @@ function loadAdminData() {
         if(document.getElementById('approved-apps')) document.getElementById('approved-apps').textContent = apps.filter(a => a.status === 'مقبول').length;
         if(document.getElementById('rejected-apps')) document.getElementById('rejected-apps').textContent = apps.filter(a => a.status === 'رفض').length;
         if(document.getElementById('pending-apps')) document.getElementById('pending-apps').textContent = apps.filter(a => a.status === 'معلق').length;
+        // hero stats
+        const el = (id) => document.getElementById(id);
+        if(el('total-apps-hero'))    el('total-apps-hero').textContent    = apps.length + ' طلب';
+        if(el('approved-apps-hero')) el('approved-apps-hero').textContent = apps.filter(a=>a.status==='مقبول').length + ' مقبول';
+        if(el('pending-apps-hero'))  el('pending-apps-hero').textContent  = apps.filter(a=>a.status==='معلق').length + ' معلق';
+        if(el('rejected-apps-hero')) el('rejected-apps-hero').textContent = apps.filter(a=>a.status==='رفض').length + ' مرفوض';
 
         [...apps].reverse().forEach((app) => {
             const statusClass = app.status === 'مقبول' ? 'status-approved' : (app.status === 'رفض' ? 'status-rejected' : 'status-pending');
