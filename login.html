@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plus Dev — تسجيل الدخول</title>
-  <link rel="icon" type="image/png" href="https://cdn.discordapp.com/avatars/990216490085142578/4b1d6f63ac4b6e1a59a320ef820a2053.png?size=64">
+  <title>اسم السيرفر — تسجيل الدخول</title>
+  <link rel="icon" type="image/png" href="Plus_Dev_No_Wellpeper.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <meta name="theme-color" content="#fc7823">
@@ -186,7 +186,7 @@
   <div class="bp-orb bp-orb-1"></div>
   <div class="bp-orb bp-orb-2"></div>
   <div class="bp-content">
-    <img class="bp-logo" src="https://cdn.discordapp.com/avatars/990216490085142578/4b1d6f63ac4b6e1a59a320ef820a2053.png?size=256" alt="Plus Dev">
+    <img class="bp-logo" src="Plus_Dev_No_Wellpeper.png" alt="Plus Dev">
     <div class="bp-title">Plus <span>Dev</span></div>
     <p class="bp-desc">سيرفر FiveM احترافي متخصص — سكربتات، شروحات، ووظائف لمجتمع الرول بلاي العربي</p>
     <div class="bp-stats">
@@ -284,14 +284,15 @@
 
     <div class="foot">
       بالدخول توافق على <a href="#">شروط الاستخدام</a> و<a href="#">سياسة الخصوصية</a>
-      <br><br><span style="color:#1e1e1e">© Plus Dev 2025</span>
+      <br><br><span style="color:#1e1e1e">© اسم السيرفر 2025</span>
     </div>
   </div>
 </div>
 
+<script src="config.js"></script>
 <script>
-const CLIENT_ID='1453875994988380373';
-const REDIRECT_URI='https://saai5l.github.io/Plus_/login.html';
+const CLIENT_ID = CONFIG.DISCORD_CLIENT_ID;
+const REDIRECT_URI = CONFIG.REDIRECT_URI;
 
 function switchTab(t){
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',(t==='discord'&&i===0)||(t==='email'&&i===1)));

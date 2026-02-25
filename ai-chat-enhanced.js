@@ -163,7 +163,7 @@ function getSmartResponse(question) {
   const q = question.toLowerCase().trim();
 
   if (q.includes('السلام') || q.includes('مرحبا') || q.includes('هلا') || q.includes('اهلا') || q.includes('صباح') || q.includes('مساء')) {
-    return { type: 'greeting', message: 'وعليكم السلام ورحمة الله! 👋\n\nأنا المساعد الذكي لسيرفر Plus Dev. كيف أقدر أساعدك اليوم؟', showQuickButtons: true };
+    return { type: 'greeting', message: `وعليكم السلام ورحمة الله! 👋\n\nأنا المساعد الذكي لسيرفر ${CONFIG.SERVER_NAME}. كيف أقدر أساعدك اليوم؟`, showQuickButtons: true };
   }
 
   if (q.includes('شكر') || q.includes('يزاك') || q.includes('مشكور')) {

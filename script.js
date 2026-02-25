@@ -1,22 +1,8 @@
-const WEBHOOKS = {
-    police:  'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات الشرطة
-    ems:     'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات EMS
-    staff:   'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات الإدارة
-    tickets: 'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // تذاكر الدعم
-    store:   'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات المتجر
-};
+const WEBHOOKS = CONFIG.WEBHOOKS;
 
 /* ============================================================ */
 
-const firebaseConfig = {
-    apiKey: "AIzaSyB5r_RltNkExAb3wHhgfMuCWPg_GzEd_Ok",
-    authDomain: "planning-with-ai-60a3c.firebaseapp.com",
-    databaseURL: "https://planning-with-ai-60a3c-default-rtdb.firebaseio.com",
-    projectId: "planning-with-ai-60a3c",
-    storageBucket: "planning-with-ai-60a3c.firebasestorage.app",
-    messagingSenderId: "493882886067",
-    appId: "1:493882886067:web:ed8f0db9678a7e8a042dc6"
-};
+const firebaseConfig = CONFIG.FIREBASE;
 
 if (typeof firebase !== 'undefined') {
     firebase.initializeApp(firebaseConfig);
@@ -26,7 +12,7 @@ if (typeof firebase !== 'undefined') {
 }
 
 // الأدمنز يُقرأون من Firebase — لا تعدّل هنا
-let ADMIN_IDS = ["1453875192009986166",""]; // fallback مؤقت حتى يتحمل Firebase
+let ADMIN_IDS = []; // يُحمَّل من Firebase تلقائياً
 
 // تحميل الأدمنز من Firebase وتحديث الـ UI
 function loadAdminIds() {
@@ -45,9 +31,32 @@ function loadAdminIds() {
 }
 
         const jobConfig = {
-            police: { open: true, webhook: WEBHOOKS.police },
-            ems: { open: true, webhook: WEBHOOKS.ems },
-            staff: { open: true, webhook: WEBHOOKS.staff }
+            police:           { open: true, webhook: WEBHOOKS.police },
+            ems:              { open: true, webhook: WEBHOOKS.ems },
+            staff:            { open: true, webhook: WEBHOOKS.staff },
+            gang:             { open: true, webhook: WEBHOOKS.staff },
+            gang_families:    { open: true, webhook: WEBHOOKS.staff },
+            gang_scrap:       { open: true, webhook: WEBHOOKS.staff },
+            gang_gsg:         { open: true, webhook: WEBHOOKS.staff },
+            gang_ms13:        { open: true, webhook: WEBHOOKS.staff },
+            gang_yakuza:      { open: true, webhook: WEBHOOKS.staff },
+            gang_neighborhood:{ open: true, webhook: WEBHOOKS.staff },
+            gang_crips:       { open: true, webhook: WEBHOOKS.staff },
+            gang_11street:    { open: true, webhook: WEBHOOKS.staff },
+            gang_lostmc:      { open: true, webhook: WEBHOOKS.staff },
+            gang_soa:         { open: true, webhook: WEBHOOKS.staff },
+            gang_quietless:   { open: true, webhook: WEBHOOKS.staff },
+            gang_altufahi:    { open: true, webhook: WEBHOOKS.staff },
+            gang_deathline:   { open: true, webhook: WEBHOOKS.staff },
+            gang_18street:    { open: true, webhook: WEBHOOKS.staff },
+            gang_oldschool:   { open: true, webhook: WEBHOOKS.staff },
+            gang_darkness:    { open: true, webhook: WEBHOOKS.staff },
+            gang_14nortenos:  { open: true, webhook: WEBHOOKS.staff },
+            gang_elpatron:    { open: true, webhook: WEBHOOKS.staff },
+            gang_vagos:       { open: true, webhook: WEBHOOKS.staff },
+            gang_26yard:      { open: true, webhook: WEBHOOKS.staff },
+            gang_boomers:     { open: true, webhook: WEBHOOKS.staff },
+            gang_elmundo:     { open: true, webhook: WEBHOOKS.staff }
         };
 
 function showPage(pageId) {
@@ -218,10 +227,34 @@ function openJobModal(jobType) {
     showRequirements(jobType);
 }
 
+const gangReqs = ['العمر 16+', 'معرفة قوانين الإجرام', 'شخصية إجرامية واضحة', 'الولاء للعصابة فوق كل شيء', 'عدم الانضمام لعصابة أخرى'];
 const jobRequirements = {
-    'police': ['العمر 17+', 'ميكروفون سليم',  'الالتزام بالرتب',  'احترام قوانين السيرفر',  'الجدية في الرول بلاي',  'القدرة على التواصل والعمل الجماعي',  'التواجد الجيد أثناء فترات النشاط'],
-    'ems': ['العمر 16+', 'سرعة الاستجابة للحالات', 'اللباقة وحسن التعامل', 'خبرة في الإسعاف والرول الطبي', 'الهدوء تحت الضغط', 'الالتزام بتعليمات الطاقم الطبي'],
-    'staff': ['العمر 18+', 'التواجد اليومي', 'خبرة إدارية سابقة', 'الحيادية في اتخاذ القرارات', 'التعامل الراقي مع اللاعبين']
+    'police':           ['العمر 17+', 'ميكروفون سليم', 'الالتزام بالرتب', 'احترام قوانين السيرفر', 'الجدية في الرول بلاي', 'القدرة على التواصل والعمل الجماعي', 'التواجد الجيد أثناء فترات النشاط'],
+    'ems':              ['العمر 16+', 'سرعة الاستجابة للحالات', 'اللباقة وحسن التعامل', 'خبرة في الإسعاف والرول الطبي', 'الهدوء تحت الضغط', 'الالتزام بتعليمات الطاقم الطبي'],
+    'staff':            ['العمر 18+', 'التواجد اليومي', 'خبرة إدارية سابقة', 'الحيادية في اتخاذ القرارات', 'التعامل الراقي مع اللاعبين'],
+    'gang':             gangReqs,
+    'gang_families':    gangReqs,
+    'gang_scrap':       gangReqs,
+    'gang_gsg':         gangReqs,
+    'gang_ms13':        gangReqs,
+    'gang_yakuza':      gangReqs,
+    'gang_neighborhood':gangReqs,
+    'gang_crips':       gangReqs,
+    'gang_11street':    gangReqs,
+    'gang_lostmc':      gangReqs,
+    'gang_soa':         gangReqs,
+    'gang_quietless':   gangReqs,
+    'gang_altufahi':    gangReqs,
+    'gang_deathline':   gangReqs,
+    'gang_18street':    gangReqs,
+    'gang_oldschool':   gangReqs,
+    'gang_darkness':    gangReqs,
+    'gang_14nortenos':  gangReqs,
+    'gang_elpatron':    gangReqs,
+    'gang_vagos':       gangReqs,
+    'gang_26yard':      gangReqs,
+    'gang_boomers':     gangReqs,
+    'gang_elmundo':     gangReqs
 };
 
 function showRequirements(jobType) {
@@ -403,9 +436,32 @@ function saveToAdminDashboard(name, job, reason, discordId, appId) {
 }
 function getJobTitle(jobType) {
     const titles = {
-        'police': 'الشرطة LSPD',
-        'ems': 'الإسعاف EMS',
-        'staff': 'فريق الإدارة'
+        'police':           'الشرطة LSPD',
+        'ems':              'الإسعاف EMS',
+        'staff':            'فريق الإدارة',
+        'gang':             'انضمام عصابة',
+        'gang_families':    'عصابة Families',
+        'gang_scrap':       'عصابة Scrap',
+        'gang_gsg':         'عصابة GSG',
+        'gang_ms13':        'عصابة MS13',
+        'gang_yakuza':      'عصابة Yakuza',
+        'gang_neighborhood':'عصابة NeighborHood',
+        'gang_crips':       'عصابة Crips',
+        'gang_11street':    'عصابة 11 Street',
+        'gang_lostmc':      'عصابة The Lost MC',
+        'gang_soa':         'عصابة Sons of Anarchy',
+        'gang_quietless':   'عصابة Quietless',
+        'gang_altufahi':    'عصابة Al Tufahi',
+        'gang_deathline':   'عصابة Death Line',
+        'gang_18street':    'عصابة 18 Street',
+        'gang_oldschool':   'عصابة Old School',
+        'gang_darkness':    'عصابة Darkness',
+        'gang_14nortenos':  'عصابة 14 Norteños',
+        'gang_elpatron':    'عصابة el-patron',
+        'gang_vagos':       'عصابة VAGOS',
+        'gang_26yard':      'عصابة 26 YARD',
+        'gang_boomers':     'عصابة BOOMERS',
+        'gang_elmundo':     'عصابة ElMundo'
     };
     return titles[jobType] || 'وظيفة غير معروفة';
 }
@@ -607,8 +663,8 @@ function editDistance(s1, s2) {
 
 // askAI مُعرَّفة في ai-chat-enhanced.js
 
-const CLIENT_ID = '1453875994988380373'; 
-const REDIRECT_URI = 'https://saai5l.github.io/Plus_/login.html';
+const CLIENT_ID = CONFIG.DISCORD_CLIENT_ID; 
+const REDIRECT_URI = CONFIG.REDIRECT_URI;
 
 function login() {
     window.location.href = 'login.html';
@@ -896,7 +952,8 @@ function deleteApplication(appId) {
 const jobNames = {
     police: 'شرطة LSPD',
     ems: 'فريق EMS',
-    staff: 'فريق الإدارة'
+    staff: 'فريق الإدارة',
+    gang: 'انضمام عصابة'
 };
 
 function pushGlobalNotif(type, title, msg) {
@@ -930,7 +987,7 @@ function updateJobStatus(jobType) {
 }
 
 function toggleAllJobs() {
-    const jobs = ['police', 'ems', 'staff'];
+    const jobs = ['police', 'ems', 'staff', 'gang'];
     const mainBtn = document.getElementById('toggle-all');
     const shouldClose = mainBtn && mainBtn.classList.contains('adm-toggle-on');
 
@@ -965,7 +1022,7 @@ function toggleAllJobs() {
 
 database.ref('jobStatus').on('value', (snapshot) => {
     const statuses = snapshot.val() || {};
-    const jobs = ['police', 'ems', 'staff'];
+    const jobs = ['police', 'ems', 'staff', 'gang'];
     let allClosed = true;
 
     jobs.forEach(job => {
