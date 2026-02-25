@@ -6,7 +6,7 @@
 // ⚙️ إعدادات — غيّر هذي القيم
 const FIVEM_CONFIG = {
     // IP السيرفر مع البورت الافتراضي لـ FiveM
-    serverUrl: 'https://winter-tooth-97b4.saif4syr33.workers.dev',
+    serverUrl: 'https://governmental-impacts-chart-empire.trycloudflare.com',
         // نفس المفتاح اللي في server.lua
     apiKey: 'PLUSDEV_SECRET_2025_CHANGE_ME',
 };
