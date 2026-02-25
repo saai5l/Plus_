@@ -2232,3 +2232,31 @@ window.showPage = function(pageId) {
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initScrollReveal, 500);
 });
+
+// ===== Tracking Tabs =====
+function showTrkSection(sectionId, clickedTab) {
+  document.querySelectorAll('#tracking-page .law-section').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(sectionId);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('#tracking-page .laws-tab').forEach(b => b.classList.remove('active'));
+  if (clickedTab) clickedTab.classList.add('active');
+}
+
+// ===== Back To Top + Scroll Progress =====
+window.addEventListener('scroll', function() {
+  // Back to top
+  const btn = document.getElementById('back-to-top');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 300);
+
+  // Scroll progress
+  const prog = document.getElementById('scroll-progress');
+  if (prog) {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = total > 0 ? window.scrollY / total : 0;
+    prog.style.transform = `scaleX(${1 - pct})`;
+  }
+
+  // Navbar scroll effect
+  const nav = document.querySelector('.navbar');
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
