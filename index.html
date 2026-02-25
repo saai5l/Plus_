@@ -386,11 +386,79 @@
       <div class="adm-toggle-row">
         <div class="adm-toggle-info">
           <span class="adm-toggle-icon" style="background:rgba(180,0,0,0.15);color:#cc2222"><i class="fas fa-skull"></i></span>
-          <span>العصابات</span>
+          <span>العصابات (الكل)</span>
         </div>
         <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang" onclick="updateJobStatus('gang')">
           <span class="adm-toggle-knob"></span>
         </button>
+      </div>
+
+      <button class="adm-gangs-expand-btn" id="gangs-expand-btn" onclick="toggleGangsExpand()">
+        <i class="fas fa-chevron-down" id="gangs-expand-icon"></i> تحكم بكل عصابة
+      </button>
+
+      <div class="adm-gangs-list" id="adm-gangs-list" style="display:none;">
+        <div class="adm-toggle-divider"></div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(0,160,0,0.15);color:#00c800"><i class="fas fa-skull"></i></span><span>Families</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_families" onclick="updateJobStatus('gang_families')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(139,69,19,0.15);color:#8b4513"><i class="fas fa-skull"></i></span><span>Scrap</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_scrap" onclick="updateJobStatus('gang_scrap')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(128,0,128,0.15);color:#a020f0"><i class="fas fa-skull"></i></span><span>GSG</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_gsg" onclick="updateJobStatus('gang_gsg')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(139,0,0,0.15);color:#8b0000"><i class="fas fa-skull"></i></span><span>Yakuza</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_yakuza" onclick="updateJobStatus('gang_yakuza')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,0,0,0.15);color:#ff0000"><i class="fas fa-skull"></i></span><span>NeighborHood</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_neighborhood" onclick="updateJobStatus('gang_neighborhood')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(0,0,255,0.15);color:#0000ff"><i class="fas fa-skull"></i></span><span>Crips</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_crips" onclick="updateJobStatus('gang_crips')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(210,180,140,0.15);color:#d2b48c"><i class="fas fa-skull"></i></span><span>11 Street</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_11street" onclick="updateJobStatus('gang_11street')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,255,255,0.1);color:#fff"><i class="fas fa-skull"></i></span><span>Quietless</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_quietless" onclick="updateJobStatus('gang_quietless')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,0,0,0.15);color:#ff0000"><i class="fas fa-skull"></i></span><span>18 Street</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_18street" onclick="updateJobStatus('gang_18street')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,69,0,0.15);color:#ff4500"><i class="fas fa-skull"></i></span><span>14 Norteños</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_nortenos" onclick="updateJobStatus('gang_nortenos')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(176,196,222,0.15);color:#b0c4de"><i class="fas fa-skull"></i></span><span>el-patron</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_elpatron" onclick="updateJobStatus('gang_elpatron')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,255,0,0.15);color:#ffff00"><i class="fas fa-skull"></i></span><span>VAGOS</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_vagos" onclick="updateJobStatus('gang_vagos')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,165,0,0.15);color:#ffa500"><i class="fas fa-skull"></i></span><span>26 YARD</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_26yard" onclick="updateJobStatus('gang_26yard')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(0,0,139,0.15);color:#00008b"><i class="fas fa-skull"></i></span><span>BOOMERS</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_boomers" onclick="updateJobStatus('gang_boomers')"><span class="adm-toggle-knob"></span></button>
+        </div>
+        <div class="adm-toggle-row adm-gang-row">
+          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(128,128,128,0.15);color:#808080"><i class="fas fa-skull"></i></span><span>ElMundo</span></div>
+          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_elmundo" onclick="updateJobStatus('gang_elmundo')"><span class="adm-toggle-knob"></span></button>
+        </div>
       </div>
     </div>
   </div>
@@ -423,14 +491,26 @@
       <h3 class="adm-panel-title">طلبات التوظيف</h3>
     </div>
     <div class="adm-filters">
-      <button class="adm-filter-btn adm-filter-active" data-status="all" onclick="filterAdminTable('all', this)"><i class="fas fa-th"></i> الكل</button>
-      <button class="adm-filter-btn adm-filter-pending" data-status="معلق" onclick="filterAdminTable('معلق', this)"><i class="fas fa-hourglass-half"></i> معلق</button>
-      <button class="adm-filter-btn adm-filter-approved" data-status="مقبول" onclick="filterAdminTable('مقبول', this)"><i class="fas fa-check"></i> مقبول</button>
-      <button class="adm-filter-btn adm-filter-rejected" data-status="رفض" onclick="filterAdminTable('رفض', this)"><i class="fas fa-times"></i> مرفوض</button>
+      <button class="adm-filter-btn adm-filter-active" onclick="filterAdminTable('all', this)"><i class="fas fa-th"></i> الكل</button>
+      <button class="adm-filter-btn adm-filter-pending" onclick="filterAdminTable('معلق', this)"><i class="fas fa-hourglass-half"></i> معلق</button>
+      <button class="adm-filter-btn adm-filter-approved" onclick="filterAdminTable('مقبول', this)"><i class="fas fa-check"></i> مقبول</button>
+      <button class="adm-filter-btn adm-filter-rejected" onclick="filterAdminTable('رفض', this)"><i class="fas fa-times"></i> مرفوض</button>
     </div>
   </div>
-  <div class="adm-list-wrap" id="jobs-list-admin">
-    <div class="adm-list-empty"><i class="fas fa-clipboard-list"></i>جاري تحميل الطلبات...</div>
+  <div class="adm-table-wrap">
+    <table class="adm-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>اسم الشخصية</th>
+          <th>الوظيفة</th>
+          <th>ملاحظة</th>
+          <th>الحالة</th>
+          <th>إجراء</th>
+        </tr>
+      </thead>
+      <tbody id="jobs-table-body"></tbody>
+    </table>
   </div>
   <div class="adm-table-footer">
     <button class="adm-clear-btn" onclick="clearLogs()">
