@@ -1,2145 +1,0 @@
-<!DOCTYPE html>
-
-<html dir="rtl" lang="ar">
-<head>
-<meta charset="utf-8"/>
-<title>Plus Dev</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<link href="style.css" rel="stylesheet"/>
-<link href="ai-chat-enhanced.css" rel="stylesheet"/>
-<meta content="website" property="og:type"/>
-<meta content="YOUR SERVER NAME" property="og:site_name"/>
-<meta content="YOUR SERVER NAME - موقع السيرفر الرسمي" property="og:title"/>
-<meta content="الموقع الرسمي للسيرفر. انضم الآن!" property="og:description"/>
-<meta content="YOUR_SITE_URL" property="og:url"/>
-<meta content="Plus_Dev_No_Wellpeper.png" property="og:image"/>
-<meta content="800" property="og:image:width"/>
-<meta content="420" property="og:image:height"/>
-<meta content="summary_large_image" name="twitter:card"/>
-<meta content="#fc7823" name="theme-color"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<!-- Favicon -->
-<link href="Plus_Dev_No_Wellpeper.png" rel="icon" type="image/png"/>
-<link href="Plus_Dev_No_Wellpeper.png" rel="shortcut icon" type="image/png"/>
-<link href="home-redesign.css" rel="stylesheet"/>
-<link href="home-fixes.css" rel="stylesheet"/>
-</head>
-<body>
-<div class="custom-modal" id="req-modal">
-<div class="modal-content">
-<h3 class="modal-header" id="req-title">شروط التقديم</h3>
-<div class="modal-body" id="req-list">
-</div>
-<div class="modal-footer">
-<button class="modal-btn btn-confirm" id="accept-req">أوافق</button>
-<button class="modal-btn btn-cancel" onclick="closeReqModal()">إلغاء</button>
-</div>
-</div>
-</div>
-<canvas class="ix-1" id="particles-canvas"></canvas>
-<!-- Loading Screen -->
-<div id="loading-screen">
-<div class="loader-content">
-<div class="logo-wrapper">
-<img class="loader-logo" src="Plus_Dev_No_Wellpeper.png"/>
-<div class="logo-glow"></div>
-</div>
-<div class="loading-bar-container">
-<div class="loading-bar"></div>
-</div>
-<p class="loading-text">PLUS DEV IS LOADING...</p>
-</div>
-</div>
-<!-- navbar -->
-<div class="container">
-<nav class="navbar">
-<div class="nav-right-section">
-<!-- Notification Bell -->
-<div class="ix-2" id="notif-bell" onclick="toggleNotifDropdown(event)">
-<i class="fas fa-bell"></i>
-<span id="notif-count">0</span>
-<div id="notif-dropdown">
-<div class="notif-header">
-<span>الإشعارات</span>
-<button class="notif-clear" onclick="clearAllNotifs(event)">مسح الكل</button>
-</div>
-<div class="notif-list" id="notif-list">
-<div class="notif-empty" id="notif-empty">
-<i class="fas fa-bell-slash"></i>
-                            لا يوجد إشعارات
-                        </div>
-</div>
-</div>
-</div>
-<div class="auth-container" id="login-container">
-<div aria-label="User Login Button" class="user-profile-btn" id="login-btn" onclick="login()" role="button" tabindex="0">
-<div class="user-profile-inner">
-<svg aria-hidden="true" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<g data-name="Layer 2" id="Layer_2">
-<path d="m15.626 11.769a6 6 0 1 0 -7.252 0 9.008 9.008 0 0 0 -5.374 8.231 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 9.008 9.008 0 0 0 -5.374-8.231zm-7.626-4.769a4 4 0 1 1 4 4 4 4 0 0 1 -4-4zm10 14h-12a1 1 0 0 1 -1-1 7 7 0 0 1 14 0 1 1 0 0 1 -1 1z"></path>
-</g>
-</svg>
-<p>Log In</p>
-</div>
-</div>
-</div>
-<div class="user-menu-container ix-3" id="user-area">
-<div class="user-avatar-wrapper" onclick="toggleUserMenu(event)">
-<img alt="User" id="user-avatar" src=""/>
-</div>
-<div class="dropdown-content" id="user-dropdown">
-<div class="user-header">
-<p id="user-display-name">تحميل...</p>
-<p class="ix-4" id="user-discord-id"></p>
-<span id="user-status">Player</span>
-</div>
-<hr/>
-<a href="#" id="track-btn" onclick="showPage('tracking-page')">
-<i class="fas fa-search-location"></i> تتبع طلبك
-            </a>
-<a href="javascript:void(0)" onclick="openTicketModal()">
-<i class="fas fa-ticket-alt"></i> فتح تذكرة دعم
-            </a>
-<a class="ix-3" href="#" id="admin-btn" onclick="showPage('admin-dashboard')">
-<i class="fas fa-user-shield"></i> لوحة الإدارة
-            </a>
-<a class="logout-item" href="javascript:void(0)" onclick="logoutUser()">
-<i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-            </a>
-</div>
-</div>
-</div>
-<button class="ix-5" id="mobile-menu-btn" onclick="toggleMobileMenu()">
-<i class="fas fa-bars" id="menu-icon"></i>
-</button>
-<div class="nav-links" id="nav-links">
-<a class="active" href="#" onclick="showPage('home')">Home</a>
-<a href="#" onclick="showPage('rules')">Rules</a>
-<a href="#" onclick="showPage('tutorials')">Explanations</a>
-<a href="#" onclick="showPage('jobs')">Apply Jobs</a>
-<a href="#" onclick="showPage('store')">Store</a>
-</div>
-<div class="social-links">
-<a class="plus-discord-btn" href="https://discord.gg/pus" target="_blank">
-<div class="plus-discord-inner">
-<span>Join Discord</span>
-<i class="fab fa-discord"></i>
-</div>
-</a>
-</div>
-</nav>
-</div>
-<!-- Logo -->
-<div class="top-logo-section">
-<img alt="اسم السيرفر Logo" class="top-logo-img" loading="lazy" src="Plus_Dev_No_Wellpeper.png"/>
-</div>
-<!-- tracking-page -->
-<div class="page" id="tracking-page">
-<div class="trk-wrapper">
-
-  <!-- Hero -->
-  <div class="laws-hero">
-    <div class="laws-hero-bg"></div>
-    <div class="laws-hero-inner">
-      <div class="laws-hero-icon"><i class="fas fa-satellite-dish"></i></div>
-      <h1 class="laws-hero-title">تتبع طلبك</h1>
-      <p class="laws-hero-sub">ابقَ على اطلاع بحالة طلبك ووظيفتك وتذاكرك لحظةً بلحظة</p>
-      <div class="tut-stats-row">
-        <div class="tut-stat"><i class="fas fa-paper-plane"></i><span id="trk-stat-apps">طلباتي</span></div>
-        <div class="tut-stat"><i class="fas fa-ticket-alt"></i><span id="trk-stat-tickets">تذاكري</span></div>
-        <div class="tut-stat"><i class="fas fa-box"></i><span id="trk-stat-orders">طلبات المتجر</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tabs -->
-  <div class="laws-tabs-wrap">
-    <div class="laws-tabs">
-      <button class="laws-tab active" onclick="showTrkSection('trk-jobs', this)">
-        <i class="fas fa-briefcase"></i><span>طلبات التوظيف</span>
-      </button>
-      <button class="laws-tab" onclick="showTrkSection('trk-tickets', this)">
-        <i class="fas fa-ticket-alt"></i><span>تذاكر الدعم</span>
-      </button>
-      <button class="laws-tab" onclick="showTrkSection('trk-orders', this)">
-        <i class="fas fa-box"></i><span>طلبات المتجر</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="laws-content-wrap trk-content-wrap">
-
-    <!-- Tab: طلبات التوظيف -->
-    <div class="law-section active" id="trk-jobs">
-
-      <!-- Empty State -->
-      <div class="trk2-empty" id="no-app-message">
-        <div class="trk2-empty-icon"><i class="fas fa-folder-open"></i></div>
-        <h3>لا يوجد طلب مقدّم</h3>
-        <p>لم تقدّم أي طلب توظيف حتى الآن.<br>توجه لصفحة الوظائف وابدأ رحلتك!</p>
-        <button class="trk2-cta-btn" onclick="showPage('jobs')">
-          <i class="fas fa-briefcase"></i> تصفح الوظائف
-        </button>
-      </div>
-
-      <!-- Status Cards -->
-      <div id="app-status-info" style="display:none;">
-        <div id="applications-list" class="trk2-cards-grid">
-
-          <!-- Main Status Card -->
-          <div class="trk2-card trk2-card-main">
-            <div class="trk2-card-top">
-              <div class="trk2-card-icon"><i class="fas fa-id-card"></i></div>
-              <div class="trk2-card-meta">
-                <div class="trk2-card-label">طلب التوظيف</div>
-                <div class="trk2-card-title" id="track-job-name">--</div>
-              </div>
-              <div class="trk2-app-id" id="track-app-id">#--</div>
-            </div>
-
-            <!-- Progress Bar -->
-            <div class="trk2-progress-wrap">
-              <div class="trk2-step-row" id="trk-steps-bar">
-                <div class="trk2-step active" data-step="submitted">
-                  <div class="trk2-step-circle"><i class="fas fa-paper-plane"></i></div>
-                  <div class="trk2-step-label">تم التقديم</div>
-                </div>
-                <div class="trk2-step-bar"></div>
-                <div class="trk2-step" data-step="review">
-                  <div class="trk2-step-circle"><i class="fas fa-search"></i></div>
-                  <div class="trk2-step-label">قيد المراجعة</div>
-                </div>
-                <div class="trk2-step-bar"></div>
-                <div class="trk2-step" data-step="done">
-                  <div class="trk2-step-circle"><i class="fas fa-check"></i></div>
-                  <div class="trk2-step-label">القرار النهائي</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Status Badge -->
-            <div class="trk2-status-row">
-              <div class="trk2-status-dot-wrap">
-                <div class="trk2-pulse"></div>
-              </div>
-              <span>الحالة الحالية:</span>
-              <span class="status-badge trk-status-badge-lg" id="track-status-label">--</span>
-            </div>
-          </div>
-
-          <!-- Admin Notes Card -->
-          <div class="trk2-card trk2-card-notes">
-            <div class="trk2-notes-hdr">
-              <div class="trk2-notes-icon"><i class="fas fa-comment-dots"></i></div>
-              <div>
-                <div class="trk2-notes-title">ملاحظات الإدارة</div>
-                <div class="trk2-notes-sub">ردود وتعليقات الفريق على طلبك</div>
-              </div>
-            </div>
-            <div class="trk2-notes-body" id="track-admin-note">
-              <div class="trk2-notes-empty">
-                <i class="fas fa-inbox"></i>
-                <p>لا توجد ملاحظات حتى الآن</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- Tab: تذاكر الدعم -->
-    <div class="law-section" id="trk-tickets">
-      <div class="trk2-section-hdr">
-        <div class="laws-section-icon"><i class="fas fa-ticket-alt"></i></div>
-        <div>
-          <h2 class="laws-section-title">تذاكر الدعم</h2>
-          <p class="laws-section-sub">تذاكرك المرسلة وردود الإدارة عليها</p>
-        </div>
-      </div>
-      <div id="my-tickets-section">
-        <div id="my-tickets-list" class="trk2-list"></div>
-      </div>
-    </div>
-
-    <!-- Tab: طلبات المتجر -->
-    <div class="law-section" id="trk-orders">
-      <div class="trk2-section-hdr">
-        <div class="laws-section-icon" style="background:rgba(46,204,113,0.15)"><i class="fas fa-box" style="color:#2ecc71"></i></div>
-        <div>
-          <h2 class="laws-section-title">طلبات المتجر</h2>
-          <p class="laws-section-sub">تابع حالة مشترياتك من المتجر</p>
-        </div>
-      </div>
-      <div id="my-orders-section">
-        <div id="my-orders-list" class="trk2-list"></div>
-      </div>
-    </div>
-
-  </div>
-</div>
-</div>
-<!-- admin-dashboard -->
-<div class="page" id="admin-dashboard">
-
-<!-- Hero -->
-<div class="laws-hero">
-  <div class="laws-hero-bg"></div>
-  <div class="laws-hero-inner">
-    <div class="laws-hero-icon"><i class="fas fa-user-shield"></i></div>
-    <h1 class="laws-hero-title">لوحة الإدارة</h1>
-    <p class="laws-hero-sub">تحكم كامل بالطلبات والأدمنز وحالة السيرفر — صلاحيات مقيدة</p>
-    <div class="tut-stats-row">
-      <div class="tut-stat"><i class="fas fa-layer-group"></i><span id="total-apps-hero">0 طلب</span></div>
-      <div class="tut-stat"><i class="fas fa-check-circle"></i><span id="approved-apps-hero">0 مقبول</span></div>
-      <div class="tut-stat"><i class="fas fa-hourglass-half"></i><span id="pending-apps-hero">0 معلق</span></div>
-      <div class="tut-stat"><i class="fas fa-times-circle"></i><span id="rejected-apps-hero">0 مرفوض</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="adm-container">
-
-<!-- Stats Row -->
-<div class="adm-stats-row">
-  <div class="adm-stat-card adm-stat-total">
-    <div class="adm-stat-icon"><i class="fas fa-layer-group"></i></div>
-    <div class="adm-stat-info">
-      <span class="adm-stat-num" id="total-apps">0</span>
-      <span class="adm-stat-label">إجمالي التقديمات</span>
-    </div>
-    <div class="adm-stat-shine"></div>
-  </div>
-  <div class="adm-stat-card adm-stat-approved">
-    <div class="adm-stat-icon"><i class="fas fa-check-circle"></i></div>
-    <div class="adm-stat-info">
-      <span class="adm-stat-num" id="approved-apps">0</span>
-      <span class="adm-stat-label">مقبول</span>
-    </div>
-    <div class="adm-stat-shine"></div>
-  </div>
-  <div class="adm-stat-card adm-stat-pending">
-    <div class="adm-stat-icon"><i class="fas fa-hourglass-half"></i></div>
-    <div class="adm-stat-info">
-      <span class="adm-stat-num" id="pending-apps">0</span>
-      <span class="adm-stat-label">قيد الانتظار</span>
-    </div>
-    <div class="adm-stat-shine"></div>
-  </div>
-  <div class="adm-stat-card adm-stat-rejected">
-    <div class="adm-stat-icon"><i class="fas fa-times-circle"></i></div>
-    <div class="adm-stat-info">
-      <span class="adm-stat-num" id="rejected-apps">0</span>
-      <span class="adm-stat-label">مرفوض</span>
-    </div>
-    <div class="adm-stat-shine"></div>
-  </div>
-</div>
-
-<!-- Controls + Admins -->
-<div class="adm-two-col">
-
-  <!-- Quick Controls -->
-  <div class="adm-panel adm-panel-controls">
-    <div class="adm-panel-head">
-      <div class="adm-panel-icon"><i class="fas fa-sliders-h"></i></div>
-      <div>
-        <h3 class="adm-panel-title">التحكم السريع</h3>
-        <p class="adm-panel-sub">فتح وإغلاق الوظائف فورياً</p>
-      </div>
-    </div>
-    <div class="adm-controls-body">
-      <div class="adm-master-toggle">
-        <div class="adm-master-label"><i class="fas fa-power-off"></i><span>التحكم الشامل</span></div>
-        <button class="adm-toggle-btn adm-toggle-off" id="toggle-all" onclick="toggleAllJobs()">
-          <span class="adm-toggle-knob"></span>
-        </button>
-      </div>
-      <div class="adm-toggle-divider"></div>
-      <div class="adm-toggle-row">
-        <div class="adm-toggle-info">
-          <span class="adm-toggle-icon adm-police-icon"><i class="fas fa-shield-alt"></i></span>
-          <span>الشرطة</span>
-        </div>
-        <button class="adm-toggle-btn adm-toggle-on" id="toggle-police" onclick="updateJobStatus('police')">
-          <span class="adm-toggle-knob"></span>
-        </button>
-      </div>
-      <div class="adm-toggle-row">
-        <div class="adm-toggle-info">
-          <span class="adm-toggle-icon adm-ems-icon"><i class="fas fa-ambulance"></i></span>
-          <span>الإسعاف</span>
-        </div>
-        <button class="adm-toggle-btn adm-toggle-on" id="toggle-ems" onclick="updateJobStatus('ems')">
-          <span class="adm-toggle-knob"></span>
-        </button>
-      </div>
-      <div class="adm-toggle-row">
-        <div class="adm-toggle-info">
-          <span class="adm-toggle-icon adm-staff-icon"><i class="fas fa-user-cog"></i></span>
-          <span>الإدارة</span>
-        </div>
-        <button class="adm-toggle-btn adm-toggle-on" id="toggle-staff" onclick="updateJobStatus('staff')">
-          <span class="adm-toggle-knob"></span>
-        </button>
-      </div>
-      <div class="adm-toggle-row">
-        <div class="adm-toggle-info">
-          <span class="adm-toggle-icon" style="background:rgba(180,0,0,0.15);color:#cc2222"><i class="fas fa-skull"></i></span>
-          <span>العصابات</span>
-        </div>
-        <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang" onclick="updateJobStatus('gang')">
-          <span class="adm-toggle-knob"></span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Admin Managers -->
-  <div class="adm-panel adm-panel-managers">
-    <div class="adm-panel-head">
-      <div class="adm-panel-icon adm-icon-orange"><i class="fas fa-user-shield"></i></div>
-      <div>
-        <h3 class="adm-panel-title">إدارة الأدمنز</h3>
-        <p class="adm-panel-sub">أضف أو احذف صلاحيات الأدمنز</p>
-      </div>
-    </div>
-    <div class="adm-add-row">
-      <input class="adm-input" id="new-admin-id" placeholder="أدخل Discord ID..." type="text"/>
-      <button class="adm-add-btn" onclick="addAdminId()"><i class="fas fa-plus"></i> إضافة</button>
-    </div>
-    <div class="adm-ids-list" id="admin-ids-list">
-      <div class="adm-ids-loading"><i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...</div>
-    </div>
-  </div>
-
-</div>
-
-<!-- Applications Table -->
-<div class="adm-panel adm-panel-table">
-  <div class="adm-table-head">
-    <div class="adm-table-title-wrap">
-      <div class="adm-panel-icon"><i class="fas fa-clipboard-list"></i></div>
-      <h3 class="adm-panel-title">طلبات التوظيف</h3>
-    </div>
-    <div class="adm-filters">
-      <button class="adm-filter-btn adm-filter-active" data-status="all" onclick="filterAdminTable('all', this)"><i class="fas fa-th"></i> الكل</button>
-      <button class="adm-filter-btn adm-filter-pending" data-status="معلق" onclick="filterAdminTable('معلق', this)"><i class="fas fa-hourglass-half"></i> معلق</button>
-      <button class="adm-filter-btn adm-filter-approved" data-status="مقبول" onclick="filterAdminTable('مقبول', this)"><i class="fas fa-check"></i> مقبول</button>
-      <button class="adm-filter-btn adm-filter-rejected" data-status="رفض" onclick="filterAdminTable('رفض', this)"><i class="fas fa-times"></i> مرفوض</button>
-    </div>
-  </div>
-  <div class="adm-list-wrap" id="jobs-list-admin">
-    <div class="adm-list-empty"><i class="fas fa-clipboard-list"></i>جاري تحميل الطلبات...</div>
-  </div>
-  <div class="adm-table-footer">
-    <button class="adm-clear-btn" onclick="clearLogs()">
-      <i class="fas fa-trash-alt"></i> تصفير جميع الطلبات
-    </button>
-  </div>
-</div>
-
-<!-- تذاكر الدعم -->
-<div class="adm-panel adm-section-gap">
-  <div class="adm-table-head">
-    <div class="adm-table-title-wrap">
-      <div class="adm-panel-icon adm-icon-blue"><i class="fas fa-ticket-alt"></i></div>
-      <h3 class="adm-panel-title">تذاكر الدعم</h3>
-    </div>
-    <div class="adm-head-actions">
-      <span class="adm-count-badge adm-badge-blue" id="tickets-count-badge">0 تذكرة</span>
-      <button class="adm-refresh-btn" onclick="loadTickets()"><i class="fas fa-sync-alt"></i> تحديث</button>
-    </div>
-  </div>
-  <div class="adm-sub-filters" id="tkt-admin-filters">
-    <button class="adm-filter-btn adm-filter-active" onclick="filterTickets('all',this)"><i class="fas fa-th"></i> الكل</button>
-    <button class="adm-filter-btn adm-filter-blue" onclick="filterTickets('open',this)"><i class="fas fa-envelope-open"></i> مفتوحة</button>
-    <button class="adm-filter-btn adm-filter-approved" onclick="filterTickets('closed',this)"><i class="fas fa-check-circle"></i> مغلقة</button>
-  </div>
-  <div class="adm-list-wrap" id="tickets-list-admin">
-    <div class="adm-list-empty"><i class="fas fa-ticket-alt"></i>اضغط "تحديث" لتحميل التذاكر</div>
-  </div>
-</div>
-
-<!-- طلبات المتجر -->
-<div class="adm-panel adm-panel-orders adm-section-gap">
-  <div class="adm-table-head">
-    <div class="adm-table-title-wrap">
-      <div class="adm-panel-icon adm-icon-green"><i class="fas fa-box"></i></div>
-      <h3 class="adm-panel-title">طلبات المتجر</h3>
-    </div>
-    <div class="adm-head-actions">
-      <span class="adm-count-badge adm-badge-green" id="orders-count-badge">0 طلب</span>
-      <button class="adm-refresh-btn" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> تحديث</button>
-    </div>
-  </div>
-  <div class="adm-sub-filters" id="orders-admin-filters">
-    <button class="adm-filter-btn adm-filter-active" onclick="filterOrders('all',this)"><i class="fas fa-th"></i> الكل</button>
-    <button class="adm-filter-btn adm-filter-pending" onclick="filterOrders('pending',this)"><i class="fas fa-hourglass-half"></i> قيد المعالجة</button>
-    <button class="adm-filter-btn adm-filter-approved" onclick="filterOrders('completed',this)"><i class="fas fa-check-circle"></i> مكتمل</button>
-    <button class="adm-filter-btn adm-filter-rejected" onclick="filterOrders('cancelled',this)"><i class="fas fa-times-circle"></i> ملغي</button>
-  </div>
-  <div class="adm-list-wrap" id="orders-list-admin">
-    <div class="adm-list-empty"><i class="fas fa-box"></i>اضغط "تحديث" لتحميل الطلبات</div>
-  </div>
-</div>
-
-</div><!-- /adm-container -->
-</div>
-<!-- HOME PAGE -->
-<div class="page active" id="home">
-<div class="container">
-<section class="hero-enhanced">
-<!-- خلفية متحركة -->
-<div class="hero-particles-bg">
-<div class="hero-orb hero-orb-1"></div>
-<div class="hero-orb hero-orb-2"></div>
-<div class="hero-orb hero-orb-3"></div>
-<div class="hero-grid-lines"></div>
-</div>
-<div class="hero-content">
-<div class="hero-badge">
-<span class="hero-badge-dot"></span>
-              السيرفر شغّال الآن
-              <span class="hero-badge-ping"></span>
-</div>
-<h1>
-  Welcome to<br/>
-<span class="hero-title-brand">
-<span class="hero-title-plus">Plus</span>
-<span class="hero-title-dev"> Dev</span>
-</span>
-</h1>
-<p class="hero-desc">سيرفر FiveM احترافي متخصص — سكربتات، شروحات، وتجربة لعب <strong>لا مثيل لها</strong></p>
-<div class="hero-btns">
-<button class="btn-primary hero-btn-glow" onclick="showPage('store')">
-<i class="fas fa-store"></i> Browse Store
-  </button>
-<button class="btn-outline" onclick="showPage('jobs')">
-<i class="fas fa-paper-plane"></i> Apply for a Job
-  </button>
-<button class="btn-outline btn-discord" onclick="window.open('https://discord.gg/pus','_blank')">
-<i class="fab fa-discord"></i> Join Discord
-  </button>
-</div>
-<!-- Scroll indicator -->
-<div class="hero-scroll-hint">
-<div class="hero-scroll-mouse">
-<div class="hero-scroll-wheel"></div>
-</div>
-<span>Scroll Down</span>
-</div>
-</div>
-</section>
-<div class="server-stats-bar container">
-<div class="stat-bar-item">
-<span class="stat-bar-num">128</span>
-<span class="stat-bar-lbl">أقصى عدد لاعبين</span>
-</div>
-<div class="stat-bar-item">
-<span class="stat-bar-num" id="stat-members">500+</span>
-<span class="stat-bar-lbl">عضو ديسكورد</span>
-</div>
-<div class="stat-bar-item">
-<span class="stat-bar-num">24/7</span>
-<span class="stat-bar-lbl">السيرفر شغّال</span>
-</div>
-<div class="stat-bar-item">
-<span class="stat-bar-num">50+</span>
-<span class="stat-bar-lbl">سكربت مثبّت</span>
-</div>
-</div>
-<!-- FEATURES SECTION -->
-<section class="features-section features-section-v2">
-<div class="features-header">
-<span class="features-tag"><i class="fas fa-star"></i> ليش اسم السيرفر؟</span>
-<h2 class="features-title">كل شيء تحتاجه في مكان واحد</h2>
-<p class="features-sub">منصة متكاملة تجمع بين الاحترافية والمتعة لتجربة لعب فريدة</p>
-</div>
-<div class="features-grid features-grid-v2">
-<div class="feature-card-v2 fcv2-1">
-  <div class="fcv2-number">01</div>
-  <div class="fcv2-icon"><i class="fas fa-code"></i></div>
-  <h3>سكربتات احترافية</h3>
-  <p>أكثر من 50 سكربت مثبّت ومطوّر خصيصاً لضمان أفضل تجربة لعب ممكنة</p>
-  <div class="fcv2-line"></div>
-</div>
-<div class="feature-card-v2 fcv2-2">
-  <div class="fcv2-number">02</div>
-  <div class="fcv2-icon"><i class="fas fa-shield-alt"></i></div>
-  <h3>أدمنز متخصصون</h3>
-  <p>فريق إدارة متوفر على مدار الساعة للحفاظ على بيئة لعب عادلة ونظيفة</p>
-  <div class="fcv2-line"></div>
-</div>
-<div class="feature-card-v2 fcv2-3">
-  <div class="fcv2-number">03</div>
-  <div class="fcv2-icon"><i class="fas fa-users"></i></div>
-  <h3>مجتمع نشط</h3>
-  <p>انضم لمجتمع ودود من آلاف اللاعبين وابنِ صداقات حقيقية داخل العالم الافتراضي</p>
-  <div class="fcv2-line"></div>
-</div>
-<div class="feature-card-v2 fcv2-4">
-  <div class="fcv2-number">04</div>
-  <div class="fcv2-icon"><i class="fas fa-rocket"></i></div>
-  <h3>تحديثات مستمرة</h3>
-  <p>محتوى جديد وتحسينات أسبوعية لضمان تجربة طازجة ومثيرة في كل مرة تلعب</p>
-  <div class="fcv2-line"></div>
-</div>
-<div class="feature-card-v2 fcv2-5">
-  <div class="fcv2-number">05</div>
-  <div class="fcv2-icon"><i class="fas fa-film"></i></div>
-  <h3>رول بلاي عالي الجودة</h3>
-  <p>قوانين مدروسة ولاعبون ملتزمون يضمنون مستوى رول بلاي سينمائي حقيقي</p>
-  <div class="fcv2-line"></div>
-</div>
-<div class="feature-card-v2 fcv2-6">
-  <div class="fcv2-number">06</div>
-  <div class="fcv2-icon"><i class="fas fa-headset"></i></div>
-  <h3>دعم فني سريع</h3>
-  <p>فريق الدعم متاح دائماً للإجابة على أسئلتك وحل مشاكلك بأسرع وقت ممكن</p>
-  <div class="fcv2-line"></div>
-</div>
-</div>
-</section>
-<section class="social-media">
-<h2>منصات التواصل</h2>
-<p>مجتمع اسم السيرفر يمتلك حضورًا قويًا على منصات التواصل الاجتماعي</p>
-<div class="stats">
-<div class="stat-item">
-<div class="stat-icon"><i class="fab fa-discord"></i></div>
-<div>
-<div class="stat-number" data-target="500">0</div>
-<div class="stat-label">أعضاء في الدسكورد</div>
-</div>
-</div>
-<div class="divider"></div>
-<div class="stat-item">
-<div class="stat-icon"><i class="fas fa-users"></i></div>
-<div>
-<div class="stat-number" data-target="2000">0</div>
-<div class="stat-label">متابعين السوشيال ميديا</div>
-</div>
-</div>
-</div>
-</section>
-<section class="links-section">
-<div class="link-card">
-<h3><i class="fas fa-info-circle"></i> من نحن</h3>
-<p>نحن سيرفر FiveM متخصص CFW، ونسعى لإسعاد اللاعبين وخدمتهم في جميع مشاكلهم.</p>
-</div>
-<div class="link-card">
-<h3><i class="fa-solid fa-book"></i> القوانين</h3>
-<p>القوانين تهدف إلى تنظيم السيرفر واحترام الدستور.</p>
-<a class="btn" onclick="showPage('rules')">اطلاع على القوانين</a>
-</div>
-</section>
-<section class="updates-section container">
-<div class="updates-header-v2">
-  <span class="features-tag"><i class="fas fa-bolt"></i> أخبار السيرفر</span>
-  <h2 class="updates-title">آخر التحديثات</h2>
-  <p class="updates-subtitle">وش أضفنا مؤخراً في اسم السيرفر</p>
-</div>
-<div class="updates-grid-v2">
-<div class="update-card-v2">
-  <div class="ucv2-left">
-    <div class="ucv2-date-badge">
-      <span class="ucv2-day">12</span>
-      <span class="ucv2-month">نوف</span>
-    </div>
-    <div class="ucv2-line-connector"></div>
-  </div>
-  <div class="ucv2-body">
-    <div class="ucv2-icon"><i class="fa-solid fa-shop"></i></div>
-    <div class="ucv2-content">
-      <div class="ucv2-tag">جديد</div>
-      <h3>إضافة المتجر</h3>
-      <p>إضافة متجر خاص في السيرفر تم إضافة جميع المنتجات مع نظام شراء متكامل.</p>
-    </div>
-  </div>
-</div>
-<div class="update-card-v2">
-  <div class="ucv2-left">
-    <div class="ucv2-date-badge">
-      <span class="ucv2-day">10</span>
-      <span class="ucv2-month">نوف</span>
-    </div>
-    <div class="ucv2-line-connector"></div>
-  </div>
-  <div class="ucv2-body">
-    <div class="ucv2-icon"><i class="fas fa-people-group"></i></div>
-    <div class="ucv2-content">
-      <div class="ucv2-tag">تحسين</div>
-      <h3>زيادة عدد اللاعبين</h3>
-      <p>تم رفع الطاقة الاستيعابية إلى 128 لاعب لتجربة لعب أفضل للجميع.</p>
-    </div>
-  </div>
-</div>
-<div class="update-card-v2">
-  <div class="ucv2-left">
-    <div class="ucv2-date-badge">
-      <span class="ucv2-day">08</span>
-      <span class="ucv2-month">نوف</span>
-    </div>
-    <div class="ucv2-line-connector"></div>
-  </div>
-  <div class="ucv2-body">
-    <div class="ucv2-icon"><i class="fas fa-user-gear"></i></div>
-    <div class="ucv2-content">
-      <div class="ucv2-tag">إدارة</div>
-      <h3>تعديل الإدارة</h3>
-      <p>تم تعديل وتجديد الإدارة القديمة وتحسينها للأفضل لخدمة المجتمع.</p>
-    </div>
-  </div>
-</div>
-</div>
-</section>
-<section class="team-section">
-<div class="team-section-header">
-<div class="team-label">الفريق</div>
-<h2 class="team-title">تعرف على <span>الفريق</span></h2>
-<p class="team-subtitle">الأشخاص الذين بنوا اسم السيرفر وحافظوا عليه</p>
-<div class="team-divider">
-<span class="team-divider-icon">◆ مؤسسين ◆</span>
-</div>
-</div>
-<div class="team-grid">
-<div class="team-card is-founder">
-<div class="team-banner">
-<span class="founder-crown">👑</span>
-</div>
-<div class="team-img-wrap">
-<img class="team-img" loading="lazy" src="https://cdn.discordapp.com/avatars/1237446569259958313/53588d0101e661785332ff76d374dd40.png?size=1024"/>
-<div class="team-img-ring"></div>
-</div>
-<div class="team-info">
-<h3 class="team-name">Saif</h3>
-<span class="team-role-badge">مسؤول</span>
-</div>
-</div>
-<div class="team-card">
-<div class="team-banner"></div>
-<div class="team-img-wrap">
-<img class="team-img" loading="lazy" src="https://cdn.discordapp.com/avatars/1119971382168653847/3786acd98ef4f586b5d15c472c8e484d.png?size=1024"/>
-<div class="team-img-ring"></div>
-</div>
-<div class="team-info">
-<h3 class="team-name">Marco</h3>
-<span class="team-role-badge">إداري</span>
-</div>
-</div>
-<div class="team-card">
-<div class="team-banner"></div>
-<div class="team-img-wrap">
-<img class="team-img" loading="lazy" src="YOUR_TEAM_MEMBER_PHOTO_URL"/>
-<div class="team-img-ring"></div>
-</div>
-<div class="team-info">
-<h3 class="team-name">Hmmm!</h3>
-<span class="team-role-badge">إداري</span>
-</div>
-</div>
-<div class="team-card">
-<div class="team-banner"></div>
-<div class="team-img-wrap">
-<img class="team-img" loading="lazy" src="https://cdn.discordapp.com/avatars/1050552192911818883/965cb0091642a65857a5278ea55f7366.png?size=1024"/>
-<div class="team-img-ring"></div>
-</div>
-<div class="team-info">
-<h3 class="team-name">Turki</h3>
-<span class="team-role-badge">إداري</span>
-</div>
-</div>
-</div>
-</section>
-</div>
-</div>
-<!-- RULES PAGE -->
-<div class="page" id="rules">
-<div class="container">
-<!-- Laws Hero -->
-<div class="laws-hero">
-<div class="laws-hero-bg"></div>
-<div class="laws-hero-inner">
-<div class="laws-hero-icon"><i class="fas fa-scale-balanced"></i></div>
-<h1 class="laws-hero-title">قوانين السيرفر</h1>
-<p class="laws-hero-sub">اقرأ القوانين بعناية — الجهل بالقانون لا يُعفي من المسؤولية</p>
-<!-- Search Bar -->
-<div class="laws-search-wrap">
-<i class="fas fa-search laws-search-icon"></i>
-<input class="laws-search-input" id="laws-search-input" oninput="filterLaws(this.value)" placeholder="ابحث في القوانين..." type="text"/>
-<span class="laws-search-count" id="laws-search-count"></span>
-</div>
-</div>
-</div>
-<!-- Category Tabs -->
-<div class="laws-tabs-wrap">
-<div class="laws-tabs">
-<button class="laws-tab active" onclick="showLawSection('rp-definitions', this)">
-<i class="fas fa-id-card"></i><span>تعريفات RP</span>
-</button>
-<button class="laws-tab" onclick="showLawSection('general-laws', this)">
-<i class="fas fa-scale-balanced"></i><span>القوانين العامة</span>
-</button>
-<button class="laws-tab" onclick="showLawSection('safe-zones', this)">
-<i class="fas fa-shield-halved"></i><span>المناطق الآمنة</span>
-</button>
-<button class="laws-tab" onclick="showLawSection('crime-laws', this)">
-<i class="fas fa-handcuffs"></i><span>قوانين الإجرام</span>
-</button>
-<button class="laws-tab" onclick="showLawSection('robbery-numbers', this)">
-<i class="fas fa-building-columns"></i><span>أعداد السرقات</span>
-</button>
-<button class="laws-tab" onclick="showLawSection('restaurant-laws', this)">
-<i class="fas fa-utensils"></i><span>قوانين المطاعم</span>
-</button>
-<button class="laws-tab" onclick="showLawSection('discord-laws', this)">
-<i class="fab fa-discord"></i><span>قوانين الديسكورد</span>
-</button>
-</div>
-</div>
-<!-- Laws Content -->
-<div class="laws-content-wrap">
-<!-- RP Definitions -->
-<div class="law-section active" id="rp-definitions">
-<div class="laws-section-header">
-<div class="laws-section-icon"><i class="fas fa-id-card"></i></div>
-<div>
-<h2 class="laws-section-title">تعريفات الرول بلاي (RP)</h2>
-<p class="laws-section-sub">المصطلحات الأساسية التي يجب أن تعرفها</p>
-</div>
-<span class="laws-count-badge">4 قوانين</span>
-</div>
-<div class="laws-list" id="list-rp-definitions">
-<div class="law-item-new law-item-warning">
-<div class="law-num">RP</div>
-<div class="law-text-new"><strong>تعريف الحياة الواقعية:</strong> يجب عليك تقمص الشخصية داخل الرول بلاي — تصرف كما لو كانت حياة حقيقية.</div>
-<button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button>
-</div>
-<div class="law-item-new law-item-warning">
-<div class="law-num">VP</div>
-<div class="law-text-new"><strong>تعريف تقدير الحياة:</strong> يجب عليك تقدير الموقف مثل الواقع — لا تلقي بحياتك بدون سبب.</div>
-<button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button>
-</div>
-<div class="law-item-new law-item-ban">
-<div class="law-num">VDM</div>
-<div class="law-text-new"><strong>Vehicle Deathmatch:</strong> يمنع منعاً باتاً استخدام المركبة كسلاح — باند نهائي.</div>
-<button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button>
-</div>
-<div class="law-item-new law-item-ban">
-<div class="law-num">RDM</div>
-<div class="law-text-new"><strong>Random Deathmatch:</strong> القتل العشوائي ممنوع تماماً — يجب وجود سبب درامي واضح.</div>
-<button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button>
-</div>
-</div>
-</div>
-<!-- General Laws -->
-<div class="law-section" id="general-laws">
-<div class="laws-section-header">
-<div class="laws-section-icon"><i class="fas fa-scale-balanced"></i></div>
-<div>
-<h2 class="laws-section-title">القوانين العامة</h2>
-<p class="laws-section-sub">القواعد الأساسية التي تحكم السيرفر</p>
-</div>
-<span class="laws-count-badge">48 قانون</span>
-</div>
-<div class="laws-list" id="list-general-laws">
-<div class="law-item-new"><div class="law-num">1</div><div class="law-text-new">يجب فهم معنى الرول بلاي والالتزام به.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">2</div><div class="law-text-new">يمنع التطرق للسياسة والدين والأعراض — <strong>باند نهائي.</strong></div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">3</div><div class="law-text-new">يمنع تقليد الشخصيات أو الأسماء.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">4</div><div class="law-text-new">يجب اختيار اسم كركتر واقعي.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">5</div><div class="law-text-new">يمنع دخول نفس الشخص بشخصية ثانية في سيناريو قائم.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">6</div><div class="law-text-new">يمنع دخول المنازل أثناء السيناريو.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">7</div><div class="law-text-new">يجب تشغيل برنامج تسجيل يحفظ آخر 20 دقيقة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">8</div><div class="law-text-new">يمنع التدخل في أي سيناريو قائم.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">9</div><div class="law-text-new">يمنع لبس الملابس العسكرية والحزام العسكري.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">10</div><div class="law-text-new">يمنع التعرض للمسعفين أو سرقة معدات الشرطة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">11</div><div class="law-text-new">تمنع الشخصنة نهائيًا.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">12</div><div class="law-text-new">يمنع Meta Gaming — استخدام معلومات خارج اللعبة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">13</div><div class="law-text-new">ممنوع لبس الخوذة أثناء القتال.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">14</div><div class="law-text-new">يمنع استخدام البرامج الخارجية — <strong>باند نهائي.</strong></div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">15</div><div class="law-text-new">ممنوع تفجير أو إهانة الجثث.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">16</div><div class="law-text-new">ممنوع تغيير الشكل بعد الجريمة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">17</div><div class="law-text-new">عند الموت — ممنوع الرجوع للسيناريو.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">18</div><div class="law-text-new">ممنوع ترابط الشخصيات.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">19</div><div class="law-text-new">لازم تقمص شخصيتك دائمًا حتى لو خويك ضدك.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">20</div><div class="law-text-new">إذا غيرت صوت الشخصية يجب أن يبقى ثابتًا.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">21</div><div class="law-text-new">يجب تقدير قيمة المركبة وعدم الصدم بدون سبب.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">22</div><div class="law-text-new">ممنوع الكذب بالمصطلحات.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">23</div><div class="law-text-new">ممنوع الكلام المشفر.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">24</div><div class="law-text-new">استغلال القلتشات = <strong>باند نهائي.</strong></div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">25</div><div class="law-text-new">عند الموت تنسى من قتلك.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">26</div><div class="law-text-new">ممنوع الستريم سنايب.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">27</div><div class="law-text-new">الإعصار = الرجوع لمكان السيناريو أو الشرطة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">28</div><div class="law-text-new">ممنوع الكلام خارج الرول بلاي.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">29</div><div class="law-text-new">الالتزام بالذوق العام.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">30</div><div class="law-text-new">ممنوع الخروج من السيرفر أثناء السيناريو.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">31</div><div class="law-text-new">ممنوع القتل بدون سبب.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">32</div><div class="law-text-new">يمنع لبس معدات الغوص خارج البحر.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">33</div><div class="law-text-new">يمنع حمل اللاعبين داخل المركبات والدبابات.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">34</div><div class="law-text-new">إذا انفجرت 4 كفرات → توقف المركبة فوراً.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">35</div><div class="law-text-new">ممنوع العلاج الذاتي بوجود مسعف.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">36</div><div class="law-text-new">الإجرام قبل الإعصار بـ15 دقيقة ممنوع.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">37</div><div class="law-text-new">يجب تقدير الموقف دائمًا.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">38</div><div class="law-text-new">يمنع دخول بث السيرفر وأنت داخل السيرفر.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">39</div><div class="law-text-new">يمنع التلفظ بدون سبب.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">40</div><div class="law-text-new">ممنوع إطلاق النار في منطقة حكومية.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">41</div><div class="law-text-new">يجب لبس ملابس تناسب الوظيفة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">42</div><div class="law-text-new">مشاركة الحسابات — <strong>باند نهائي.</strong></div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">43</div><div class="law-text-new">يمنع التخريم خلف الجدار.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">44</div><div class="law-text-new">المناطق الآمنة ليست للحماية من الملاحقة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">45</div><div class="law-text-new">يمنع سرقة الشرطة أو EMS.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">46</div><div class="law-text-new">القفزات الانتحارية ممنوعة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">47</div><div class="law-text-new">التهديد يجب أن يكون مباشراً.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">48</div><div class="law-text-new">إذا انصاع المواطن يمنع قتله.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-</div>
-</div>
-<!-- Safe Zones -->
-<div class="law-section" id="safe-zones">
-<div class="laws-section-header">
-<div class="laws-section-icon ix-28"><i class="fas fa-shield-halved"></i></div>
-<div>
-<h2 class="laws-section-title">المناطق الآمنة</h2>
-<p class="laws-section-sub">لا يجوز تنفيذ أي عمليات إجرامية داخل هذه المناطق</p>
-</div>
-<span class="laws-count-badge ix-29">14 منطقة</span>
-</div>
-<div class="safezones-grid">
-<div class="safezone-item"><i class="fas fa-shield-alt"></i> مراكز الشرطة</div>
-<div class="safezone-item"><i class="fas fa-hospital"></i> المستشفيات</div>
-<div class="safezone-item"><i class="fas fa-building"></i> الشقق العامة</div>
-<div class="safezone-item"><i class="fas fa-utensils"></i> المطاعم والكافيهات</div>
-<div class="safezone-item"><i class="fas fa-wrench"></i> ورش تصليح المركبات</div>
-<div class="safezone-item"><i class="fas fa-briefcase"></i> مركز الوظائف</div>
-<div class="safezone-item"><i class="fas fa-home"></i> العقار</div>
-<div class="safezone-item"><i class="fas fa-lock"></i> السجن</div>
-<div class="safezone-item"><i class="fas fa-gavel"></i> المحكمة</div>
-<div class="safezone-item"><i class="fas fa-car"></i> حجز المركبات</div>
-<div class="safezone-item"><i class="fas fa-tag"></i> معارض السيارات</div>
-<div class="safezone-item"><i class="fas fa-key"></i> تأجير السيارات</div>
-<div class="safezone-item"><i class="fas fa-dice"></i> الكازينو</div>
-<div class="safezone-item"><i class="fas fa-store"></i> ايكيا</div>
-</div>
-<div class="safezone-note"><i class="fas fa-info-circle"></i> جميع المواقف التابعة لهذه الأماكن تُعتبر مناطق آمنة أيضاً.</div>
-</div>
-<!-- Crime Laws -->
-<div class="law-section" id="crime-laws">
-<div class="laws-section-header">
-<div class="laws-section-icon ix-30"><i class="fas fa-handcuffs"></i></div>
-<div>
-<h2 class="laws-section-title">قوانين الإجرام</h2>
-<p class="laws-section-sub">القواعد الخاصة بالسيناريوهات الإجرامية والسرقات</p>
-</div>
-<span class="laws-count-badge ix-31">25 قانون</span>
-</div>
-<div class="laws-list" id="list-crime-laws">
-<div class="law-item-new"><div class="law-num">1</div><div class="law-text-new">يجب تقمص الحياة الواقعية أثناء السيناريو.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">2</div><div class="law-text-new">ممنوع الاتفاق مع شخص ليكون رهينة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">3</div><div class="law-text-new">مدة رهن الرهينة 20 دقيقة فقط.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">4</div><div class="law-text-new">ممنوع المتاجرة بالممنوعات في المناطق الآمنة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">5</div><div class="law-text-new">ممنوع سرقة المواطن بدون عداوة مثبتة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">6</div><div class="law-text-new">الحد الأقصى للعائلات: 10 أشخاص.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">7</div><div class="law-text-new">ممنوع تحالف العصابات ضد الداخلية إلا في السرقات.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">8</div><div class="law-text-new">ممنوع خطف رهينة للتفاوض على السجناء.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">9</div><div class="law-text-new">ممنوع الاعتداء على مفاوض الشرطة أو المجرمين.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">10</div><div class="law-text-new">ممنوع مقاومة سلاح ناري بسلاح أبيض.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">11</div><div class="law-text-new">ممنوع الخطف أو الاعتداء في قضايا المرور.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">12</div><div class="law-text-new">ممنوع مشاركة الرهينة مع خاطفين آخرين.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">13</div><div class="law-text-new">ممنوع تقليد ملابس العصابات.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">14</div><div class="law-text-new">يمنع الخطف بوجود مدنيين.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">15</div><div class="law-text-new">ممنوع خطف موظف حكومي.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">16</div><div class="law-text-new">ممنوع البقاء في موقع السرقة بعد التنفيذ.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">17</div><div class="law-text-new">ممنوع إيموت الباركور والسلايد.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">18</div><div class="law-text-new">ممنوع إطلاق النار داخل الهيومن لاب والمترو.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">19</div><div class="law-text-new">ممنوع طلب مبالغ مالية من الرهينة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">20</div><div class="law-text-new">عند إسقاطك يمنع إعطاء كول آوت.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">21</div><div class="law-text-new">يجب التخطيط قبل السرقة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">22</div><div class="law-text-new">الحد الداخل للسيناريو للعصابة: 4 أشخاص فقط.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">23</div><div class="law-text-new">افتعال فايت بدون سبب = <strong>باند نهائي.</strong></div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">24</div><div class="law-text-new">الحد الأعلى للرهائن: 4 أشخاص فقط.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">25</div><div class="law-text-new">ممنوع أي خطف أو اعتداء أثناء قضايا المرور.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-</div>
-</div>
-<!-- Robbery Numbers -->
-<div class="law-section" id="robbery-numbers">
-<div class="laws-section-header">
-<div class="laws-section-icon ix-32"><i class="fas fa-building-columns"></i></div>
-<div>
-<h2 class="laws-section-title">أعداد السرقات</h2>
-<p class="laws-section-sub">الحد الأقصى والأدنى للمشاركين في كل نوع سرقة</p>
-</div>
-</div>
-<div class="robbery-grid">
-<div class="robbery-card"><div class="robbery-name"><i class="fas fa-store"></i> Store Robbery</div><div class="robbery-stats"><span class="rob-crew">👥 1–3</span><span class="rob-police">🚔 5</span></div></div>
-<div class="robbery-card"><div class="robbery-name"><i class="fas fa-money-bill"></i> ATM Robbery</div><div class="robbery-stats"><span class="rob-crew">👥 1–3</span><span class="rob-police">🚔 5</span></div></div>
-<div class="robbery-card"><div class="robbery-name"><i class="fas fa-home"></i> House Robbery</div><div class="robbery-stats"><span class="rob-crew">👥 1–4</span><span class="rob-police">🚔 6</span></div></div>
-<div class="robbery-card"><div class="robbery-name"><i class="fas fa-shield-alt"></i> Police Staff House</div><div class="robbery-stats"><span class="rob-crew">👥 2–5</span><span class="rob-police">🚔 7</span></div></div>
-<div class="robbery-card robbery-card-hostage"><div class="robbery-badge-hostage">يتطلب رهينة</div><div class="robbery-name"><i class="fas fa-wifi"></i> DigitalDen Robbery</div><div class="robbery-stats"><span class="rob-crew">👥 2–5</span><span class="rob-police">🚔 7</span></div></div>
-<div class="robbery-card robbery-card-hostage"><div class="robbery-badge-hostage">يتطلب رهينة</div><div class="robbery-name"><i class="fas fa-tshirt"></i> Laundromat Robbery</div><div class="robbery-stats"><span class="rob-crew">👥 2–5</span><span class="rob-police">🚔 7</span></div></div>
-<div class="robbery-card robbery-card-hostage"><div class="robbery-badge-hostage">يتطلب رهينة</div><div class="robbery-name"><i class="fas fa-exchange-alt"></i> Cash Exchange</div><div class="robbery-stats"><span class="rob-crew">👥 3–6</span><span class="rob-police">🚔 8</span></div></div>
-<div class="robbery-card robbery-card-hostage"><div class="robbery-badge-hostage">يتطلب رهينة</div><div class="robbery-name"><i class="fas fa-gem"></i> Jewelry Robbery</div><div class="robbery-stats"><span class="rob-crew">👥 3–7</span><span class="rob-police">🚔 9</span></div></div>
-<div class="robbery-card robbery-card-hostage"><div class="robbery-badge-hostage">يتطلب رهينة</div><div class="robbery-name"><i class="fas fa-university"></i> Blaine County Bank</div><div class="robbery-stats"><span class="rob-crew">👥 4–7</span><span class="rob-police">🚔 9</span></div></div>
-<div class="robbery-card robbery-card-elite"><div class="robbery-badge-hostage ix-33">سرقة كبرى</div><div class="robbery-name"><i class="fas fa-landmark"></i> Maze Bank</div><div class="robbery-stats"><span class="rob-crew">👥 5–10</span><span class="rob-police">🚔 12</span></div></div>
-</div>
-<div class="robbery-open-cases">
-<div class="open-case-item"><i class="fas fa-users"></i><div><strong>الحالات المفتوحة للاعبين</strong><span>7 كحد أقصى</span></div></div>
-<div class="open-case-item"><i class="fas fa-shield-alt"></i><div><strong>الحالات المفتوحة للشرطة</strong><span>11 كحد أقصى</span></div></div>
-</div>
-</div>
-<!-- Restaurant Laws -->
-<div class="law-section" id="restaurant-laws">
-<div class="laws-section-header">
-<div class="laws-section-icon ix-34"><i class="fas fa-utensils"></i></div>
-<div>
-<h2 class="laws-section-title">قوانين المطاعم</h2>
-<p class="laws-section-sub">احترم موظفي المطاعم والتزم بالنظام</p>
-</div>
-<span class="laws-count-badge ix-35">10 قوانين</span>
-</div>
-<div class="laws-list" id="list-restaurant-laws">
-<div class="law-item-new"><div class="law-num">1</div><div class="law-text-new">احترام موظفي المطاعم وعدم الإساءة لهم أو خطفهم أثناء العمل.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">2</div><div class="law-text-new">يمنع المفاوضة على أسعار المطاعم.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">3</div><div class="law-text-new">يمنع لبس ملابس موظفي المطاعم لغير العاملين.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">4</div><div class="law-text-new">يجب الالتزام بالمواقف الخاصة بالمطاعم.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">5</div><div class="law-text-new">الوقوف بشكل منظم للحصول على الطعام.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">6</div><div class="law-text-new">الأسعار قابلة للتغيير من قِبل الإدارة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">7</div><div class="law-text-new">البيع يكون داخل المطعم فقط.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">8</div><div class="law-text-new">يمنع سرقة موظفي المطاعم.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">9</div><div class="law-text-new">يمنع بيع الوجبات لغير موظفي المطعم.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">10</div><div class="law-text-new">يمنع خطف موظفي المطاعم أثناء أوقات العمل.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-</div>
-</div>
-<!-- Discord Laws -->
-<div class="law-section" id="discord-laws">
-<div class="laws-section-header">
-<div class="laws-section-icon ix-36"><i class="fab fa-discord"></i></div>
-<div>
-<h2 class="laws-section-title">قوانين الديسكورد</h2>
-<p class="laws-section-sub">احترم المجتمع والتزم بقواعد الخادم</p>
-</div>
-<span class="laws-count-badge ix-37">8 قوانين</span>
-</div>
-<div class="laws-list" id="list-discord-laws">
-<div class="law-item-new"><div class="law-num">1</div><div class="law-text-new">احترام الجميع وعدم السب أو الإهانة حتى بطريقة غير مباشرة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">2</div><div class="law-text-new">يمنع نشر روابط دعوات سيرفرات أخرى.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">3</div><div class="law-text-new">ممنوع التدخل في شؤون الآخرين.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">4</div><div class="law-text-new">ممنوع التطرق للدين أو السياسة.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">5</div><div class="law-text-new">امتلاك أكثر من حساب = <strong>باند نهائي.</strong></div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new law-item-ban"><div class="law-num">6</div><div class="law-text-new">انتحال الشخصيات الإدارية = باند مباشر.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">7</div><div class="law-text-new">السخرية والاستهزاء يعاقب عليها.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-<div class="law-item-new"><div class="law-num">8</div><div class="law-text-new">الاستفسارات تكون عبر الدعم الفني فقط.</div><button class="law-copy-btn" onclick="copyLaw(this)" title="نسخ"><i class="fas fa-copy"></i></button></div>
-</div>
-</div>
-</div><!-- /laws-content-wrap -->
-<!-- NOTE -->
-<div class="note">
-<strong>ملاحظة:</strong>
-<ul>
-<li>يجب على الجميع ان يكون جدي في طريقة اللعب وطريقة إختياره للشخصيه .. تقمص الرول البلاي الحقيقي.</li>
-<li>القوانين قابلة للتغيير والتعديل وجميع الحقوق محفوظة لدى.</li>
-</ul>
-</div>
-<section class="faq-standalone-section" id="faq-display-section">
-<div class="faq-box">
-<div class="faq-title-area">
-<span class="faq-icon-top">💡</span>
-<h2>الأسئلة الشائعة</h2>
-<p>إجابات سريعة لأكثر الاستفسارات تكراراً داخل السيرفر</p>
-</div>
-<div class="faq-accordion-container">
-<div class="faq-item">
-<button class="faq-question">كيف يمكنني الحصول على عمل قانوني؟</button>
-<div class="faq-answer">
-<p>توجه إلى City Hall ثم مركز التوظيف واختر الوظيفة المناسبة.</p>
-</div>
-</div>
-<div class="faq-item">
-<button class="faq-question">ماذا أفعل إذا تعرضت لاعتداء أو سرقة؟</button>
-<div class="faq-answer">
-<p>اتصل بالشرطة فوراً أو توجه لأقرب مركز شرطة لتقديم بلاغ.</p>
-</div>
-</div>
-<div class="faq-item">
-<button class="faq-question">كيف أشتري سيارة؟</button>
-<div class="faq-answer">
-<p>اذهب لمعرض السيارات، تأكد أن عندك المبلغ الكافي ورخصة قيادة.</p>
-</div>
-</div>
-</div> <!-- faq-accordion-container -->
-</div> <!-- faq-box -->
-</section>
-</div>
-</div>
-
-<!-- TUTORIALS PAGE -->
-<div class="page" id="tutorials">
-<div class="container">
-<!-- Tutorials Hero -->
-<div class="laws-hero">
-  <div class="laws-hero-bg"></div>
-  <div class="laws-hero-inner">
-    <div class="laws-hero-icon"><i class="fas fa-clapperboard"></i></div>
-    <h1 class="laws-hero-title">الشروحات</h1>
-    <p class="laws-hero-sub">شروحات مرئية احترافية لمساعدتك في فهم وتركيب المنتجات</p>
-    <!-- Stats Row -->
-    <div class="tut-stats-row">
-      <div class="tut-stat"><i class="fas fa-play-circle"></i><span>3 شروحات</span></div>
-      <div class="tut-stat"><i class="fas fa-clock"></i><span>شروحات مجانية</span></div>
-      <div class="tut-stat"><i class="fas fa-star"></i><span>جودة عالية</span></div>
-    </div>
-  </div>
-</div>
-<!-- Category Tabs -->
-<div class="laws-tabs-wrap">
-  <div class="laws-tabs">
-    <button class="laws-tab active" onclick="showTutSection('tut-all', this)">
-      <i class="fas fa-th"></i><span>الكل</span>
-    </button>
-    <button class="laws-tab" onclick="showTutSection('tut-server', this)">
-      <i class="fas fa-server"></i><span>إعداد السيرفر</span>
-    </button>
-    <button class="laws-tab" onclick="showTutSection('tut-scripts', this)">
-      <i class="fas fa-code"></i><span>تركيب السكربتات</span>
-    </button>
-  </div>
-</div>
-<!-- Tutorials Grid -->
-<div class="laws-content-wrap">
-  <div class="law-section active" id="tut-all">
-    <div class="laws-section-header">
-      <div class="laws-section-icon"><i class="fas fa-film"></i></div>
-      <div>
-        <h2 class="laws-section-title">جميع الشروحات</h2>
-        <p class="laws-section-sub">شروحات خطوة بخطوة لكل شيء تحتاجه</p>
-      </div>
-      <span class="laws-count-badge">3 شروحات</span>
-    </div>
-    <div class="tutorials-grid-new">
-      <div class="tutorial-card-new" data-cat="server">
-        <div class="tutorial-badge"><i class="fas fa-database"></i></div>
-        <div class="tutorial-video-wrap">
-          <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/MSD8MJhnD-I?start=366"></iframe>
-        </div>
-        <div class="tutorial-card-body">
-          <div class="tutorial-cat-tag"><i class="fas fa-server"></i> إعداد السيرفر</div>
-          <h3 class="tutorial-card-title">شرح تركيب داتا بيس</h3>
-          <p class="tutorial-card-desc">شرح تركيب داتا بيس عن طريق تطبيق الـ XAMPP و HeidiSQL بتفاصيل دقيقة</p>
-          <div class="tutorial-tags">
-            <span class="tut-tag">XAMPP</span>
-            <span class="tut-tag">HeidiSQL</span>
-            <span class="tut-tag">Database</span>
-          </div>
-        </div>
-      </div>
-      <div class="tutorial-card-new" data-cat="scripts">
-        <div class="tutorial-badge"><i class="fas fa-puzzle-piece"></i></div>
-        <div class="tutorial-video-wrap">
-          <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/_PR6CIU_6nM"></iframe>
-        </div>
-        <div class="tutorial-card-body">
-          <div class="tutorial-cat-tag"><i class="fas fa-code"></i> تركيب السكربتات</div>
-          <h3 class="tutorial-card-title">شرح تركيب سكربت</h3>
-          <p class="tutorial-card-desc">شرح تركيب سكربت في سيرفرك عن طريق server.cfg أو TX Admin</p>
-          <div class="tutorial-tags">
-            <span class="tut-tag">server.cfg</span>
-            <span class="tut-tag">TX Admin</span>
-          </div>
-        </div>
-      </div>
-      <div class="tutorial-card-new" data-cat="server">
-        <div class="tutorial-badge"><i class="fas fa-rocket"></i></div>
-        <div class="tutorial-video-wrap">
-          <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/jJKpPejTF5I"></iframe>
-        </div>
-        <div class="tutorial-card-body">
-          <div class="tutorial-cat-tag"><i class="fas fa-server"></i> إعداد السيرفر</div>
-          <h3 class="tutorial-card-title">شرح فتح سيرفر</h3>
-          <p class="tutorial-card-desc">شرح شامل لفتح سيرفر FiveM من الصفر — XAMPP، HeidiSQL، txadmin، server.cfg</p>
-          <div class="tutorial-tags">
-            <span class="tut-tag">FiveM</span>
-            <span class="tut-tag">txadmin</span>
-            <span class="tut-tag">server.cfg</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="law-section" id="tut-server">
-    <div class="laws-section-header">
-      <div class="laws-section-icon"><i class="fas fa-server"></i></div>
-      <div>
-        <h2 class="laws-section-title">إعداد السيرفر</h2>
-        <p class="laws-section-sub">كل ما يخص إنشاء وإعداد سيرفر FiveM</p>
-      </div>
-      <span class="laws-count-badge">2 شروحات</span>
-    </div>
-    <div class="tutorials-grid-new">
-      <div class="tutorial-card-new">
-        <div class="tutorial-badge"><i class="fas fa-database"></i></div>
-        <div class="tutorial-video-wrap">
-          <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/MSD8MJhnD-I?start=366"></iframe>
-        </div>
-        <div class="tutorial-card-body">
-          <div class="tutorial-cat-tag"><i class="fas fa-server"></i> إعداد السيرفر</div>
-          <h3 class="tutorial-card-title">شرح تركيب داتا بيس</h3>
-          <p class="tutorial-card-desc">شرح تركيب داتا بيس عن طريق تطبيق الـ XAMPP و HeidiSQL بتفاصيل دقيقة</p>
-          <div class="tutorial-tags"><span class="tut-tag">XAMPP</span><span class="tut-tag">HeidiSQL</span></div>
-        </div>
-      </div>
-      <div class="tutorial-card-new">
-        <div class="tutorial-badge"><i class="fas fa-rocket"></i></div>
-        <div class="tutorial-video-wrap">
-          <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/jJKpPejTF5I"></iframe>
-        </div>
-        <div class="tutorial-card-body">
-          <div class="tutorial-cat-tag"><i class="fas fa-server"></i> إعداد السيرفر</div>
-          <h3 class="tutorial-card-title">شرح فتح سيرفر</h3>
-          <p class="tutorial-card-desc">شرح شامل لفتح سيرفر FiveM من الصفر</p>
-          <div class="tutorial-tags"><span class="tut-tag">FiveM</span><span class="tut-tag">txadmin</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="law-section" id="tut-scripts">
-    <div class="laws-section-header">
-      <div class="laws-section-icon" style="background:rgba(52,152,219,0.15);"><i class="fas fa-code" style="color:#3498db;"></i></div>
-      <div>
-        <h2 class="laws-section-title">تركيب السكربتات</h2>
-        <p class="laws-section-sub">كيف تركب سكربتات اسم السيرفر في سيرفرك</p>
-      </div>
-      <span class="laws-count-badge">1 شرح</span>
-    </div>
-    <div class="tutorials-grid-new">
-      <div class="tutorial-card-new">
-        <div class="tutorial-badge"><i class="fas fa-puzzle-piece"></i></div>
-        <div class="tutorial-video-wrap">
-          <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/_PR6CIU_6nM"></iframe>
-        </div>
-        <div class="tutorial-card-body">
-          <div class="tutorial-cat-tag"><i class="fas fa-code"></i> تركيب السكربتات</div>
-          <h3 class="tutorial-card-title">شرح تركيب سكربت</h3>
-          <p class="tutorial-card-desc">شرح تركيب سكربت في سيرفرك عن طريق server.cfg أو TX Admin</p>
-          <div class="tutorial-tags"><span class="tut-tag">server.cfg</span><span class="tut-tag">TX Admin</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-</div>
-<!-- STORE PAGE -->
-<div class="page" id="store">
-<div class="container">
-<div class="laws-hero">
-  <div class="laws-hero-bg"></div>
-  <div class="laws-hero-inner">
-    <div class="laws-hero-icon"><i class="fas fa-store"></i></div>
-    <h1 class="laws-hero-title">متجر اسم السيرفر</h1>
-    <p class="laws-hero-sub">سكربتات FiveM احترافية بجودة لا مثيل لها — تركيب فوري ودعم مستمر</p>
-    <div class="tut-stats-row">
-      <div class="tut-stat"><i class="fas fa-box"></i><span>6+ منتجات</span></div>
-      <div class="tut-stat"><i class="fas fa-headset"></i><span>دعم مجاني</span></div>
-      <div class="tut-stat"><i class="fas fa-bolt"></i><span>تسليم فوري</span></div>
-    </div>
-  </div>
-</div>
-<div class="laws-tabs-wrap">
-  <div class="laws-tabs">
-    <button class="laws-tab active" onclick="filterProductsTab('all', this)"><i class="fas fa-th"></i><span>الكل</span></button>
-    <button class="laws-tab" onclick="filterProductsTab('scripts', this)"><i class="fas fa-code"></i><span>سكربتات</span></button>
-    <button class="laws-tab" onclick="filterProductsTab('systems', this)"><i class="fas fa-layer-group"></i><span>أنظمة متكاملة</span></button>
-    <button class="laws-tab" onclick="filterProductsTab('maps', this)"><i class="fas fa-map"></i><span>خرائط وملفات</span></button>
-    <button class="laws-tab" onclick="filterProductsTab('free', this)"><i class="fas fa-gift"></i><span>مجاني</span></button>
-  </div>
-</div>
-<div class="laws-content-wrap">
-<div class="store-grid" id="store-grid">
-<div class="product-card" data-cat="systems">
-<span class="product-badge badge-hot">🔥 الأكثر مبيعاً</span>
-<div class="product-img-placeholder">🚔</div>
-<div class="product-body">
-<div class="product-category">أنظمة متكاملة</div>
-<div class="product-name">نظام LSPD المتكامل</div>
-<div class="product-desc">نظام شرطة كامل مع محكمة، سجل، ومطاردات احترافية</div>
-<div class="product-features">
-<span class="pf-tag"><i class="fas fa-check"></i> نظام محكمة</span>
-<span class="pf-tag"><i class="fas fa-check"></i> سجل جنائي</span>
-<span class="pf-tag"><i class="fas fa-check"></i> مطاردات</span>
-</div>
-<div class="product-footer">
-<div class="product-price"><span class="old-price">150$</span>99$</div>
-<div class="product-btns">
-<button class="details-btn" onclick="openProductModal('نظام LSPD المتكامل',99,'systems','🚔','نظام شرطة كامل مع محكمة، سجل، ومطاردات احترافية','نظام محكمة,سجل جنائي,مطاردات,نظام مداهمة,تقارير إدارية','150$')">
-<i class="fas fa-eye"></i>
-</button>
-<button class="buy-btn" onclick="buyProduct('نظام LSPD المتكامل',99,'systems','🚔')">
-<i class="fas fa-shopping-cart"></i> شراء
-                            </button>
-</div>
-</div>
-</div>
-</div>
-<div class="product-card" data-cat="scripts">
-<span class="product-badge badge-new">✨ جديد</span>
-<div class="product-img-placeholder">🏥</div>
-<div class="product-body">
-<div class="product-category">سكربتات</div>
-<div class="product-name">سكربت EMS الطبي</div>
-<div class="product-desc">نظام إسعاف متكامل مع خيارات علاج واقعية</div>
-<div class="product-features">
-<span class="pf-tag"><i class="fas fa-check"></i> علاج متقدم</span>
-<span class="pf-tag"><i class="fas fa-check"></i> سجلات مرضى</span>
-</div>
-<div class="product-footer">
-<div class="product-price">45$</div>
-<div class="product-btns">
-<button class="details-btn" onclick="openProductModal('سكربت EMS الطبي',45,'scripts','🏥','نظام إسعاف متكامل مع خيارات علاج واقعية','علاج متقدم,سجلات مرضى,نقل المصابين,أدوات طبية','')">
-<i class="fas fa-eye"></i>
-</button>
-<button class="buy-btn" onclick="buyProduct('سكربت EMS الطبي',45,'scripts','🏥')">
-<i class="fas fa-shopping-cart"></i> شراء
-                            </button>
-</div>
-</div>
-</div>
-</div>
-<div class="product-card" data-cat="scripts">
-<div class="product-img-placeholder">🏦</div>
-<div class="product-body">
-<div class="product-category">سكربتات</div>
-<div class="product-name">نظام السرقات المتقدم</div>
-<div class="product-desc">بنوك، متاجر، وسرقات منازل بمنطق RP احترافي</div>
-<div class="product-features">
-<span class="pf-tag"><i class="fas fa-check"></i> بنوك</span>
-<span class="pf-tag"><i class="fas fa-check"></i> متاجر</span>
-<span class="pf-tag"><i class="fas fa-check"></i> منازل</span>
-</div>
-<div class="product-footer">
-<div class="product-price">75$</div>
-<div class="product-btns">
-<button class="details-btn" onclick="openProductModal('نظام السرقات المتقدم',75,'scripts','🏦','بنوك، متاجر، وسرقات منازل بمنطق RP احترافي','سرقة بنوك,سرقة متاجر,سرقة منازل,نظام هروب,منطق RP','')">
-<i class="fas fa-eye"></i>
-</button>
-<button class="buy-btn" onclick="buyProduct('نظام السرقات المتقدم',75,'scripts','🏦')">
-<i class="fas fa-shopping-cart"></i> شراء
-                            </button>
-</div>
-</div>
-</div>
-</div>
-<div class="product-card" data-cat="systems">
-<span class="product-badge badge-hot">🔥 مميز</span>
-<div class="product-img-placeholder">🏙️</div>
-<div class="product-body">
-<div class="product-category">أنظمة متكاملة</div>
-<div class="product-name">حزمة السيرفر الكاملة</div>
-<div class="product-desc">كل ما تحتاجه لتشغيل سيرفر CFW احترافي من أول يوم</div>
-<div class="product-features">
-<span class="pf-tag"><i class="fas fa-check"></i> +50 سكربت</span>
-<span class="pf-tag"><i class="fas fa-check"></i> دعم مجاني</span>
-<span class="pf-tag"><i class="fas fa-check"></i> تركيب</span>
-</div>
-<div class="product-footer">
-<div class="product-price"><span class="old-price">500$</span>299$</div>
-<div class="product-btns">
-<button class="details-btn" onclick="openProductModal('حزمة السيرفر الكاملة',299,'systems','🏙️','كل ما تحتاجه لتشغيل سيرفر CFW احترافي من أول يوم','+50 سكربت,دعم مجاني,تركيب كامل,تحديثات مجانية,داتا بيس جاهزة','500$')">
-<i class="fas fa-eye"></i>
-</button>
-<button class="buy-btn" onclick="buyProduct('حزمة السيرفر الكاملة',299,'systems','🏙️')">
-<i class="fas fa-shopping-cart"></i> شراء
-                            </button>
-</div>
-</div>
-</div>
-</div>
-<div class="product-card" data-cat="maps">
-<div class="product-img-placeholder">🗺️</div>
-<div class="product-body">
-<div class="product-category">خرائط وملفات</div>
-<div class="product-name">خريطة مطار مخصصة</div>
-<div class="product-desc">خريطة مطار MLO مع مواقف وصالات احترافية</div>
-<div class="product-features">
-<span class="pf-tag"><i class="fas fa-check"></i> MLO جاهز</span>
-<span class="pf-tag"><i class="fas fa-check"></i> مواقف</span>
-</div>
-<div class="product-footer">
-<div class="product-price">35$</div>
-<div class="product-btns">
-<button class="details-btn" onclick="openProductModal('خريطة مطار مخصصة',35,'maps','🗺️','خريطة مطار MLO مع مواقف وصالات احترافية','MLO جاهز,مواقف سيارات,صالات انتظار,مدرج واقعي','')">
-<i class="fas fa-eye"></i>
-</button>
-<button class="buy-btn" onclick="buyProduct('خريطة مطار مخصصة',35,'maps','🗺️')">
-<i class="fas fa-shopping-cart"></i> شراء
-                            </button>
-</div>
-</div>
-</div>
-</div>
-<div class="product-card" data-cat="free">
-<span class="product-badge badge-new">🎁 مجاني</span>
-<div class="product-img-placeholder">📦</div>
-<div class="product-body">
-<div class="product-category">مجاني</div>
-<div class="product-name">سكربت الإعلانات</div>
-<div class="product-desc">نظام إعلانات داخل السيرفر مع دعم عربي كامل</div>
-<div class="product-features">
-<span class="pf-tag"><i class="fas fa-check"></i> دعم عربي</span>
-<span class="pf-tag"><i class="fas fa-check"></i> مجاني</span>
-</div>
-<div class="product-footer">
-<div class="product-price product-price-free">مجاني</div>
-<div class="product-btns">
-<button class="details-btn" onclick="openProductModal('سكربت الإعلانات',0,'free','📦','نظام إعلانات داخل السيرفر مع دعم عربي كامل','دعم عربي كامل,إعلانات صوتية,إعلانات نصية,سهل التركيب','')">
-<i class="fas fa-eye"></i>
-</button>
-<button class="buy-btn free" onclick="buyProduct('سكربت الإعلانات',0,'free','📦')">
-<i class="fas fa-download"></i> تحميل
-    </button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- JOBS PAGE -->
-<div class="page" id="jobs">
-<div class="container">
-<!-- Jobs Hero -->
-<div class="laws-hero">
-  <div class="laws-hero-bg"></div>
-  <div class="laws-hero-inner">
-    <div class="laws-hero-icon"><i class="fas fa-paper-plane"></i></div>
-    <h1 class="laws-hero-title">تقديم الوظائف</h1>
-    <p class="laws-hero-sub">انضم لفريق اسم السيرفر — اختر وظيفتك وابدأ رحلتك</p>
-    <div class="tut-stats-row">
-      <div class="tut-stat"><i class="fas fa-briefcase"></i><span>3 وظائف متاحة</span></div>
-      <div class="tut-stat"><i class="fas fa-clock"></i><span>قبول سريع</span></div>
-      <div class="tut-stat"><i class="fas fa-star"></i><span>فريق محترف</span></div>
-    </div>
-  </div>
-</div>
-<!-- Category Tabs -->
-<div class="laws-tabs-wrap">
-  <div class="laws-tabs">
-    <button class="laws-tab active" onclick="showJobSection('jobs-all', this)">
-      <i class="fas fa-th"></i><span>الكل</span>
-    </button>
-    <button class="laws-tab" onclick="showJobSection('jobs-gov', this)">
-      <i class="fas fa-landmark"></i><span>حكومي</span>
-    </button>
-    <button class="laws-tab" onclick="showJobSection('jobs-admin', this)">
-      <i class="fas fa-user-shield"></i><span>إدارة</span>
-    </button>
-    <button class="laws-tab" onclick="showJobSection('jobs-gangs', this)">
-      <i class="fas fa-skull"></i><span>عصابات</span>
-    </button>
-  </div>
-</div>
-<!-- Jobs Content -->
-<div class="laws-content-wrap">
-  <div class="law-section active" id="jobs-all">
-    <div class="laws-section-header">
-      <div class="laws-section-icon"><i class="fas fa-users"></i></div>
-      <div>
-        <h2 class="laws-section-title">جميع الوظائف المتاحة</h2>
-        <p class="laws-section-sub">اقرأ المتطلبات جيداً قبل التقديم</p>
-      </div>
-      <span class="laws-count-badge">3 وظائف</span>
-    </div>
-    <div class="jobs-grid-new">
-      <div class="job-card-new job-police">
-        <div class="job-card-header">
-          <div class="job-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
-          <div class="job-card-top-info">
-            <div class="job-cat-tag"><i class="fas fa-landmark"></i> حكومي</div>
-            <div class="job-status-badge open">متاح</div>
-          </div>
-        </div>
-        <h3 class="job-card-title">شرطة LSPD</h3>
-        <p class="job-card-desc">انضم إلى الشرطة وحافظ على الأمن والنظام داخل المدينة. كن الصوت العدالة في اسم السيرفر.</p>
-        <div class="job-requirements">
-          <div class="job-req-title"><i class="fas fa-list-check"></i> المتطلبات الأساسية</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> إلتزام بقوانين الرول بلاي</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> خبرة في سيرفرات FiveM</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> مايك يعمل</div>
-        </div>
-        <button class="job-apply-btn" id="btn-police" onclick="openJobModal('police')">
-          <i class="fas fa-paper-plane"></i> تقديم الآن
-        </button>
-      </div>
-
-      <div class="job-card-new job-ems">
-        <div class="job-card-header">
-          <div class="job-icon-wrap"><i class="fa-solid fa-star-of-life"></i></div>
-          <div class="job-card-top-info">
-            <div class="job-cat-tag"><i class="fas fa-landmark"></i> حكومي</div>
-            <div class="job-status-badge open">متاح</div>
-          </div>
-        </div>
-        <h3 class="job-card-title">فريق EMS</h3>
-        <p class="job-card-desc">انضم إلى الإسعاف وأنقذ الأرواح في حوادث المدينة. كن البطل الذي لا يُرى.</p>
-        <div class="job-requirements">
-          <div class="job-req-title"><i class="fas fa-list-check"></i> المتطلبات الأساسية</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> هدوء وسرعة بديهة</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> معرفة بمناطق الخريطة</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> تقمص شخصية المسعف</div>
-        </div>
-        <button class="job-apply-btn" id="btn-ems" onclick="openJobModal('ems')">
-          <i class="fas fa-paper-plane"></i> تقديم الآن
-        </button>
-      </div>
-
-      <div class="job-card-new job-staff">
-        <div class="job-card-header">
-          <div class="job-icon-wrap"><i class="fa-solid fa-user-gear"></i></div>
-          <div class="job-card-top-info">
-            <div class="job-cat-tag"><i class="fas fa-user-shield"></i> إدارة</div>
-            <div class="job-status-badge open">متاح</div>
-          </div>
-        </div>
-        <h3 class="job-card-title">فريق الإدارة</h3>
-        <p class="job-card-desc">انضم للإدارة وساهم في بناء أفضل سيرفر FiveM. احترافية عالية مطلوبة.</p>
-        <div class="job-requirements">
-          <div class="job-req-title"><i class="fas fa-list-check"></i> المتطلبات الأساسية</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> خبرة سابقة في الإدارة</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> توفر يومي لا يقل عن 3 ساعات</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> عمر لا يقل عن 16 سنة</div>
-        </div>
-        <button class="job-apply-btn" id="btn-staff" onclick="openJobModal('staff')">
-          <i class="fas fa-paper-plane"></i> تقديم الآن
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="law-section" id="jobs-gov">
-    <div class="laws-section-header">
-      <div class="laws-section-icon"><i class="fas fa-landmark"></i></div>
-      <div><h2 class="laws-section-title">الوظائف الحكومية</h2><p class="laws-section-sub">شرطة وإسعاف</p></div>
-      <span class="laws-count-badge">2 وظائف</span>
-    </div>
-    <div class="jobs-grid-new">
-      <div class="job-card-new job-police">
-        <div class="job-card-header">
-          <div class="job-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
-          <div class="job-card-top-info">
-            <div class="job-cat-tag"><i class="fas fa-landmark"></i> حكومي</div>
-            <div class="job-status-badge open">متاح</div>
-          </div>
-        </div>
-        <h3 class="job-card-title">شرطة LSPD</h3>
-        <p class="job-card-desc">انضم إلى الشرطة وحافظ على الأمن والنظام داخل المدينة.</p>
-        <div class="job-requirements">
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> إلتزام بقوانين الرول بلاي</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> خبرة في سيرفرات FiveM</div>
-        </div>
-        <button class="job-apply-btn" data-job="police" onclick="openJobModal('police')"><i class="fas fa-paper-plane"></i> تقديم الآن</button>
-      </div>
-      <div class="job-card-new job-ems">
-        <div class="job-card-header">
-          <div class="job-icon-wrap"><i class="fa-solid fa-star-of-life"></i></div>
-          <div class="job-card-top-info">
-            <div class="job-cat-tag"><i class="fas fa-landmark"></i> حكومي</div>
-            <div class="job-status-badge open">متاح</div>
-          </div>
-        </div>
-        <h3 class="job-card-title">فريق EMS</h3>
-        <p class="job-card-desc">انضم إلى الإسعاف وأنقذ الأرواح في حوادث المدينة.</p>
-        <div class="job-requirements">
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> هدوء وسرعة بديهة</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> تقمص شخصية المسعف</div>
-        </div>
-        <button class="job-apply-btn" data-job="ems" onclick="openJobModal('ems')"><i class="fas fa-paper-plane"></i> تقديم الآن</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="law-section" id="jobs-admin">
-    <div class="laws-section-header">
-      <div class="laws-section-icon" style="background:rgba(155,89,182,0.15);"><i class="fas fa-user-shield" style="color:#9b59b6;"></i></div>
-      <div><h2 class="laws-section-title">فريق الإدارة</h2><p class="laws-section-sub">انضم للفريق الإداري</p></div>
-      <span class="laws-count-badge">1 وظيفة</span>
-    </div>
-    <div class="jobs-grid-new">
-      <div class="job-card-new job-staff">
-        <div class="job-card-header">
-          <div class="job-icon-wrap"><i class="fa-solid fa-user-gear"></i></div>
-          <div class="job-card-top-info">
-            <div class="job-cat-tag"><i class="fas fa-user-shield"></i> إدارة</div>
-            <div class="job-status-badge open">متاح</div>
-          </div>
-        </div>
-        <h3 class="job-card-title">فريق الإدارة</h3>
-        <p class="job-card-desc">انضم للإدارة وساهم في بناء أفضل سيرفر FiveM.</p>
-        <div class="job-requirements">
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> خبرة سابقة في الإدارة</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> توفر يومي 3 ساعات+</div>
-          <div class="job-req-item"><i class="fas fa-check-circle"></i> عمر 16+</div>
-        </div>
-        <button class="job-apply-btn" data-job="staff" onclick="openJobModal('staff')"><i class="fas fa-paper-plane"></i> تقديم الآن</button>
-      </div>
-    </div>
-  </div>
-<div class="law-section" id="jobs-gangs">
-    <div class="laws-section-header">
-        <div class="laws-section-icon" style="background:rgba(180,0,0,0.15);"><i class="fas fa-skull" style="color:#cc2222;"></i></div>
-        <div>
-            <h2 class="laws-section-title">العصابات</h2>
-            <p class="laws-section-sub">اختر عصابتك وقدّم طلب الانضمام</p>
-        </div>
-        <span class="laws-count-badge">15 عصابة</span>
-    </div>
-    <div class="jobs-grid-new">
-
-        <div class="job-card-new" style="border-color:rgba(0,160,0,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(0,160,0,0.2),rgba(0,110,0,0.15));border-color:rgba(0,160,0,0.3)"><i class="fas fa-skull" style="color:#00c800"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#00c800;background:rgba(0,160,0,0.1);border-color:rgba(0,160,0,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#00c800">Families</h3>
-            <p class="job-card-desc">عصابة الضاحية الخضراء، منظمة وتضع الولاء للعائلة فوق كل اعتبار.</p>
-            <button class="job-apply-btn" data-job="gang_families" onclick="openJobModal('gang_families')" style="background:linear-gradient(135deg,#006400,#00c800)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(139,69,19,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(139,69,19,0.2),rgba(101,67,33,0.15));border-color:rgba(139,69,19,0.3)"><i class="fas fa-skull" style="color:#8b4513"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#8b4513;background:rgba(139,69,19,0.1);border-color:rgba(139,69,19,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#8b4513">Scrap</h3>
-            <p class="job-card-desc">عصابة الخردة، يتقنون فن البقاء والسيطرة على الموارد المهجورة.</p>
-            <button class="job-apply-btn" data-job="gang_scrap" onclick="openJobModal('gang_scrap')" style="background:linear-gradient(135deg,#5d2e0a,#8b4513)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(128,0,128,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(128,0,128,0.2),rgba(75,0,130,0.15));border-color:rgba(128,0,128,0.3)"><i class="fas fa-skull" style="color:#a020f0"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#a020f0;background:rgba(128,0,128,0.1);border-color:rgba(128,0,128,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#a020f0">GSG</h3>
-            <p class="job-card-desc">عصابة قوية بانتشارها الواسع وفرض سيطرتها المطلقة.</p>
-            <button class="job-apply-btn" data-job="gang_gsg" onclick="openJobModal('gang_gsg')" style="background:linear-gradient(135deg,#4b0082,#a020f0)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(139,0,0,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(139,0,0,0.2),rgba(80,0,0,0.15));border-color:rgba(139,0,0,0.3)"><i class="fas fa-skull" style="color:#8b0000"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#8b0000;background:rgba(139,0,0,0.1);border-color:rgba(139,0,0,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#8b0000">Yakuza</h3>
-            <p class="job-card-desc">المافيا اليابانية العريقة، تعتمد على الشرف والقوة في تنفيذ مهامها.</p>
-            <button class="job-apply-btn" data-job="gang_yakuza" onclick="openJobModal('gang_yakuza')" style="background:linear-gradient(135deg,#4a0000,#8b0000)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(255,0,0,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(255,0,0,0.2),rgba(200,0,0,0.15));border-color:rgba(255,0,0,0.3)"><i class="fas fa-skull" style="color:#ff0000"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#ff0000;background:rgba(255,0,0,0.1);border-color:rgba(255,0,0,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#ff0000">NeighborHood</h3>
-            <p class="job-card-desc">سكان الحي الأصليين، يدافعون عن منطقتهم بكل شراسة.</p>
-            <button class="job-apply-btn" data-job="gang_neighborhood" onclick="openJobModal('gang_neighborhood')" style="background:linear-gradient(135deg,#b30000,#ff0000)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(0,0,255,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(0,0,255,0.2),rgba(0,0,150,0.15));border-color:rgba(0,0,255,0.3)"><i class="fas fa-skull" style="color:#0000ff"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#0000ff;background:rgba(0,0,255,0.1);border-color:rgba(0,0,255,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#0000ff">Crips</h3>
-            <p class="job-card-desc">عصابة اللون الأزرق، يمتلكون تاريخاً عريقاً في شوارع المدينة.</p>
-            <button class="job-apply-btn" data-job="gang_crips" onclick="openJobModal('gang_crips')" style="background:linear-gradient(135deg,#00008b,#0000ff)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(210,180,140,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(210,180,140,0.2),rgba(180,150,110,0.15));border-color:rgba(210,180,140,0.3)"><i class="fas fa-skull" style="color:#d2b48c"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#d2b48c;background:rgba(210,180,140,0.1);border-color:rgba(210,180,140,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#d2b48c">11 Street</h3>
-            <p class="job-card-desc">عصابة الشارع الحادي عشر، متخصصون في العمليات النوعية.</p>
-            <button class="job-apply-btn" data-job="gang_11street" onclick="openJobModal('gang_11street')" style="background:linear-gradient(135deg,#8b7355,#d2b48c)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(255,255,255,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(255,255,255,0.2),rgba(200,200,200,0.15));border-color:rgba(255,255,255,0.3)"><i class="fas fa-skull" style="color:#ffffff"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#ffffff;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#ffffff">Quietless</h3>
-            <p class="job-card-desc">الصمت المطبق، يتحركون كالأشباح في قلب المدينة.</p>
-            <button class="job-apply-btn" data-job="gang_quietless" onclick="openJobModal('gang_quietless')" style="background:linear-gradient(135deg,#999,#fff);color:#000">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(255,0,0,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(255,0,0,0.2),rgba(200,0,0,0.15));border-color:rgba(255,0,0,0.3)"><i class="fas fa-skull" style="color:#ff0000"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#ff0000;background:rgba(255,0,0,0.1);border-color:rgba(255,0,0,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#ff0000">18 Street</h3>
-            <p class="job-card-desc">عصابة الشارع 18، القوة في العدد والسيطرة.</p>
-            <button class="job-apply-btn" data-job="gang_18street" onclick="openJobModal('gang_18street')" style="background:linear-gradient(135deg,#b30000,#ff0000)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(255,69,0,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(255,69,0,0.2),rgba(200,50,0,0.15));border-color:rgba(255,69,0,0.3)"><i class="fas fa-skull" style="color:#ff4500"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#ff4500;background:rgba(255,69,0,0.1);border-color:rgba(255,69,0,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#ff4500">14 Norteños</h3>
-            <p class="job-card-desc">عصابة نورتينوس، ولاء للشمال وقوة لا يستهان بها.</p>
-            <button class="job-apply-btn" data-job="gang_nortenos" onclick="openJobModal('gang_nortenos')" style="background:linear-gradient(135deg,#b33000,#ff4500)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(176,196,222,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(176,196,222,0.2),rgba(112,128,144,0.15));border-color:rgba(176,196,222,0.3)"><i class="fas fa-skull" style="color:#b0c4de"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#b0c4de;background:rgba(176,196,222,0.1);border-color:rgba(176,196,222,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#b0c4de">el-patron</h3>
-            <p class="job-card-desc">الرئيس، يديرون العمليات بذكاء استراتيجي ونفوذ كبير.</p>
-            <button class="job-apply-btn" data-job="gang_elpatron" onclick="openJobModal('gang_elpatron')" style="background:linear-gradient(135deg,#778899,#b0c4de)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(255,255,0,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(255,255,0,0.2),rgba(200,200,0,0.15));border-color:rgba(255,255,0,0.3)"><i class="fas fa-skull" style="color:#ffff00"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#ffff00;background:rgba(255,255,0,0.1);border-color:rgba(255,255,0,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#ffff00">VAGOS</h3>
-            <p class="job-card-desc">عصابة اللون الأصفر، يمتلكون أقوى الروابط الأخوية في الشارع.</p>
-            <button class="job-apply-btn" data-job="gang_vagos" onclick="openJobModal('gang_vagos')" style="background:linear-gradient(135deg,#b3b300,#ffff00);color:#000">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(255,165,0,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(255,165,0,0.2),rgba(200,120,0,0.15));border-color:rgba(255,165,0,0.3)"><i class="fas fa-skull" style="color:#ffa500"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#ffa500;background:rgba(255,165,0,0.1);border-color:rgba(255,165,0,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#ffa500">26 YARD</h3>
-            <p class="job-card-desc">مربعات الـ 26، يسيطرون على الساحات الخلفية للمدينة.</p>
-            <button class="job-apply-btn" data-job="gang_26yard" onclick="openJobModal('gang_26yard')" style="background:linear-gradient(135deg,#cc8400,#ffa500)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(0,0,139,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(0,0,139,0.2),rgba(0,0,100,0.15));border-color:rgba(0,0,139,0.3)"><i class="fas fa-skull" style="color:#00008b"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#00008b;background:rgba(0,0,139,0.1);border-color:rgba(0,0,139,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#00008b">BOOMERS</h3>
-            <p class="job-card-desc">البومرز، لا أحد يستطيع الوقوف في وجه انفجار قوتهم.</p>
-            <button class="job-apply-btn" data-job="gang_boomers" onclick="openJobModal('gang_boomers')" style="background:linear-gradient(135deg,#000050,#00008b)">تقديم الآن</button>
-        </div>
-
-        <div class="job-card-new" style="border-color:rgba(128,128,128,0.25);">
-            <div class="job-card-header">
-                <div class="job-icon-wrap" style="background:linear-gradient(135deg,rgba(128,128,128,0.2),rgba(100,100,100,0.15));border-color:rgba(128,128,128,0.3)"><i class="fas fa-skull" style="color:#808080"></i></div>
-                <div class="job-card-top-info">
-                    <div class="job-cat-tag" style="color:#808080;background:rgba(128,128,128,0.1);border-color:rgba(128,128,128,0.2)"><i class="fas fa-mask"></i> إجرام</div>
-                    <div class="job-status-badge open">متاح</div>
-                </div>
-            </div>
-            <h3 class="job-card-title" style="color:#808080">ElMundo</h3>
-            <p class="job-card-desc">العالم، طموحاتهم لا تتوقف عند حدود الشارع، بل تتعدى ذلك.</p>
-            <button class="job-apply-btn" data-job="gang_elmundo" onclick="openJobModal('gang_elmundo')" style="background:linear-gradient(135deg,#555,#808080)">تقديم الآن</button>
-        </div>
-
-    </div>
-</div>
-
-    </div>
-  </div>
-
-</div>
-</div>
-</div>
-<!-- JOB MODAL -->
-<div class="modal" id="job-modal">
-<div class="modal-content">
-<div class="modal-header">
-<div class="modal-header-content">
-<div class="modal-job-icon" id="modal-job-icon">📋</div>
-<div>
-<h3 id="modal-title">تقديم على وظيفة</h3>
-<p class="modal-subtitle">تأكد من ملء جميع الحقول بدقة</p>
-</div>
-</div>
-<button class="close-modal" onclick="closeModal()">×</button>
-</div>
-<form id="job-form" novalidate="">
-<input id="job-type" type="hidden"/>
-<!-- اسم الشخصية -->
-<div class="form-group" id="fg-character-name">
-<label for="character-name">
-<i class="fas fa-user"></i>
-                    اسمك الثلاثي (Character Name)
-                    <span class="field-required">*</span>
-</label>
-<input autocomplete="off" id="character-name" placeholder="مثال: Ahmad Al-Rashidi" required="" type="text"/>
-<span class="field-hint">الاسم الذي سجلته في اللعبة</span>
-<span class="field-error" id="err-name"></span>
-</div>
-<!-- Steam ID -->
-<div class="form-group" id="fg-character-id">
-<label for="character-id">
-<i class="fab fa-steam"></i>
-                    Steam ID
-                    <span class="field-required">*</span>
-</label>
-<input autocomplete="off" id="character-id" placeholder="steam:110000112345678" required="" type="text"/>
-<span class="field-hint">تجده عبر F8 ثم اكتب: id</span>
-<span class="field-error" id="err-steam"></span>
-</div>
-<!-- Discord ID (مقفل) -->
-<div class="form-group">
-<label for="discord-id-input">
-<i class="fab fa-discord"></i>
-                    Discord ID
-                </label>
-<div class="locked-input-wrapper">
-<input class="locked-input" id="discord-id-input" placeholder="سجّل دخولك لجلب الـ ID تلقائياً" readonly="" type="text"/>
-<span class="lock-icon"><i class="fas fa-lock"></i></span>
-</div>
-<span class="field-hint">يُملأ تلقائياً عند تسجيل الدخول</span>
-</div>
-<!-- الوقت المتاح -->
-<div class="form-group" id="fg-phone-number">
-<label for="phone-number">
-<i class="fas fa-clock"></i>
-                    الوقت المتاح يومياً
-                    <span class="field-required">*</span>
-</label>
-<input id="phone-number" placeholder="مثال: 4-6 ساعات" required="" type="text"/>
-<span class="field-error" id="err-time"></span>
-</div>
-<!-- سبب التقديم -->
-<div class="form-group" id="fg-reason">
-<label for="reason">
-<i class="fas fa-pen-to-square"></i>
-                    سبب التقديم
-                    <span class="field-required">*</span>
-</label>
-<textarea id="reason" placeholder="اكتب سبب تقديمك بشكل واضح ومفصّل... (20 حرف على الأقل)" required="" rows="4"></textarea>
-<div class="reason-footer">
-<span class="field-error" id="err-reason"></span>
-<span class="char-count" id="reason-count">0 / 20 حرف</span>
-</div>
-</div>
-<div class="modal-footer">
-<button class="btn btn-cancel-form" onclick="closeModal()" type="button">إلغاء</button>
-<button class="btn btn-submit-form" id="submit-job-btn" type="submit">
-<i class="fas fa-paper-plane"></i>
-                    إرسال الطلب
-                </button>
-</div>
-</form>
-</div>
-</div>
-<!-- Notification -->
-<div class="notification" id="notification">
-<i class="fas fa-check-circle"></i>
-<span id="notification-message">تم إرسال تقديمك وستصلك رسالة بالقبول</span>
-</div>
-<div class="ai-bubble" id="ai-chat-toggle" onclick="toggleChat()">
-<span>🤖</span>
-</div>
-<div class="chat-window" id="ai-chat-window">
-<div class="chat-header">
-<div class="header-content">
-<span class="online-dot"></span>
-<span>🤖 مساعد اسم السيرفر الذكي</span>
-</div>
-<button class="close-btn" onclick="toggleChat()" title="إغلاق">×</button>
-</div>
-<div class="chat-body" id="chat-body">
-<div class="ai-msg">
-<div class="ai-response">
-<div class="response-title">👋 مرحبًا بك في اسم السيرفر!</div>
-<div class="response-message">
-                    أنا المساعد الذكي للسيرفر، هنا لمساعدتك في:
-                    <br/>• الإجابة على أسئلة القوانين
-                    <br/>• شرح قوانين الرول بلاي
-                    <br/>• توضيح أنظمة السرقات والعصابات
-                    <br/>• أي استفسار يخص السيرفر
-                </div>
-</div>
-</div>
-</div>
-<div class="chat-footer">
-<input id="ai-input" placeholder="اكتب سؤالك أو اختر من الأزرار..." type="text"/>
-<button id="send-btn" onclick="askAI()">إرسال</button>
-</div>
-</div>
-<!-- Footer -->
-<div class="container">
-<footer class="footer">
-<div class="social-icons">
-<!-- YouTube -->
-<a href="https://www.youtube.com/@PlusDev" target="_blank">
-<i class="fab fa-youtube"></i>
-</a>
-<!-- Twitter / X -->
-<a href="https://twitter.com/PlusDev" target="_blank">
-<i class="fab fa-twitter"></i>
-</a>
-<!-- TikTok -->
-<a href="https://www.tiktok.com/@YOUR_TIKTOK" target="_blank">
-<i class="fab fa-tiktok"></i>
-</a>
-<!-- Instagram -->
-<a href="https://www.instagram.com/YOUR_INSTAGRAM/" target="_blank">
-<i class="fab fa-instagram"></i>
-</a>
-<!-- Discord -->
-<a href="https://discord.gg/pus" target="_blank">
-<i class="fab fa-discord"></i>
-</a>
-</div>
-<div class="footer-divider"></div>
-<div class="copyright">
-            جميع الحقوق محفوظة © اسم السيرفر 2025
-        </div>
-</footer>
-</div>
-<!-- Notification New -->
-<div class="custom-modal" id="confirm-modal">
-<div class="modal-content">
-<i class="fa-solid fa-circle-exclamation modal-icon" id="modal-icon"></i>
-<h3 id="modal-title">تأكيد الإجراء</h3>
-<p id="modal-message">هل أنت متأكد من تنفيذ هذا القرار؟</p>
-<div class="modal-buttons">
-<button class="modal-btn btn-confirm" id="confirm-yes">تأكيد</button>
-<button class="modal-btn btn-cancel" id="confirm-no" onclick="closeConfirmModal()">إلغاء</button>
-</div>
-</div>
-</div>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="config.js"></script>
-<script src="script.js"></script>
-<script src="ai-chat-enhanced.js"></script>
-<div class="toast-notif" id="toast-notif">
-<span class="toast-icon" id="toast-icon">🔔</span>
-<div class="toast-content">
-<div class="toast-title" id="toast-title">إشعار</div>
-<div class="toast-msg" id="toast-msg"></div>
-</div>
-</div>
-<!-- modal التذكرة للمستخدم -->
-<div class="ix-45" id="ticket-modal-overlay" onclick="if(event.target===this)closeTicketModal()">
-<div class="ix-46">
-
-<button class="ix-47" onclick="closeTicketModal()">✕</button>
-<div id="tkt-form">
-<div class="ix-48"><i class="fas fa-ticket-alt ix-49"></i>فتح تذكرة دعم</div>
-<div class="ix-50">سيتم إرسال تذكرتك لفريق الدعم مباشرةً</div>
-<div class="ix-51">نوع المشكلة</div>
-<div class="ix-52">
-<div class="tkt-opt sel" onclick="selTkt(this,'🚨 مشكلة تقنية')"><span class="ico">🚨</span>مشكلة تقنية</div>
-<div class="tkt-opt" onclick="selTkt(this,'⚖️ شكوى لاعب')"><span class="ico">⚖️</span>شكوى لاعب</div>
-<div class="tkt-opt" onclick="selTkt(this,'💰 مشكلة متجر')"><span class="ico">💰</span>مشكلة متجر</div>
-<div class="tkt-opt" onclick="selTkt(this,'📋 استفسار قانون')"><span class="ico">📋</span>استفسار قانون</div>
-<div class="tkt-opt" onclick="selTkt(this,'🏢 طلب وظيفة')"><span class="ico">🏢</span>طلب وظيفة</div>
-<div class="tkt-opt" onclick="selTkt(this,'💬 أخرى')"><span class="ico">💬</span>أخرى</div>
-</div>
-<div class="ix-53">عنوان التذكرة</div>
-<input class="tkt-inp" id="tkt-subject" placeholder="مثال: مشكلة في التسجيل">
-<div class="ix-54">وصف المشكلة</div>
-<textarea class="tkt-inp ix-55" id="tkt-body" placeholder="اشرح مشكلتك بالتفصيل..."></textarea>
-<div class="ix-56">
-<button class="ix-57" id="tkt-send-btn" onclick="submitTicket()"><i class="fas fa-paper-plane"></i> إرسال</button>
-<button class="ix-58" onclick="closeTicketModal()">إلغاء</button>
-</div>
-</input></div>
-<div class="ix-59" id="tkt-success">
-<span class="ix-60">✅</span>
-<div class="ix-61">تم إرسال تذكرتك!</div>
-<div class="ix-62" id="tkt-success-num"></div>
-<div class="ix-63" id="tkt-notif-hint">🔔 ستصلك إشعار عند رد الإدمن</div>
-<button class="ix-64" onclick="closeTicketModal()">حسناً</button>
-</div>
-</div>
-</div>
-<!-- modal الرد للإدمن -->
-<div class="ix-45" id="reply-modal-overlay" onclick="if(event.target===this)closeReplyModal()">
-<div class="ix-65">
-<button class="ix-47" onclick="closeReplyModal()">✕</button>
-<div class="ix-66"><i class="fas fa-reply ix-49"></i>الرد على التذكرة</div>
-<div class="ix-67" id="reply-ticket-info"></div>
-<div class="ix-68">ردك على اللاعب</div>
-<textarea class="ix-69" id="reply-body" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" onfocus="this.style.borderColor='#3498db'" placeholder="اكتب ردك هنا..."></textarea>
-<div class="ix-56">
-<button class="ix-70" id="send-reply-btn" onclick="sendAdminReply()"><i class="fas fa-paper-plane"></i> إرسال الرد</button>
-<button class="ix-71" onclick="closeTicketByAdmin()"><i class="fas fa-check"></i> إغلاق</button>
-<button class="ix-72" onclick="closeReplyModal()">إلغاء</button>
-</div>
-</div>
-</div>
-<!-- ═══ PRODUCT DETAILS MODAL ═══ -->
-<div class="ix-73" id="product-modal-overlay" onclick="if(event.target===this)closeProductModal()">
-<div class="prod-modal-box">
-<button class="prod-close-btn" onclick="closeProductModal()">✕</button>
-<div class="prod-modal-header">
-<div class="prod-modal-emoji" id="pm-emoji">🚔</div>
-<div class="prod-modal-badge" id="pm-cat-badge">أنظمة</div>
-</div>
-<div class="prod-modal-body">
-<h2 class="prod-modal-name" id="pm-name">—</h2>
-<p class="prod-modal-desc" id="pm-desc">—</p>
-<div class="prod-modal-features" id="pm-features"></div>
-<div class="prod-modal-price-row">
-<div>
-<span class="prod-modal-old-price" id="pm-old-price"></span>
-<span class="prod-modal-price" id="pm-price">—</span>
-</div>
-<button class="prod-modal-buy-btn" id="pm-buy-btn" onclick="triggerBuyFromModal()">
-<i class="fas fa-shopping-cart"></i> اشتري الآن
-        </button>
-</div>
-</div>
-</div>
-</div>
-<!-- ═══ PURCHASE CONFIRM MODAL ═══ -->
-<div class="ix-74" id="purchase-modal-overlay" onclick="if(event.target===this)closePurchaseModal()">
-<div class="purch-modal-box">
-<button class="prod-close-btn" onclick="closePurchaseModal()">✕</button>
-<!-- Step 1: Confirm -->
-<div id="purch-step-confirm">
-<div class="purch-icon">🛒</div>
-<h3 class="purch-title">تأكيد الطلب</h3>
-<div class="purch-product-info" id="purch-product-info"></div>
-<div class="purch-form">
-<label class="purch-label">ملاحظة للبائع (اختياري)</label>
-<textarea class="purch-textarea" id="purch-note" placeholder="أي تفاصيل إضافية..."></textarea>
-</div>
-<div class="purch-discord-row">
-<i class="fab fa-discord"></i>
-<span id="purch-discord-name">سيتم التواصل معك عبر ديسكورد</span>
-</div>
-<div class="purch-actions">
-<button class="purch-confirm-btn" id="purch-confirm-btn" onclick="confirmPurchase()">
-<i class="fas fa-check"></i> تأكيد الطلب
-        </button>
-<button class="purch-cancel-btn" onclick="closePurchaseModal()">إلغاء</button>
-</div>
-</div>
-<!-- Step 2: Success -->
-<div class="ix-75" id="purch-step-success">
-<div class="ix-76">✅</div>
-<h3 class="ix-77">تم إرسال طلبك!</h3>
-<p class="ix-78">سيتم التواصل معك عبر ديسكورد قريباً</p>
-<div class="purch-order-badge" id="purch-order-id"></div>
-<button class="purch-confirm-btn ix-79" onclick="closePurchaseModal()">حسناً</button>
-</div>
-</div>
-</div>
-
-<!-- Back To Top -->
-<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="للأعلى">
-  <i class="fas fa-arrow-up"></i>
-</button>
-
-<!-- Scroll Progress -->
-<div id="scroll-progress"></div>
-
-<!-- ═══ FOOTER ═══ -->
-<footer class="site-footer">
-  <div class="footer-glow"></div>
-  <div class="footer-inner container">
-    <div class="footer-top">
-      <!-- Brand -->
-      <div class="footer-brand">
-        <img class="footer-logo" src="Plus_Dev_No_Wellpeper.png" alt="اسم السيرفر"/>
-        <div>
-          <div class="footer-brand-name">اسم السيرفر</div>
-          <div class="footer-brand-sub">سيرفر FiveM احترافي</div>
-        </div>
-      </div>
-      <!-- Links -->
-      <div class="footer-links-group">
-        <div class="footer-col">
-          <div class="footer-col-title">الموقع</div>
-          <a onclick="showPage('home')"><i class="fas fa-home"></i> الرئيسية</a>
-          <a onclick="showPage('rules')"><i class="fas fa-scale-balanced"></i> القوانين</a>
-          <a onclick="showPage('tutorials')"><i class="fas fa-clapperboard"></i> الشروحات</a>
-          <a onclick="showPage('store')"><i class="fas fa-store"></i> المتجر</a>
-          <a onclick="showPage('jobs')"><i class="fas fa-paper-plane"></i> الوظائف</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">تواصل معنا</div>
-          <a href="https://discord.gg/pus" target="_blank"><i class="fab fa-discord"></i> ديسكورد</a>
-          <a href="#" onclick="openTicketModal()"><i class="fas fa-ticket-alt"></i> فتح تذكرة</a>
-          <a onclick="showPage('tracking-page')"><i class="fas fa-search-location"></i> تتبع طلبك</a>
-        </div>
-      </div>
-      <!-- Social -->
-      <div class="footer-social-col">
-        <div class="footer-col-title">انضم لمجتمعنا</div>
-        <a class="footer-discord-btn" href="https://discord.gg/pus" target="_blank">
-          <i class="fab fa-discord"></i>
-          <span>Join Discord</span>
-          <div class="fdb-online"><span class="online-dot"></span> 500+ عضو</div>
-        </a>
-        <div class="footer-server-status">
-          <span class="online-dot"></span>
-          <span>السيرفر شغّال الآن</span>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2025 اسم السيرفر — جميع الحقوق محفوظة</div>
-      <div class="footer-made">صُنع بـ <span>❤️</span> لمجتمع FiveM العربي</div>
-    </div>
-  </div>
-</footer>
-
-<script src="home-animations.js"></script>
-<script src="home-fixes.js"></script>
-</body>
-</html>
