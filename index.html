@@ -6,7 +6,6 @@
 <title>Plus Dev</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <link href="style.css" rel="stylesheet"/>
-<link href="visual-upgrade.css" rel="stylesheet">
 <link href="ai-chat-enhanced.css" rel="stylesheet"/>
 <meta content="website" property="og:type"/>
 <meta content="YOUR SERVER NAME" property="og:site_name"/>
@@ -1550,7 +1549,7 @@
           <div class="job-req-item"><i class="fas fa-check-circle"></i> إلتزام بقوانين الرول بلاي</div>
           <div class="job-req-item"><i class="fas fa-check-circle"></i> خبرة في سيرفرات FiveM</div>
         </div>
-        <button class="job-apply-btn" onclick="openJobModal('police')"><i class="fas fa-paper-plane"></i> تقديم الآن</button>
+        <button class="job-apply-btn" data-job="police" onclick="openJobModal('police')"><i class="fas fa-paper-plane"></i> تقديم الآن</button>
       </div>
       <div class="job-card-new job-ems">
         <div class="job-card-header">
@@ -1566,7 +1565,7 @@
           <div class="job-req-item"><i class="fas fa-check-circle"></i> هدوء وسرعة بديهة</div>
           <div class="job-req-item"><i class="fas fa-check-circle"></i> تقمص شخصية المسعف</div>
         </div>
-        <button class="job-apply-btn" onclick="openJobModal('ems')"><i class="fas fa-paper-plane"></i> تقديم الآن</button>
+        <button class="job-apply-btn" data-job="ems" onclick="openJobModal('ems')"><i class="fas fa-paper-plane"></i> تقديم الآن</button>
       </div>
     </div>
   </div>
@@ -1593,7 +1592,7 @@
           <div class="job-req-item"><i class="fas fa-check-circle"></i> توفر يومي 3 ساعات+</div>
           <div class="job-req-item"><i class="fas fa-check-circle"></i> عمر 16+</div>
         </div>
-        <button class="job-apply-btn" onclick="openJobModal('staff')"><i class="fas fa-paper-plane"></i> تقديم الآن</button>
+        <button class="job-apply-btn" data-job="staff" onclick="openJobModal('staff')"><i class="fas fa-paper-plane"></i> تقديم الآن</button>
       </div>
     </div>
   </div>
@@ -1618,7 +1617,7 @@
             </div>
             <h3 class="job-card-title" style="color:#00c800">Families</h3>
             <p class="job-card-desc">عصابة الضاحية الخضراء، منظمة وتضع الولاء للعائلة فوق كل اعتبار.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_families')" style="background:linear-gradient(135deg,#006400,#00c800)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_families" onclick="openJobModal('gang_families')" style="background:linear-gradient(135deg,#006400,#00c800)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(139,69,19,0.25);">
@@ -1631,7 +1630,7 @@
             </div>
             <h3 class="job-card-title" style="color:#8b4513">Scrap</h3>
             <p class="job-card-desc">عصابة الخردة، يتقنون فن البقاء والسيطرة على الموارد المهجورة.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_scrap')" style="background:linear-gradient(135deg,#5d2e0a,#8b4513)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_scrap" onclick="openJobModal('gang_scrap')" style="background:linear-gradient(135deg,#5d2e0a,#8b4513)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(128,0,128,0.25);">
@@ -1644,7 +1643,7 @@
             </div>
             <h3 class="job-card-title" style="color:#a020f0">GSG</h3>
             <p class="job-card-desc">عصابة قوية بانتشارها الواسع وفرض سيطرتها المطلقة.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_gsg')" style="background:linear-gradient(135deg,#4b0082,#a020f0)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_gsg" onclick="openJobModal('gang_gsg')" style="background:linear-gradient(135deg,#4b0082,#a020f0)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(139,0,0,0.25);">
@@ -1657,7 +1656,7 @@
             </div>
             <h3 class="job-card-title" style="color:#8b0000">Yakuza</h3>
             <p class="job-card-desc">المافيا اليابانية العريقة، تعتمد على الشرف والقوة في تنفيذ مهامها.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_yakuza')" style="background:linear-gradient(135deg,#4a0000,#8b0000)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_yakuza" onclick="openJobModal('gang_yakuza')" style="background:linear-gradient(135deg,#4a0000,#8b0000)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(255,0,0,0.25);">
@@ -1670,7 +1669,7 @@
             </div>
             <h3 class="job-card-title" style="color:#ff0000">NeighborHood</h3>
             <p class="job-card-desc">سكان الحي الأصليين، يدافعون عن منطقتهم بكل شراسة.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_neighborhood')" style="background:linear-gradient(135deg,#b30000,#ff0000)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_neighborhood" onclick="openJobModal('gang_neighborhood')" style="background:linear-gradient(135deg,#b30000,#ff0000)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(0,0,255,0.25);">
@@ -1683,7 +1682,7 @@
             </div>
             <h3 class="job-card-title" style="color:#0000ff">Crips</h3>
             <p class="job-card-desc">عصابة اللون الأزرق، يمتلكون تاريخاً عريقاً في شوارع المدينة.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_crips')" style="background:linear-gradient(135deg,#00008b,#0000ff)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_crips" onclick="openJobModal('gang_crips')" style="background:linear-gradient(135deg,#00008b,#0000ff)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(210,180,140,0.25);">
@@ -1696,7 +1695,7 @@
             </div>
             <h3 class="job-card-title" style="color:#d2b48c">11 Street</h3>
             <p class="job-card-desc">عصابة الشارع الحادي عشر، متخصصون في العمليات النوعية.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_11street')" style="background:linear-gradient(135deg,#8b7355,#d2b48c)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_11street" onclick="openJobModal('gang_11street')" style="background:linear-gradient(135deg,#8b7355,#d2b48c)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(255,255,255,0.25);">
@@ -1709,7 +1708,7 @@
             </div>
             <h3 class="job-card-title" style="color:#ffffff">Quietless</h3>
             <p class="job-card-desc">الصمت المطبق، يتحركون كالأشباح في قلب المدينة.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_quietless')" style="background:linear-gradient(135deg,#999,#fff);color:#000">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_quietless" onclick="openJobModal('gang_quietless')" style="background:linear-gradient(135deg,#999,#fff);color:#000">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(255,0,0,0.25);">
@@ -1722,7 +1721,7 @@
             </div>
             <h3 class="job-card-title" style="color:#ff0000">18 Street</h3>
             <p class="job-card-desc">عصابة الشارع 18، القوة في العدد والسيطرة.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_18street')" style="background:linear-gradient(135deg,#b30000,#ff0000)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_18street" onclick="openJobModal('gang_18street')" style="background:linear-gradient(135deg,#b30000,#ff0000)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(255,69,0,0.25);">
@@ -1735,7 +1734,7 @@
             </div>
             <h3 class="job-card-title" style="color:#ff4500">14 Norteños</h3>
             <p class="job-card-desc">عصابة نورتينوس، ولاء للشمال وقوة لا يستهان بها.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_nortenos')" style="background:linear-gradient(135deg,#b33000,#ff4500)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_nortenos" onclick="openJobModal('gang_nortenos')" style="background:linear-gradient(135deg,#b33000,#ff4500)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(176,196,222,0.25);">
@@ -1748,7 +1747,7 @@
             </div>
             <h3 class="job-card-title" style="color:#b0c4de">el-patron</h3>
             <p class="job-card-desc">الرئيس، يديرون العمليات بذكاء استراتيجي ونفوذ كبير.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_elpatron')" style="background:linear-gradient(135deg,#778899,#b0c4de)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_elpatron" onclick="openJobModal('gang_elpatron')" style="background:linear-gradient(135deg,#778899,#b0c4de)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(255,255,0,0.25);">
@@ -1761,7 +1760,7 @@
             </div>
             <h3 class="job-card-title" style="color:#ffff00">VAGOS</h3>
             <p class="job-card-desc">عصابة اللون الأصفر، يمتلكون أقوى الروابط الأخوية في الشارع.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_vagos')" style="background:linear-gradient(135deg,#b3b300,#ffff00);color:#000">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_vagos" onclick="openJobModal('gang_vagos')" style="background:linear-gradient(135deg,#b3b300,#ffff00);color:#000">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(255,165,0,0.25);">
@@ -1774,7 +1773,7 @@
             </div>
             <h3 class="job-card-title" style="color:#ffa500">26 YARD</h3>
             <p class="job-card-desc">مربعات الـ 26، يسيطرون على الساحات الخلفية للمدينة.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_26yard')" style="background:linear-gradient(135deg,#cc8400,#ffa500)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_26yard" onclick="openJobModal('gang_26yard')" style="background:linear-gradient(135deg,#cc8400,#ffa500)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(0,0,139,0.25);">
@@ -1787,7 +1786,7 @@
             </div>
             <h3 class="job-card-title" style="color:#00008b">BOOMERS</h3>
             <p class="job-card-desc">البومرز، لا أحد يستطيع الوقوف في وجه انفجار قوتهم.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_boomers')" style="background:linear-gradient(135deg,#000050,#00008b)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_boomers" onclick="openJobModal('gang_boomers')" style="background:linear-gradient(135deg,#000050,#00008b)">تقديم الآن</button>
         </div>
 
         <div class="job-card-new" style="border-color:rgba(128,128,128,0.25);">
@@ -1800,7 +1799,7 @@
             </div>
             <h3 class="job-card-title" style="color:#808080">ElMundo</h3>
             <p class="job-card-desc">العالم، طموحاتهم لا تتوقف عند حدود الشارع، بل تتعدى ذلك.</p>
-            <button class="job-apply-btn" onclick="openJobModal('gang_elmundo')" style="background:linear-gradient(135deg,#555,#808080)">تقديم الآن</button>
+            <button class="job-apply-btn" data-job="gang_elmundo" onclick="openJobModal('gang_elmundo')" style="background:linear-gradient(135deg,#555,#808080)">تقديم الآن</button>
         </div>
 
     </div>

@@ -1067,28 +1067,53 @@ database.ref('jobStatus').on('value', (snapshot) => {
     const jobs = ['police', 'ems', 'staff', 'gang'];
     let allClosed = true;
 
+    // كل الوظائف الرئيسية
     jobs.forEach(job => {
         const isClosed = statuses[job] ? statuses[job].closed : false;
-        
-        const playerBtn = document.getElementById(`btn-${job}`);
-        if (playerBtn) {
-            playerBtn.innerText = isClosed ? "تم إغلاق التقديم" : "تقديم الآن";
-            playerBtn.style.backgroundColor = isClosed ? "#444" : "#fc7823";
-            playerBtn.disabled = isClosed;
-            playerBtn.style.cursor = isClosed ? "not-allowed" : "pointer";
-        }
+        if (!isClosed) allClosed = false;
 
+        // تحديث كل الأزرار اللي تحمل data-job أو id
+        document.querySelectorAll(`[data-job="${job}"], #btn-${job}`).forEach(btn => {
+            btn.innerHTML = isClosed
+                ? '<i class="fas fa-lock"></i> تم إغلاق التقديم'
+                : '<i class="fas fa-paper-plane"></i> تقديم الآن';
+            btn.style.backgroundColor = isClosed ? '#444' : '';
+            btn.style.opacity = isClosed ? '0.6' : '';
+            btn.style.cursor = isClosed ? 'not-allowed' : 'pointer';
+            btn.disabled = isClosed;
+        });
+
+        // تحديث badge "متاح/مغلق" في كروت الوظيفة
+        document.querySelectorAll(`.job-${job} .job-status-badge`).forEach(badge => {
+            badge.textContent = isClosed ? 'مغلق' : 'متاح';
+            badge.className = `job-status-badge ${isClosed ? 'closed' : 'open'}`;
+        });
+
+        // تحديث زر الأدمن
         const adminBtn = document.getElementById(`toggle-${job}`);
         if (adminBtn) {
-            adminBtn.className = isClosed ? "adm-toggle-btn adm-toggle-off" : "adm-toggle-btn adm-toggle-on";
+            adminBtn.className = isClosed ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
         }
+    });
 
-        if (!isClosed) allClosed = false;
+    // تحديث العصابات كلها بناءً على حالة gang
+    const gangClosed = statuses['gang'] ? statuses['gang'].closed : false;
+    document.querySelectorAll('[data-job^="gang_"]').forEach(btn => {
+        btn.innerHTML = gangClosed
+            ? '<i class="fas fa-lock"></i> تم إغلاق التقديم'
+            : 'تقديم الآن';
+        btn.style.opacity = gangClosed ? '0.6' : '';
+        btn.style.cursor = gangClosed ? 'not-allowed' : 'pointer';
+        btn.disabled = gangClosed;
+    });
+    document.querySelectorAll('[class*="job-gang"] .job-status-badge').forEach(badge => {
+        badge.textContent = gangClosed ? 'مغلق' : 'متاح';
+        badge.className = `job-status-badge ${gangClosed ? 'closed' : 'open'}`;
     });
 
     const mainBtn = document.getElementById('toggle-all');
     if (mainBtn) {
-        mainBtn.className = allClosed ? "adm-toggle-btn adm-toggle-off" : "adm-toggle-btn adm-toggle-on";
+        mainBtn.className = allClosed ? 'adm-toggle-btn adm-toggle-off' : 'adm-toggle-btn adm-toggle-on';
     }
 });
 
