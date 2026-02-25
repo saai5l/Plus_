@@ -1,74 +1,58 @@
-# 🎮 قالب موقع سيرفر رول بلاي — FiveM / GTA
+# 🎮 Ultimate FiveM / GTA Roleplay Web Suite
 
-موقع احترافي متكامل جاهز للتخصيص والرفع
-
----
-
-## ✨ المميزات
-- 🤖 شات بوت ذكي يجيب على أسئلة القوانين
-- 📋 صفحة قوانين مع بحث وتصفية
-- 📝 نظام تقديم وظائف (شرطة، EMS، إدارة)
-- 🛒 متجر منتجات مع نظام طلبات
-- 🎫 نظام تذاكر دعم مع رد الإدمن
-- 📊 لوحة تحكم إدارية متكاملة
-- 🔔 نظام إشعارات داخلي + Firebase
-- 📱 تصميم متجاوب (موبايل وديسكتوب)
-- 🔐 تسجيل دخول عبر Discord OAuth2
+A high-performance, all-in-one web portal designed for serious RP communities. This isn't just a landing page—it’s a fully functional hub to manage your players, laws, and staff applications.
 
 ---
 
-## 🚀 خطوات الإعداد
+## ⚡ Key Features
+* **Smart Rule Bot:** An interactive AI assistant that knows your server laws inside out.
+* **Live Law Directory:** Searchable and categorized rulebook to keep your community informed.
+* **Dynamic Career Portal:** Integrated application system for Police, EMS, and Admin roles.
+* **Integrated Marketplace:** Show off your server products with a built-in order system.
+* **Support Ticket Hub:** A dedicated space for players to get help and admins to respond.
+* **Powerful Admin Dashboard:** Total control over site content and user management.
+* **Real-time Alerts:** Push notifications powered by Firebase to keep everyone updated.
+* **Discord Sync:** Fast and secure login using Discord OAuth2.
+* **Fully Responsive:** Looks pixel-perfect on everything from mobile phones to desktop monitors.
 
-### 1. افتح ملف config.js وعبّئ هذه الحقول:
+---
 
-| الحقل | الوصف |
+## 🛠️ Setup Guide
+
+### 1. Configure the Core
+Open `config.js` and plug in your server’s data:
+
+| Key | Description |
 |---|---|
-| `SERVER_NAME` | اسم سيرفرك |
-| `DISCORD_CLIENT_ID` | من discord.com/developers |
-| `REDIRECT_URI` | رابط موقعك + /login.html |
-| `WEBHOOKS.*` | روابط الويب هوك من كل قناة |
-| `FIREBASE.*` | من console.firebase.google.com |
-| `LOGO_URL` | رابط شعار سيرفرك |
+| `SERVER_NAME` | Enter your community name. |
+| `DISCORD_CLIENT_ID` | Obtain this from the Discord Developer Portal. |
+| `REDIRECT_URI` | Your site URL + `/login.html`. |
+| `WEBHOOKS.*` | Set up your channel webhooks for logs/apps. |
+| `FIREBASE.*` | Connect your Firebase project for real-time data. |
+| `LOGO_URL` | Link to your server's high-res logo. |
 
-### 2. عدّل laws.json
-افتح الملف وغيّر القوانين — كل سطر بين `"` قانون مستقل
+### 2. Set Your Rules
+Edit `laws.json`. Swap the text between the quotes to match your server’s specific regulations.
 
-### 3. عدّل index.html
-ابحث عن `اسم السيرفر` في الملف وغيّره لاسم سيرفرك
-غيّر روابط السوشال ميديا في الأسفل
+### 3. Personalize the Content
+In `index.html`, search for the placeholder "اسم السيرفر" and replace it with your own. Don't forget to update the social media links in the footer.
 
-### 4. ارفع على GitHub Pages (مجاناً)
-1. أنشئ Repository جديد
-2. ارفع جميع الملفات
-3. Settings → Pages → Source: main branch
+### 4. Go Live (For Free)
+1. Create a new GitHub Repository.
+2. Push all project files to the `main` branch.
+3. Navigate to **Settings → Pages** and set the Source to your **main branch**.
 
 ---
 
-## 📁 هيكل الملفات
+## 📂 Project Architecture
 
-```
+```text
 📦 Server-Website/
-├── ⚙️ config.js          ← ← ← ابدأ من هنا
-├── 📄 index.html         ← الصفحة الرئيسية
-├── 📄 login.html         ← تسجيل الدخول
-├── 📋 laws.json          ← القوانين
-├── ⚙️ script.js          ← الكود الرئيسي
-├── ⚙️ ai-chat-enhanced.js ← الشات بوت
-├── 🎨 style.css          ← التصميم الرئيسي
-├── 🎨 ai-chat-enhanced.css ← تصميم الشات
-├── 🎨 admin-dashboard.css ← لوحة التحكم
-└── 📖 README.md          ← هذا الملف
-```
-
----
-
-## ❓ أسئلة شائعة
-
-**كيف أضيف أدمن؟**
-سجّل دخول ثم من لوحة التحكم → إدارة الأدمنز → أدخل Discord ID
-
-**كيف أغير الألوان؟**
-عدّل `PRIMARY_COLOR` في config.js أو غيّر `#fc7823` في style.css
-
-**هل يحتاج سيرفر مدفوع؟**
-لا، يعمل مجاناً على GitHub Pages + Firebase Free Tier
+├── ⚙️ config.js           ← Global settings & API keys
+├── 📄 index.html          ← Main landing page
+├── 📄 login.html          ← Discord Auth handler
+├── 📋 laws.json           ← The rulebook data
+├── ⚙️ script.js           ← Core logic & functionality
+├── ⚙️ ai-chat-enhanced.js  ← AI Chatbot logic
+├── 🎨 style.css           ← Global visual DNA
+└── 📖 README.md           ← Documentation
