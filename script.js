@@ -1,4 +1,3 @@
-
 const WEBHOOKS = {
     police:  'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات الشرطة
     ems:     'https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99', // طلبات EMS
@@ -648,13 +647,9 @@ function updateUI(user) {
     
     const discordIdInput = document.getElementById('discord-id-input');
 
-    // إظهار/إخفاء رابط Profile
-    const profileNavLink = document.getElementById('profile-nav-link');
-
     if (user) {
         if (loginBtn) loginBtn.style.display = 'none';
         if (userArea) userArea.style.display = 'flex';
-        if (profileNavLink) profileNavLink.style.display = 'flex';
         
         if (userAvatar) userAvatar.src = user.avatar || '';
         if (userDisplayName) userDisplayName.innerText = user.name || '';
@@ -686,7 +681,6 @@ function updateUI(user) {
     } else {
         if (loginBtn) loginBtn.style.display = 'flex';
         if (userArea) userArea.style.display = 'none';
-        if (profileNavLink) profileNavLink.style.display = 'none';
         
         if (discordIdInput) {
             discordIdInput.value = '';
@@ -2153,4 +2147,3 @@ function loadMyTickets(userId) {
         }).join('');
     });
 }
-
