@@ -423,26 +423,14 @@
       <h3 class="adm-panel-title">طلبات التوظيف</h3>
     </div>
     <div class="adm-filters">
-      <button class="adm-filter-btn adm-filter-active" onclick="filterAdminTable('all', this)"><i class="fas fa-th"></i> الكل</button>
-      <button class="adm-filter-btn adm-filter-pending" onclick="filterAdminTable('معلق', this)"><i class="fas fa-hourglass-half"></i> معلق</button>
-      <button class="adm-filter-btn adm-filter-approved" onclick="filterAdminTable('مقبول', this)"><i class="fas fa-check"></i> مقبول</button>
-      <button class="adm-filter-btn adm-filter-rejected" onclick="filterAdminTable('رفض', this)"><i class="fas fa-times"></i> مرفوض</button>
+      <button class="adm-filter-btn adm-filter-active" data-status="all" onclick="filterAdminTable('all', this)"><i class="fas fa-th"></i> الكل</button>
+      <button class="adm-filter-btn adm-filter-pending" data-status="معلق" onclick="filterAdminTable('معلق', this)"><i class="fas fa-hourglass-half"></i> معلق</button>
+      <button class="adm-filter-btn adm-filter-approved" data-status="مقبول" onclick="filterAdminTable('مقبول', this)"><i class="fas fa-check"></i> مقبول</button>
+      <button class="adm-filter-btn adm-filter-rejected" data-status="رفض" onclick="filterAdminTable('رفض', this)"><i class="fas fa-times"></i> مرفوض</button>
     </div>
   </div>
-  <div class="adm-table-wrap">
-    <table class="adm-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>اسم الشخصية</th>
-          <th>الوظيفة</th>
-          <th>ملاحظة</th>
-          <th>الحالة</th>
-          <th>إجراء</th>
-        </tr>
-      </thead>
-      <tbody id="jobs-table-body"></tbody>
-    </table>
+  <div class="adm-list-wrap" id="jobs-list-admin">
+    <div class="adm-list-empty"><i class="fas fa-clipboard-list"></i>جاري تحميل الطلبات...</div>
   </div>
   <div class="adm-table-footer">
     <button class="adm-clear-btn" onclick="clearLogs()">

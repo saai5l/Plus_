@@ -808,91 +808,133 @@ const mockJobs = [
 
 let currentAdminFilter = 'all';
 
+let allApplications = [];
+
+function renderApplications(list) {
+    const el = document.getElementById('jobs-list-admin');
+    if (!el) return;
+    if (!list.length) {
+        el.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.25)"><i class="fas fa-clipboard-list" style="font-size:2rem;display:block;margin-bottom:10px;opacity:0.3"></i>لا توجد طلبات بهذه الفئة</div>`;
+        return;
+    }
+
+    const statusMap = {
+        'معلق':  { color: '#f39c12', bg: 'rgba(243,156,18,0.12)',  icon: 'fa-hourglass-half' },
+        'مقبول': { color: '#2ecc71', bg: 'rgba(46,204,113,0.12)',  icon: 'fa-check-circle' },
+        'رفض':   { color: '#e74c3c', bg: 'rgba(231,76,60,0.12)',   icon: 'fa-times-circle' }
+    };
+
+    el.innerHTML = list.map(app => {
+        const s = statusMap[app.status] || statusMap['معلق'];
+        const discordBadge = app.discordId
+            ? `<div style="display:flex;align-items:center;gap:4px;margin-top:3px"><i class="fab fa-discord" style="color:#5865f2;font-size:0.75rem"></i><code style="background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.2);border-radius:4px;padding:1px 6px;color:#a0a9ff;font-size:0.7rem">${app.discordId}</code></div>`
+            : '';
+        const dateBadge = app.date
+            ? `<span style="color:rgba(255,255,255,0.25);font-size:0.72rem"><i class="fas fa-clock" style="margin-left:3px"></i>${app.date}</span>`
+            : '';
+
+        return `
+        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;margin-bottom:8px;transition:border-color 0.2s" 
+             onmouseenter="this.style.borderColor='rgba(252,120,35,0.2)'" 
+             onmouseleave="this.style.borderColor='rgba(255,255,255,0.06)'">
+          <div style="display:flex;align-items:flex-start;gap:12px;justify-content:space-between;flex-wrap:wrap">
+
+            <!-- يسار: معلومات الطلب -->
+            <div style="display:flex;align-items:flex-start;gap:12px;flex:1;min-width:0">
+              <div style="width:42px;height:42px;border-radius:12px;background:rgba(252,120,35,0.1);border:1px solid rgba(252,120,35,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;color:#fc7823">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:5px">
+                  <span style="background:rgba(252,120,35,0.1);color:#fc7823;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${app.appId || '---'}</span>
+                  <span style="background:${s.bg};color:${s.color};border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700"><i class="fas ${s.icon}" style="margin-left:4px"></i>${app.status}</span>
+                  <span style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);border-radius:6px;padding:2px 10px;font-size:0.72rem">${app.job}</span>
+                </div>
+                <div style="font-weight:700;font-size:0.92rem;color:#fff;margin-bottom:3px">${app.name}</div>
+                ${discordBadge}
+                ${dateBadge}
+                ${app.adminNote ? `<div style="margin-top:7px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:7px 10px;font-size:0.8rem;color:rgba(255,255,255,0.4)"><i class="fas fa-sticky-note" style="margin-left:5px;color:rgba(252,120,35,0.5)"></i>${app.adminNote}</div>` : ''}
+              </div>
+            </div>
+
+            <!-- يمين: ملاحظة + أزرار -->
+            <div style="display:flex;flex-direction:column;gap:7px;flex-shrink:0;min-width:200px">
+              <textarea id="admin-note-${app.appId}"
+                        placeholder="أضف ملاحظة للمستخدم..."
+                        style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);padding:8px 10px;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:0.82rem;resize:vertical;min-height:52px;outline:none;width:100%;box-sizing:border-box;transition:border-color 0.2s"
+                        onfocus="this.style.borderColor='rgba(252,120,35,0.35)'"
+                        onblur="this.style.borderColor='rgba(255,255,255,0.08)'">${app.adminNote || ''}</textarea>
+              <div style="display:flex;gap:6px">
+                <button onclick="submitDecision('${app.appId}', 'مقبول')" 
+                        style="flex:1;background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.25);color:#2ecc71;padding:7px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.82rem;font-weight:700;transition:all 0.2s"
+                        onmouseenter="this.style.background='rgba(46,204,113,0.2)'"
+                        onmouseleave="this.style.background='rgba(46,204,113,0.1)'">
+                  <i class="fas fa-check" style="margin-left:4px"></i>قبول
+                </button>
+                <button onclick="submitDecision('${app.appId}', 'رفض')"
+                        style="flex:1;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.25);color:#e74c3c;padding:7px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.82rem;font-weight:700;transition:all 0.2s"
+                        onmouseenter="this.style.background='rgba(231,76,60,0.2)'"
+                        onmouseleave="this.style.background='rgba(231,76,60,0.1)'">
+                  <i class="fas fa-times" style="margin-left:4px"></i>رفض
+                </button>
+                <button onclick="deleteApplication('${app.appId}')"
+                        style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.35);padding:7px 10px;border-radius:8px;cursor:pointer;transition:all 0.2s"
+                        onmouseenter="this.style.background='rgba(231,76,60,0.08)';this.style.color='#e74c3c'"
+                        onmouseleave="this.style.background='rgba(255,255,255,0.04)';this.style.color='rgba(255,255,255,0.35)'">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>`;
+    }).join('');
+}
+
 function filterAdminTable(status, btn) {
     currentAdminFilter = status;
-    const rows = document.querySelectorAll('#jobs-table-body tr');
-    rows.forEach(row => {
-        if (status === 'all') {
-            row.style.display = '';
-        } else {
-            const statusCell = row.querySelector('.status-tag');
-            row.style.display = (statusCell && statusCell.textContent.trim() === status) ? '' : 'none';
-        }
-    });
     document.querySelectorAll('.adm-filter-btn').forEach(b => b.classList.remove('adm-filter-active'));
     if (btn) btn.classList.add('adm-filter-active');
     else {
         const activeBtn = document.querySelector(`.adm-filter-btn[data-status="${status}"]`);
         if (activeBtn) activeBtn.classList.add('adm-filter-active');
     }
+    if (status === 'all') renderApplications(allApplications);
+    else renderApplications(allApplications.filter(a => a.status === status));
 }
 
 function loadAdminData() {
-    const tableBody = document.getElementById('jobs-table-body');
-    if (!tableBody) return;
-    
-    // تحديث قائمة الأدمنز
+    const el = document.getElementById('jobs-list-admin');
+    if (!el) return;
+
     renderAdminIds();
 
     database.ref('applications').on('value', (snapshot) => {
         const data = snapshot.val();
-        tableBody.innerHTML = ""; 
 
         if (!data) {
-            tableBody.innerHTML = `<tr><td colspan="6" class="empty-msg">لا توجد طلبات تقديم حالياً</td></tr>`;
-            if(document.getElementById('total-apps')) document.getElementById('total-apps').textContent = '0';
-            if(document.getElementById('approved-apps')) document.getElementById('approved-apps').textContent = '0';
-            if(document.getElementById('rejected-apps')) document.getElementById('rejected-apps').textContent = '0';
-            if(document.getElementById('pending-apps')) document.getElementById('pending-apps').textContent = '0';
+            allApplications = [];
+            el.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.25)"><i class="fas fa-clipboard-list" style="font-size:2rem;display:block;margin-bottom:10px;opacity:0.3"></i>لا توجد طلبات تقديم حالياً</div>`;
+            ['total-apps','approved-apps','rejected-apps','pending-apps'].forEach(id => {
+                if(document.getElementById(id)) document.getElementById(id).textContent = '0';
+            });
             return;
         }
 
-        const apps = Object.values(data);
+        allApplications = Object.values(data).reverse();
 
-        // إحصائيات محدّثة
-        if(document.getElementById('total-apps')) document.getElementById('total-apps').textContent = apps.length;
-        if(document.getElementById('approved-apps')) document.getElementById('approved-apps').textContent = apps.filter(a => a.status === 'مقبول').length;
-        if(document.getElementById('rejected-apps')) document.getElementById('rejected-apps').textContent = apps.filter(a => a.status === 'رفض').length;
-        if(document.getElementById('pending-apps')) document.getElementById('pending-apps').textContent = apps.filter(a => a.status === 'معلق').length;
-        // hero stats
-        const el = (id) => document.getElementById(id);
-        if(el('total-apps-hero'))    el('total-apps-hero').textContent    = apps.length + ' طلب';
-        if(el('approved-apps-hero')) el('approved-apps-hero').textContent = apps.filter(a=>a.status==='مقبول').length + ' مقبول';
-        if(el('pending-apps-hero'))  el('pending-apps-hero').textContent  = apps.filter(a=>a.status==='معلق').length + ' معلق';
-        if(el('rejected-apps-hero')) el('rejected-apps-hero').textContent = apps.filter(a=>a.status==='رفض').length + ' مرفوض';
+        // إحصائيات
+        const el2 = (id) => document.getElementById(id);
+        if(el2('total-apps'))    el2('total-apps').textContent    = allApplications.length;
+        if(el2('approved-apps')) el2('approved-apps').textContent = allApplications.filter(a=>a.status==='مقبول').length;
+        if(el2('rejected-apps')) el2('rejected-apps').textContent = allApplications.filter(a=>a.status==='رفض').length;
+        if(el2('pending-apps'))  el2('pending-apps').textContent  = allApplications.filter(a=>a.status==='معلق').length;
+        if(el2('total-apps-hero'))    el2('total-apps-hero').textContent    = allApplications.length + ' طلب';
+        if(el2('approved-apps-hero')) el2('approved-apps-hero').textContent = allApplications.filter(a=>a.status==='مقبول').length + ' مقبول';
+        if(el2('pending-apps-hero'))  el2('pending-apps-hero').textContent  = allApplications.filter(a=>a.status==='معلق').length + ' معلق';
+        if(el2('rejected-apps-hero')) el2('rejected-apps-hero').textContent = allApplications.filter(a=>a.status==='رفض').length + ' مرفوض';
 
-        [...apps].reverse().forEach((app) => {
-            const statusClass = app.status === 'مقبول' ? 'status-approved' : (app.status === 'رفض' ? 'status-rejected' : 'status-pending');
-            const discordDisplay = app.discordId ? `<div style="font-size:0.7rem;color:rgba(88,101,242,0.8);margin-top:2px"><i class="fab fa-discord" style="margin-left:3px"></i>${app.discordId}</div>` : '';
-            const dateDisplay = app.date ? `<div style="font-size:0.7rem;color:rgba(255,255,255,0.25);margin-top:2px"><i class="fas fa-clock" style="margin-left:3px"></i>${app.date}</div>` : '';
-            
-            tableBody.innerHTML += `
-                <tr>
-                    <td class="app-id-cell">${app.appId || '---'}</td>
-                    <td class="user-name">
-                        ${app.name}
-                        ${discordDisplay}
-                        ${dateDisplay}
-                    </td>
-                    <td class="job-type">${app.job}</td>
-                    <td>
-                        <textarea id="admin-note-${app.appId}" 
-                                  class="admin-textarea" 
-                                  placeholder="أضف ملاحظة للمستخدم...">${app.adminNote || ''}</textarea>
-                    </td>
-                    <td><span class="status-tag ${statusClass}">${app.status}</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="action-btn btn-accept" onclick="submitDecision('${app.appId}', 'مقبول')" title="قبول"><i class="fa-solid fa-check"></i></button>
-                            <button class="action-btn btn-decline" onclick="submitDecision('${app.appId}', 'رفض')" title="رفض"><i class="fa-solid fa-xmark"></i></button>
-                            <button class="action-btn btn-remove" onclick="deleteApplication('${app.appId}')" title="حذف"><i class="fa-solid fa-trash-can"></i></button>
-                        </div>
-                    </td>
-                </tr>`;
-        });
-
-        // تطبيق الفلتر الحالي بعد التحميل
-        if (currentAdminFilter !== 'all') filterAdminTable(currentAdminFilter);
+        filterAdminTable(currentAdminFilter);
     });
 }
 
