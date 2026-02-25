@@ -8,7 +8,7 @@ const FIVEM_CONFIG = {
     // IP السيرفر مع البورت الافتراضي لـ FiveM
     serverUrl: 'http://147.189.171.57:30120',
     // نفس المفتاح اللي في server.lua
-    apiKey: 'PLUSDEV_SECRET_2025_CHANGE_ME',
+    apiKey: 'Seif_2025_Secure',
 };
 
 // ============================================================
