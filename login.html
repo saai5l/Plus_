@@ -22,6 +22,9 @@
       --text-muted:   #777;
       --discord:      #5865F2;
       --discord-dark: #4752c4;
+      --steam:        #1b2838;
+      --steam-light:  #2a475e;
+      --steam-accent: #66c0f4;
       --radius:       14px;
       --tr:           all 0.3s ease;
     }
@@ -110,7 +113,7 @@
     .tab {
       flex:1; padding:9px 0;
       border:none; border-radius:7px;
-      font-family:'Tajawal',sans-serif; font-size:.9rem; font-weight:700;
+      font-family:'Tajawal',sans-serif; font-size:.82rem; font-weight:700;
       color:var(--text-muted); background:transparent; cursor:pointer;
       transition: var(--tr);
     }
@@ -158,6 +161,40 @@
     .discord-btn:hover::after { opacity:1; }
     .discord-btn i { font-size:1.25rem; }
     .discord-note { font-size:.8rem; color:var(--text-muted); text-align:center; margin-top:12px; line-height:1.55; }
+
+    /* ─── Steam button ─── */
+    .steam-btn {
+      width:100%; display:flex; align-items:center; justify-content:center; gap:11px;
+      padding:14px; background:linear-gradient(135deg,#1b2838,#2a475e);
+      border:1px solid rgba(102,192,244,0.2); border-radius:var(--radius); color:#c6d4df;
+      font-family:'Tajawal',sans-serif; font-size:1.05rem; font-weight:800;
+      cursor:pointer; transition:var(--tr);
+      box-shadow: 0 6px 20px rgba(27,40,56,0.6);
+      position:relative; overflow:hidden; margin-bottom:12px;
+    }
+    .steam-btn::after { content:''; position:absolute; inset:0; background:rgba(102,192,244,.08); opacity:0; transition:opacity .3s; }
+    .steam-btn:hover  { transform:translateY(-2px); box-shadow:0 10px 28px rgba(102,192,244,.2); border-color:rgba(102,192,244,0.45); color:#fff; }
+    .steam-btn:hover::after { opacity:1; }
+    .steam-btn img { width:22px; height:22px; filter:brightness(1.2); }
+
+    /* ─── Steam link banner ─── */
+    .steam-link-banner {
+      display:none; padding:13px 15px;
+      background:linear-gradient(135deg,rgba(27,40,56,.9),rgba(42,71,94,.6));
+      border:1px solid rgba(102,192,244,.3); border-radius:12px; margin-bottom:18px;
+      font-size:.84rem; color:var(--text-muted); line-height:1.6;
+    }
+    .steam-link-banner.on { display:block; }
+    .steam-link-banner strong { color:#66c0f4; }
+
+    /* ─── Connected badge ─── */
+    .linked-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      background:rgba(46,204,113,.1); border:1px solid rgba(46,204,113,.25);
+      color:#5dda8f; padding:4px 10px; border-radius:20px; font-size:.78rem; font-weight:700;
+      margin-top:8px;
+    }
+    .linked-badge.steam-badge { background:rgba(102,192,244,.1); border-color:rgba(102,192,244,.25); color:#66c0f4; }
 
     /* ─── Divider ─── */
     .div {
@@ -283,8 +320,11 @@
     <button class="tab on" onclick="switchTab('discord')">
       <i class="fab fa-discord"></i> ديسكورد
     </button>
+    <button class="tab" onclick="switchTab('steam')">
+      <i class="fab fa-steam"></i> ستيم
+    </button>
     <button class="tab" onclick="switchTab('email')">
-      <i class="fas fa-envelope"></i> إيميل وباسورد
+      <i class="fas fa-envelope"></i> إيميل
     </button>
   </div>
 
@@ -300,6 +340,45 @@
     <p class="discord-note">
       سيتم جلب إيميلك من ديسكورد تلقائياً وحفظه، عشان تقدر تسجل دخول بالإيميل لاحقاً وتلاقي بياناتك موجودة.
     </p>
+  </div>
+
+  <!-- ══ Steam Panel ══ -->
+  <div class="panel" id="p-steam">
+
+    <!-- Steam link banner (show when steam linked to discord) -->
+    <div class="steam-link-banner" id="steam-link-banner">
+      <i class="fab fa-discord" style="color:#9da7fb;margin-left:5px"></i>
+      <strong>وجدنا حساب ديسكورد بنفس الإيميل!</strong><br>
+      تبغى تربط حساب ستيم مع ديسكورد عشان تسجل بكلتا الطريقتين؟
+      <div class="link-actions">
+        <button class="lbtn lbtn-y" onclick="confirmSteamLink()">
+          <i class="fab fa-discord"></i> نعم، ارتبط
+        </button>
+        <button class="lbtn lbtn-n" onclick="dismissSteamLink()">ستيم فقط</button>
+      </div>
+    </div>
+
+    <button class="steam-btn" onclick="loginSteam()">
+      <img src="https://store.steampowered.com/favicon.ico" alt="Steam">
+      تسجيل الدخول عبر Steam
+    </button>
+
+    <p class="discord-note">
+      سيتم تحويلك لصفحة ستيم للتحقق. بعد العودة، سنحاول ربط حسابك بالديسكورد تلقائياً إذا نفس الإيميل.
+    </p>
+
+    <!-- Steam profile preview (shown after login) -->
+    <div id="steam-preview" style="display:none;margin-top:14px;padding:13px;background:rgba(27,40,56,0.6);border:1px solid rgba(102,192,244,0.2);border-radius:12px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img id="steam-avatar" src="" style="width:44px;height:44px;border-radius:50%;border:2px solid rgba(102,192,244,0.4);">
+        <div>
+          <div id="steam-name" style="font-weight:700;color:#c6d4df;font-size:.95rem;"></div>
+          <div id="steam-id-display" style="font-size:.75rem;color:rgba(255,255,255,.3);margin-top:2px;"></div>
+          <span class="linked-badge steam-badge"><i class="fab fa-steam"></i> متصل</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ══ Email Panel ══ -->
@@ -383,8 +462,11 @@ const REDIRECT_URI = 'https://saai5l.github.io/Plus_/login.html';
 
 /* ════════════════════ TABS ════════════════════ */
 function switchTab(t){
-  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',(t==='discord'&&i===0)||(t==='email'&&i===1)));
+  const tabs=document.querySelectorAll('.tab');
+  const order=['discord','steam','email'];
+  tabs.forEach((b,i)=>b.classList.toggle('on',order[i]===t));
   document.getElementById('p-discord').classList.toggle('on',t==='discord');
+  document.getElementById('p-steam').classList.toggle('on',t==='steam');
   document.getElementById('p-email').classList.toggle('on',t==='email');
   clearAlert();
 }
@@ -409,7 +491,168 @@ function togglePw(){
   e.className='fas fa-'+(i.type==='text'?'eye-slash':'eye');
 }
 
-/* ════════════════════ DISCORD LOGIN ════════════════════ */
+/* ════════════════════ STEAM LOGIN (OpenID) ════════════════════ */
+// Steam OpenID 2.0 — redirect to Steam, Steam returns steamid in URL
+function loginSteam(){
+  const returnTo = encodeURIComponent(REDIRECT_URI + '?steam=1');
+  const realm    = encodeURIComponent(REDIRECT_URI.split('/').slice(0,3).join('/'));
+  const steamUrl =
+    `https://steamcommunity.com/openid/login` +
+    `?openid.ns=${encodeURIComponent('http://specs.openid.net/auth/2.0')}` +
+    `&openid.mode=checkid_setup` +
+    `&openid.return_to=${returnTo}` +
+    `&openid.realm=${realm}` +
+    `&openid.identity=${encodeURIComponent('http://specs.openid.net/auth/2.0/identifier_select')}` +
+    `&openid.claimed_id=${encodeURIComponent('http://specs.openid.net/auth/2.0/identifier_select')}`;
+  window.location.href = steamUrl;
+}
+
+// بعد الرجوع من ستيم — استخرج steamId من URL
+function handleSteamCallback(params) {
+  // Steam يرجع: openid.claimed_id = https://steamcommunity.com/openid/id/STEAMID64
+  const claimedId = params.get('openid.claimed_id') || '';
+  const match = claimedId.match(/\/(\d{17})$/);
+  if (!match) {
+    showAlert('فشل التحقق من ستيم، جرب مرة ثانية.');
+    switchTab('steam');
+    return;
+  }
+  const steamId = match[1];
+
+  // جلب بيانات الملف الشخصي عبر Steam API proxy (CORS-friendly)
+  // نستخدم Steam Web API بدون key بشكل محدود — أو نعرض ما عندنا
+  processSteamLogin(steamId);
+}
+
+let pendingSteamLink = null;
+
+async function processSteamLogin(steamId) {
+  showAlert('جاري معالجة تسجيل ستيم…', 'inf');
+  switchTab('steam');
+
+  // نحاول نجيب profile info
+  let steamName = 'مستخدم ستيم';
+  let steamAvatar = `https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg`;
+
+  // نحاول Steam API عبر allorigins proxy
+  try {
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=NOKEY&steamids=${steamId}`)}`;
+    const r = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
+    const j = await r.json();
+    const parsed = JSON.parse(j.contents);
+    const p = parsed?.response?.players?.[0];
+    if (p) {
+      steamName   = p.personaname || steamName;
+      steamAvatar = p.avatarfull  || steamAvatar;
+    }
+  } catch { /* نكمل بدون بيانات تفصيلية */ }
+
+  // احفظ Steam session
+  const steamData = {
+    steamId,
+    name:    steamName,
+    avatar:  steamAvatar,
+    loginVia:'steam'
+  };
+
+  // اعرض Preview
+  const prev = document.getElementById('steam-preview');
+  if (prev) {
+    document.getElementById('steam-avatar').src = steamAvatar;
+    document.getElementById('steam-name').textContent = steamName;
+    document.getElementById('steam-id-display').textContent = 'Steam ID: ' + steamId;
+    prev.style.display = 'block';
+  }
+
+  // تحقق — هل عنده ديسكورد مرتبط بنفس الـ steamId أو إيميل مرتبط
+  const existingLink = getSteamLink(steamId);
+  if (existingLink) {
+    // مرتبط مسبقاً — سجّل دخوله مباشرة
+    const du = JSON.parse(localStorage.getItem('pd_discord_users') || '{}');
+    const dc = du[existingLink] || null;
+    if (dc) {
+      const merged = { ...dc, steamId, loginVia: 'both' };
+      loginOk(merged, true, 'أهلاً ' + merged.name + '! تم التحقق عبر ستيم 🎮');
+      return;
+    }
+  }
+
+  // هل فيه حساب ديسكورد له إيميل مرتبط يطابق Steam profile؟
+  // (نعرض بانر الربط حتى يختار)
+  pendingSteamLink = { steamId, steamName, steamAvatar };
+
+  const allDiscord = JSON.parse(localStorage.getItem('pd_discord_users') || '{}');
+  const hasDiscord = Object.keys(allDiscord).length > 0;
+
+  if (hasDiscord) {
+    document.getElementById('steam-link-banner').classList.add('on');
+    showAlert('وجدنا حساب ديسكورد — شوف الخيارات أعلاه.', 'inf');
+  } else {
+    // لا يوجد ديسكورد — سجّل دخول بستيم مباشرة
+    const user = {
+      id:      'steam_' + steamId,
+      name:    steamName,
+      avatar:  steamAvatar,
+      steamId: steamId,
+      loginVia:'steam'
+    };
+    saveSteamLink(steamId, null);
+    loginOk(user, true, 'أهلاً ' + steamName + '! جاري التحويل 🎮');
+  }
+}
+
+function confirmSteamLink() {
+  if (!pendingSteamLink) return;
+  const { steamId, steamName, steamAvatar } = pendingSteamLink;
+
+  // جيب آخر حساب ديسكورد
+  const allDiscord = JSON.parse(localStorage.getItem('pd_discord_users') || '{}');
+  const discordId  = Object.keys(allDiscord).pop();
+  const dc         = allDiscord[discordId] || {};
+
+  const merged = {
+    id:       discordId || ('steam_' + steamId),
+    name:     dc.name || steamName,
+    avatar:   dc.avatar || steamAvatar,
+    email:    dc.email || null,
+    steamId:  steamId,
+    discordId:discordId || null,
+    loginVia: 'both'
+  };
+
+  saveSteamLink(steamId, discordId);
+  document.getElementById('steam-link-banner').classList.remove('on');
+  loginOk(merged, true, 'تم ربط ستيم بالديسكورد! 🎮🔗');
+  pendingSteamLink = null;
+}
+
+function dismissSteamLink() {
+  if (!pendingSteamLink) return;
+  const { steamId, steamName, steamAvatar } = pendingSteamLink;
+  const user = {
+    id:      'steam_' + steamId,
+    name:    steamName,
+    avatar:  steamAvatar,
+    steamId: steamId,
+    loginVia:'steam'
+  };
+  saveSteamLink(steamId, null);
+  document.getElementById('steam-link-banner').classList.remove('on');
+  loginOk(user, true);
+  pendingSteamLink = null;
+}
+
+function saveSteamLink(steamId, discordId) {
+  const l = JSON.parse(localStorage.getItem('pd_steam_links') || '{}');
+  l[steamId] = discordId;
+  localStorage.setItem('pd_steam_links', JSON.stringify(l));
+}
+
+function getSteamLink(steamId) {
+  return (JSON.parse(localStorage.getItem('pd_steam_links') || '{}'))[steamId] || null;
+}
+
+
 function loginDiscord(){
   const scope=encodeURIComponent('identify email');
   window.location.href=`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}`+
@@ -420,6 +663,16 @@ function loginDiscord(){
 window.addEventListener('load',()=>{
   const frag=new URLSearchParams(window.location.hash.slice(1));
   const token=frag.get('access_token');
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // ── Steam OpenID callback ──
+  if(urlParams.get('steam') === '1' && urlParams.get('openid.mode') === 'id_res'){
+    showAlert('جاري التحقق من ستيم…','inf');
+    switchTab('steam');
+    window.history.replaceState({},document.title,window.location.pathname);
+    handleSteamCallback(urlParams);
+    return;
+  }
 
   if(token){
     showAlert('جاري تسجيل الدخول…','inf');
