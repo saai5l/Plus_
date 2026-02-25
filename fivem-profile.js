@@ -1,248 +1,190 @@
 /* ============================================================
-   Plus Dev — FiveM Profile Integration
-   ملف ربط الموقع بسيرفر QBCore
+   Plus Dev — FiveM Profile Integration v2.0
    ============================================================ */
 
-// ⚙️ إعدادات — غيّر هذي القيم
 const FIVEM_CONFIG = {
-    // IP السيرفر مع البورت الافتراضي لـ FiveM
-    serverUrl: 'http://147.189.171.57:30120',
-    // نفس المفتاح اللي في server.lua
-    apiKey: 'Seif_2025_Secure',
+    serverUrl : 'http://147.189.171.57:30120',
+    apiKey    : 'Seif_2025_Secure',
 };
 
-// ============================================================
-// جيب بيانات اللاعب من السيرفر
-// ============================================================
 async function fetchPlayerFromFiveM(discordId) {
     if (!discordId) return null;
-
-    // نظّف الـ ID (أشيل discord: لو موجود)
     const cleanId = discordId.replace('discord:', '');
-
     try {
         const res = await fetch(
             `${FIVEM_CONFIG.serverUrl}/player?discord=${cleanId}`,
-            {
-                headers: {
-                    'x-api-key': FIVEM_CONFIG.apiKey,
-                    'Content-Type': 'application/json'
-                },
-                signal: AbortSignal.timeout(8000) // timeout 8 ثانية
-            }
+            { headers: { 'x-api-key': FIVEM_CONFIG.apiKey }, signal: AbortSignal.timeout(10000) }
         );
-
-        if (!res.ok) throw new Error('Server error: ' + res.status);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         return data.success ? data : null;
-
     } catch (err) {
-        console.warn('[PlusDev] FiveM API Error:', err.message);
+        console.warn('[PlusDev] FiveM error:', err.message);
         return null;
     }
 }
 
-// ============================================================
-// جيب عدد اللاعبين أونلاين
-// ============================================================
 async function fetchOnlinePlayers() {
     try {
         const res = await fetch(`${FIVEM_CONFIG.serverUrl}/online`, {
             headers: { 'x-api-key': FIVEM_CONFIG.apiKey },
             signal: AbortSignal.timeout(5000)
         });
-        const data = await res.json();
-        return data.success ? data : null;
-    } catch {
-        return null;
-    }
+        return await res.json();
+    } catch { return null; }
 }
 
-// ============================================================
-// عرض بيانات اللاعب في صفحة الملف الشخصي
-// ============================================================
+const JOB_COLORS = {
+    police    : { color:'#3498db', bg:'rgba(52,152,219,0.12)',  icon:'fa-shield-alt' },
+    ambulance : { color:'#2ecc71', bg:'rgba(46,204,113,0.12)',  icon:'fa-briefcase-medical' },
+    mechanic  : { color:'#f39c12', bg:'rgba(243,156,18,0.12)',  icon:'fa-wrench' },
+    realestate: { color:'#9b59b6', bg:'rgba(155,89,182,0.12)',  icon:'fa-building' },
+    cardealer : { color:'#1abc9c', bg:'rgba(26,188,156,0.12)',  icon:'fa-car' },
+    default   : { color:'#fc7823', bg:'rgba(252,120,35,0.12)',  icon:'fa-briefcase' },
+};
+
+const fmt = n => Number(n || 0).toLocaleString('ar-SA');
+
+function getJobStyle(jobName) {
+    return JOB_COLORS[jobName] || JOB_COLORS.default;
+}
+
+function buildVitalBar(label, icon, pct, cls) {
+    const color = cls.includes('hunger') ? '#f39c12' : cls.includes('thirst') ? '#3498db' : '#e74c3c';
+    return `<div class="fivem-vital-item">
+      <span class="fivem-vital-label"><i class="fas ${icon}"></i> ${label}</span>
+      <div class="fivem-vital-bar"><div class="fivem-vital-fill ${cls}" style="width:${pct}%"></div></div>
+      <span class="fivem-vital-pct" style="color:${color}">${pct}%</span>
+    </div>`;
+}
+
+function buildProfileHTML(player, user) {
+    const job    = getJobStyle(player.job_name);
+    const avatar = user.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png';
+    const hunger = Math.min(Math.round(player.hunger), 100);
+    const thirst = Math.min(Math.round(player.thirst), 100);
+    const stress = Math.min(Math.round(player.stress), 100);
+
+    return `
+    <div class="fivem-profile-card">
+      <div class="fivem-card-header">
+        <div class="fivem-avatar-wrap">
+          <img src="${avatar}" alt="avatar" class="fivem-avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+          ${player.online ? '<span class="fivem-online-dot" title="داخل السيرفر"></span>' : ''}
+        </div>
+        <div class="fivem-header-info">
+          <h2 class="fivem-char-name">${player.name}</h2>
+          <span class="fivem-job-badge" style="background:${job.bg};color:${job.color};border-color:${job.color}44;">
+            <i class="fas ${job.icon}"></i> ${player.job}
+            ${player.job_grade ? `<small>— ${player.job_grade}</small>` : ''}
+          </span>
+          <p class="fivem-citizen-id"><i class="fas fa-id-card"></i> Citizen ID: <code>${player.citizenid}</code></p>
+          <span class="fivem-server-badge ${player.online ? 'online' : 'offline'}">
+            <i class="fas fa-circle"></i> ${player.online ? 'داخل السيرفر' : 'خارج السيرفر'}
+          </span>
+        </div>
+      </div>
+      <div class="fivem-stats-grid">
+        <div class="fivem-stat-card fivem-stat-cash">
+          <div class="fivem-stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+          <div class="fivem-stat-info"><span class="fivem-stat-label">كاش</span><span class="fivem-stat-value">$${fmt(player.cash)}</span></div>
+        </div>
+        <div class="fivem-stat-card fivem-stat-bank">
+          <div class="fivem-stat-icon"><i class="fas fa-university"></i></div>
+          <div class="fivem-stat-info"><span class="fivem-stat-label">بنك</span><span class="fivem-stat-value">$${fmt(player.bank)}</span></div>
+        </div>
+        <div class="fivem-stat-card fivem-stat-time">
+          <div class="fivem-stat-icon"><i class="fas fa-clock"></i></div>
+          <div class="fivem-stat-info"><span class="fivem-stat-label">وقت اللعب</span><span class="fivem-stat-value">${player.playtime}</span></div>
+        </div>
+        <div class="fivem-stat-card fivem-stat-phone">
+          <div class="fivem-stat-icon"><i class="fas fa-phone"></i></div>
+          <div class="fivem-stat-info"><span class="fivem-stat-label">رقم الهاتف</span><span class="fivem-stat-value">${player.phone || 'غير محدد'}</span></div>
+        </div>
+      </div>
+      <div class="fivem-vitals">
+        ${buildVitalBar('جوع','fa-utensils',hunger,'fivem-vital-hunger')}
+        ${buildVitalBar('عطش','fa-tint',thirst,'fivem-vital-thirst')}
+        ${buildVitalBar('ضغط','fa-brain',stress,'fivem-vital-stress')}
+      </div>
+      <div class="fivem-card-footer">
+        <span class="fivem-nationality"><i class="fas fa-globe"></i> ${player.nationality}</span>
+        <button class="fivem-refresh-btn" onclick="loadFiveMProfile()"><i class="fas fa-sync-alt"></i> تحديث</button>
+      </div>
+    </div>`;
+}
+
+function buildSkeletonHTML() {
+    return `<div class="fivem-skeleton-card">
+      <div class="fivem-skeleton-header">
+        <div class="sk-circle"></div>
+        <div class="sk-lines"><div class="sk-line w60"></div><div class="sk-line w40"></div><div class="sk-line w30"></div></div>
+      </div>
+      <div class="sk-grid">${[1,2,3,4].map(()=>`<div class="sk-stat"><div class="sk-icon"></div><div class="sk-lines"><div class="sk-line w50"></div><div class="sk-line w70"></div></div></div>`).join('')}</div>
+      <div class="sk-vitals">${[1,2,3].map(()=>`<div class="sk-vital"><div class="sk-line w20"></div><div class="sk-bar"></div></div>`).join('')}</div>
+    </div>`;
+}
+
 async function loadFiveMProfile() {
     const section = document.getElementById('fivem-profile-section');
     if (!section) return;
 
-    const savedUser = JSON.parse(localStorage.getItem('user') || 'null');
-    if (!savedUser) {
-        section.innerHTML = `
-            <div class="fivem-not-logged">
-                <i class="fas fa-lock"></i>
-                <p>سجّل دخولك عبر ديسكورد لعرض ملفك في اللعبة</p>
-            </div>`;
+    const savedUser = JSON.parse(
+        localStorage.getItem('plusdev_user') ||
+        localStorage.getItem('user') || 'null'
+    );
+
+    if (!savedUser || !savedUser.id) {
+        section.innerHTML = `<div class="fivem-not-logged"><i class="fas fa-lock"></i><p>سجّل دخولك عبر ديسكورد لعرض ملفك في اللعبة</p></div>`;
         return;
     }
 
-    // حالة التحميل
-    section.innerHTML = `
-        <div class="fivem-loading">
-            <div class="fivem-spinner"></div>
-            <p>جاري تحميل بياناتك من السيرفر...</p>
-        </div>`;
+    section.innerHTML = buildSkeletonHTML();
 
-    const player = await fetchPlayerFromFiveM(savedUser.id);
+    const discordId = savedUser.discordId || (savedUser.loginVia === 'discord' ? savedUser.id : null);
+
+    if (!discordId) {
+        section.innerHTML = `<div class="fivem-not-found">
+          <i class="fab fa-discord"></i>
+          <h3>يلزم ربط حساب ديسكورد</h3>
+          <p>الملف الشخصي يحتاج حساب ديسكورد مرتبط بسيرفر FiveM.</p>
+          <a href="login.html" class="fivem-retry-btn"><i class="fab fa-discord"></i> ربط ديسكورد</a>
+        </div>`;
+        return;
+    }
+
+    const player = await fetchPlayerFromFiveM(discordId);
 
     if (!player) {
-        section.innerHTML = `
-            <div class="fivem-not-found">
-                <i class="fas fa-user-slash"></i>
-                <h3>لم يتم العثور على بياناتك</h3>
-                <p>تأكد أنك دخلت السيرفر مرة واحدة على الأقل، أو أن السيرفر شغّال حالياً.</p>
-                <button class="fivem-retry-btn" onclick="loadFiveMProfile()">
-                    <i class="fas fa-redo"></i> إعادة المحاولة
-                </button>
-            </div>`;
+        section.innerHTML = `<div class="fivem-not-found">
+          <i class="fas fa-user-slash"></i>
+          <h3>لم يتم العثور على بياناتك</h3>
+          <p>تأكد أنك دخلت السيرفر مرة واحدة على الأقل، أو أن السيرفر يعمل حالياً.</p>
+          <button class="fivem-retry-btn" onclick="loadFiveMProfile()"><i class="fas fa-redo"></i> إعادة المحاولة</button>
+        </div>`;
         return;
     }
 
-    // تحديد لون الوظيفة
-    const jobColors = {
-        'police': '#3498db', 'ambulance': '#2ecc71', 'mechanic': '#f39c12',
-        'realestate': '#9b59b6', 'cardealer': '#1abc9c', 'default': '#fc7823'
-    };
-    const jobColor = jobColors[player.job_name] || jobColors.default;
-
-    // تنسيق الأرقام
-    const fmt = n => Number(n || 0).toLocaleString('ar-SA');
-
-    section.innerHTML = `
-        <div class="fivem-profile-card">
-
-            <!-- Header -->
-            <div class="fivem-card-header">
-                <div class="fivem-avatar-wrap">
-                    <img src="${savedUser.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}"
-                         alt="avatar" class="fivem-avatar">
-                    <span class="fivem-online-dot"></span>
-                </div>
-                <div class="fivem-header-info">
-                    <h2 class="fivem-char-name">${player.name}</h2>
-                    <span class="fivem-job-badge" style="background:${jobColor}22;color:${jobColor};border-color:${jobColor}44;">
-                        <i class="fas fa-briefcase"></i> ${player.job}
-                        ${player.job_grade ? `<small>— ${player.job_grade}</small>` : ''}
-                    </span>
-                    <p class="fivem-citizen-id">
-                        <i class="fas fa-id-card"></i> Citizen ID: <code>${player.citizenid}</code>
-                    </p>
-                </div>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="fivem-stats-grid">
-
-                <div class="fivem-stat-card fivem-stat-cash">
-                    <div class="fivem-stat-icon"><i class="fas fa-money-bill-wave"></i></div>
-                    <div class="fivem-stat-info">
-                        <span class="fivem-stat-label">كاش</span>
-                        <span class="fivem-stat-value">$${fmt(player.cash)}</span>
-                    </div>
-                </div>
-
-                <div class="fivem-stat-card fivem-stat-bank">
-                    <div class="fivem-stat-icon"><i class="fas fa-university"></i></div>
-                    <div class="fivem-stat-info">
-                        <span class="fivem-stat-label">بنك</span>
-                        <span class="fivem-stat-value">$${fmt(player.bank)}</span>
-                    </div>
-                </div>
-
-                <div class="fivem-stat-card fivem-stat-time">
-                    <div class="fivem-stat-icon"><i class="fas fa-clock"></i></div>
-                    <div class="fivem-stat-info">
-                        <span class="fivem-stat-label">وقت اللعب</span>
-                        <span class="fivem-stat-value">${player.playtime}</span>
-                    </div>
-                </div>
-
-                <div class="fivem-stat-card fivem-stat-phone">
-                    <div class="fivem-stat-icon"><i class="fas fa-phone"></i></div>
-                    <div class="fivem-stat-info">
-                        <span class="fivem-stat-label">رقم الهاتف</span>
-                        <span class="fivem-stat-value">${player.phone || 'غير محدد'}</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Vitals Bar -->
-            <div class="fivem-vitals">
-                <div class="fivem-vital-item">
-                    <span class="fivem-vital-label"><i class="fas fa-utensils"></i> جوع</span>
-                    <div class="fivem-vital-bar">
-                        <div class="fivem-vital-fill fivem-vital-hunger"
-                             style="width:${Math.min(player.hunger,100)}%"></div>
-                    </div>
-                    <span class="fivem-vital-pct">${Math.round(player.hunger)}%</span>
-                </div>
-                <div class="fivem-vital-item">
-                    <span class="fivem-vital-label"><i class="fas fa-tint"></i> عطش</span>
-                    <div class="fivem-vital-bar">
-                        <div class="fivem-vital-fill fivem-vital-thirst"
-                             style="width:${Math.min(player.thirst,100)}%"></div>
-                    </div>
-                    <span class="fivem-vital-pct">${Math.round(player.thirst)}%</span>
-                </div>
-                <div class="fivem-vital-item">
-                    <span class="fivem-vital-label"><i class="fas fa-brain"></i> ضغط</span>
-                    <div class="fivem-vital-bar">
-                        <div class="fivem-vital-fill fivem-vital-stress"
-                             style="width:${Math.min(player.stress,100)}%"></div>
-                    </div>
-                    <span class="fivem-vital-pct">${Math.round(player.stress)}%</span>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="fivem-card-footer">
-                <span class="fivem-nationality">
-                    <i class="fas fa-globe"></i> ${player.nationality}
-                </span>
-                <button class="fivem-refresh-btn" onclick="loadFiveMProfile()">
-                    <i class="fas fa-sync-alt"></i> تحديث
-                </button>
-            </div>
-
-        </div>`;
+    section.innerHTML = buildProfileHTML(player, savedUser);
 }
 
-// ============================================================
-// عدد اللاعبين أونلاين في الهيدر/الهوم
-// ============================================================
 async function updateOnlineCount() {
     const el = document.getElementById('fivem-online-count');
     if (!el) return;
-
     el.textContent = '...';
     const data = await fetchOnlinePlayers();
-    if (data) {
-        el.textContent = `${data.count} / ${data.max}`;
-        el.classList.add('fivem-online-active');
-    } else {
-        el.textContent = 'غير متاح';
-    }
+    el.textContent = (data && data.success) ? `${data.count} / ${data.max}` : 'غير متاح';
 }
 
-// ============================================================
-// تحميل تلقائي عند فتح صفحة الملف الشخصي
-// ============================================================
-// هذا الكود يمنع التعليق ويشغل جلب البيانات فوراً
 if (typeof showPage === 'function' && !window._profileFixed) {
-    const originalShowPage = showPage;
+    const _orig = showPage;
     window.showPage = function(pageId) {
-        originalShowPage(pageId);
+        _orig(pageId);
         if (pageId === 'profile-page') {
-            setTimeout(() => {
-                if (typeof loadFiveMProfile === 'function') loadFiveMProfile();
-                if (typeof updateOnlineCount === 'function') updateOnlineCount();
-            }, 300);
+            setTimeout(() => { loadFiveMProfile(); updateOnlineCount(); }, 200);
         }
     };
     window._profileFixed = true;
 }
 
-// تحديث عداد أونلاين عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', () => {
-    updateOnlineCount();
-});
+document.addEventListener('DOMContentLoaded', updateOnlineCount);
