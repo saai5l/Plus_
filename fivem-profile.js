@@ -227,14 +227,19 @@ async function updateOnlineCount() {
 // ============================================================
 // تحميل تلقائي عند فتح صفحة الملف الشخصي
 // ============================================================
-const _origShowPage = typeof showPage === 'function' ? showPage : null;
-
-function showPage(pageId) {
-    if (_origShowPage) _origShowPage(pageId);
-    if (pageId === 'profile-page') {
-        setTimeout(loadFiveMProfile, 200);
-        setTimeout(updateOnlineCount, 200);
-    }
+// هذا الكود يمنع التعليق ويشغل جلب البيانات فوراً
+if (typeof showPage === 'function' && !window._profileFixed) {
+    const originalShowPage = showPage;
+    window.showPage = function(pageId) {
+        originalShowPage(pageId);
+        if (pageId === 'profile-page') {
+            setTimeout(() => {
+                if (typeof loadFiveMProfile === 'function') loadFiveMProfile();
+                if (typeof updateOnlineCount === 'function') updateOnlineCount();
+            }, 300);
+        }
+    };
+    window._profileFixed = true;
 }
 
 // تحديث عداد أونلاين عند تحميل الصفحة
