@@ -22,9 +22,6 @@
       --text-muted:   #777;
       --discord:      #5865F2;
       --discord-dark: #4752c4;
-      --steam:        #1b2838;
-      --steam-mid:    #2a475e;
-      --steam-accent: #66c0f4;
       --radius:       14px;
       --tr:           all 0.3s ease;
     }
@@ -105,15 +102,15 @@
 
     /* ─── Tabs ─── */
     .tabs {
-      display:flex; gap:4px;
+      display:flex; gap:5px;
       background:rgba(255,255,255,0.04);
       border-radius:10px; padding:4px;
       margin-bottom:26px;
     }
     .tab {
-      flex:1; padding:8px 0;
+      flex:1; padding:9px 0;
       border:none; border-radius:7px;
-      font-family:'Tajawal',sans-serif; font-size:.8rem; font-weight:700;
+      font-family:'Tajawal',sans-serif; font-size:.9rem; font-weight:700;
       color:var(--text-muted); background:transparent; cursor:pointer;
       transition: var(--tr);
     }
@@ -122,7 +119,7 @@
       color:#fff;
       box-shadow: 0 4px 14px rgba(252,120,35,0.32);
     }
-    .tab i { margin-left:4px; }
+    .tab i { margin-left:5px; }
 
     /* ─── Panels ─── */
     .panel { display:none; animation: pan .3s ease; }
@@ -161,55 +158,6 @@
     .discord-btn:hover::after { opacity:1; }
     .discord-btn i { font-size:1.25rem; }
     .discord-note { font-size:.8rem; color:var(--text-muted); text-align:center; margin-top:12px; line-height:1.55; }
-
-    /* ─── Steam button ─── */
-    .steam-btn {
-      width:100%; display:flex; align-items:center; justify-content:center; gap:11px;
-      padding:14px; background:linear-gradient(135deg, var(--steam), var(--steam-mid));
-      border:1px solid rgba(102,192,244,0.2); border-radius:var(--radius); color:#c6d4df;
-      font-family:'Tajawal',sans-serif; font-size:1.05rem; font-weight:800;
-      cursor:pointer; transition:var(--tr);
-      box-shadow: 0 6px 20px rgba(27,40,56,0.6);
-      position:relative; overflow:hidden;
-    }
-    .steam-btn::after { content:''; position:absolute; inset:0; background:rgba(102,192,244,.06); opacity:0; transition:opacity .3s; }
-    .steam-btn:hover  { transform:translateY(-2px); box-shadow:0 10px 28px rgba(102,192,244,.2); border-color:rgba(102,192,244,.5); color:#fff; }
-    .steam-btn:hover::after { opacity:1; }
-    .steam-btn img { width:22px; height:22px; }
-
-    /* ─── Steam profile preview ─── */
-    .steam-preview {
-      margin-top:14px;
-      padding:14px 16px;
-      background:rgba(27,40,56,0.6);
-      border:1px solid rgba(102,192,244,0.2);
-      border-radius:12px;
-      display:none;
-      align-items:center;
-      gap:12px;
-      animation: aIn .3s ease;
-    }
-    .steam-preview.on { display:flex; }
-    .steam-preview img { width:44px; height:44px; border-radius:50%; border:2px solid rgba(102,192,244,.4); flex-shrink:0; }
-    .steam-preview-info { flex:1; }
-    .steam-preview-name { font-weight:800; color:#c6d4df; font-size:.93rem; }
-    .steam-preview-id   { font-size:.72rem; color:rgba(255,255,255,.3); margin-top:2px; }
-    .steam-linked-badge {
-      display:inline-flex; align-items:center; gap:5px;
-      background:rgba(102,192,244,.1); border:1px solid rgba(102,192,244,.25);
-      color:var(--steam-accent); padding:3px 9px; border-radius:20px;
-      font-size:.72rem; font-weight:700; margin-top:5px;
-    }
-
-    /* ─── Steam link offer ─── */
-    .steam-link-offer {
-      display:none; margin-top:12px; padding:13px 15px;
-      background:linear-gradient(135deg,rgba(27,40,56,.8),rgba(42,71,94,.5));
-      border:1px solid rgba(102,192,244,.25); border-radius:12px;
-      font-size:.83rem; color:var(--text-muted); line-height:1.6;
-    }
-    .steam-link-offer.on { display:block; }
-    .steam-link-offer strong { color:var(--steam-accent); }
 
     /* ─── Divider ─── */
     .div {
@@ -332,9 +280,12 @@
 
   <!-- Tabs -->
   <div class="tabs">
-    <button class="tab on"  id="tab-discord"  onclick="switchTab('discord')"><i class="fab fa-discord"></i>  ديسكورد</button>
-    <button class="tab"     id="tab-steam"    onclick="switchTab('steam')">  <i class="fab fa-steam"></i>   ستيم</button>
-    <button class="tab"     id="tab-email"    onclick="switchTab('email')">  <i class="fas fa-envelope"></i> إيميل</button>
+    <button class="tab on" onclick="switchTab('discord')">
+      <i class="fab fa-discord"></i> ديسكورد
+    </button>
+    <button class="tab" onclick="switchTab('email')">
+      <i class="fas fa-envelope"></i> إيميل وباسورد
+    </button>
   </div>
 
   <!-- Alert (shared) -->
@@ -343,42 +294,12 @@
   <!-- ══ Discord Panel ══ -->
   <div class="panel on" id="p-discord">
     <button class="discord-btn" onclick="loginDiscord()">
-      <i class="fab fa-discord"></i> تسجيل الدخول عبر Discord
+      <i class="fab fa-discord"></i>
+      تسجيل الدخول عبر Discord
     </button>
-    <p class="discord-note">سيتم جلب إيميلك من ديسكورد تلقائياً وحفظه، عشان تقدر تسجل دخول بالإيميل لاحقاً.</p>
-  </div>
-
-  <!-- ══ Steam Panel ══ -->
-  <div class="panel" id="p-steam">
-
-    <button class="steam-btn" id="steam-login-btn" onclick="loginSteam()">
-      <img src="https://store.steampowered.com/favicon.ico" alt="Steam">
-      تسجيل الدخول عبر Steam
-    </button>
-
-    <p class="discord-note">سيتم تحويلك لستيم للتحقق من هويتك، ثم ترجع هنا تلقائياً.</p>
-
-    <!-- بعد الدخول — معاينة الحساب -->
-    <div class="steam-preview" id="steam-preview">
-      <img id="steam-av" src="">
-      <div class="steam-preview-info">
-        <div class="steam-preview-name" id="steam-uname">—</div>
-        <div class="steam-preview-id"   id="steam-uid">Steam ID: —</div>
-        <span class="steam-linked-badge"><i class="fab fa-steam"></i> متصل بستيم</span>
-      </div>
-    </div>
-
-    <!-- عرض ربط ديسكورد بعد الدخول بستيم -->
-    <div class="steam-link-offer" id="steam-link-offer">
-      <i class="fab fa-discord" style="color:#9da7fb;margin-left:6px"></i>
-      <strong>تبغى تربط حسابك بالديسكورد؟</strong><br>
-      يخليك تسجل بالطريقتين وتحتفظ بكل بياناتك.
-      <div class="link-actions" style="margin-top:10px">
-        <button class="lbtn lbtn-y" onclick="steamLinkDiscord()"><i class="fab fa-discord"></i> ربط ديسكورد</button>
-        <button class="lbtn lbtn-n" onclick="steamSkipLink()">تخطى</button>
-      </div>
-    </div>
-
+    <p class="discord-note">
+      سيتم جلب إيميلك من ديسكورد تلقائياً وحفظه، عشان تقدر تسجل دخول بالإيميل لاحقاً وتلاقي بياناتك موجودة.
+    </p>
   </div>
 
   <!-- ══ Email Panel ══ -->
@@ -442,15 +363,16 @@
 </div>
 
 <script>
-/* ══════════════ CONFIG ══════════════ */
-const CLIENT_ID   = '1453875994988380373';
+/* ════════════════════ CONFIG ════════════════════ */
+const CLIENT_ID = '1453875994988380373'; 
 const REDIRECT_URI = 'https://saai5l.github.io/Plus_/login.html';
 
-/* ══════════════ PARTICLES ══════════════ */
+/* ════════════════════ PARTICLES ════════════════════ */
 (function(){
   const colors=['#fc7823','rgba(252,120,35,0.5)','#e66a1f','rgba(252,120,35,0.25)'];
   for(let i=0;i<20;i++){
-    const p=document.createElement('div'); p.className='particle';
+    const p=document.createElement('div');
+    p.className='particle';
     const s=Math.random()*5+2;
     p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}vw;`+
       `background:${colors[Math.floor(Math.random()*colors.length)]};`+
@@ -459,16 +381,15 @@ const REDIRECT_URI = 'https://saai5l.github.io/Plus_/login.html';
   }
 })();
 
-/* ══════════════ TABS ══════════════ */
+/* ════════════════════ TABS ════════════════════ */
 function switchTab(t){
-  ['discord','steam','email'].forEach(id=>{
-    document.getElementById('tab-'+id)?.classList.toggle('on', id===t);
-    document.getElementById('p-'+id)?.classList.toggle('on', id===t);
-  });
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',(t==='discord'&&i===0)||(t==='email'&&i===1)));
+  document.getElementById('p-discord').classList.toggle('on',t==='discord');
+  document.getElementById('p-email').classList.toggle('on',t==='email');
   clearAlert();
 }
 
-/* ══════════════ ALERT ══════════════ */
+/* ════════════════════ ALERT ════════════════════ */
 function showAlert(msg,type='err'){
   const icons={err:'fa-circle-exclamation',ok:'fa-circle-check',inf:'fa-circle-info'};
   const el=document.getElementById('alert');
@@ -480,287 +401,216 @@ function clearAlert(){
   el.className='alert'; el.innerHTML='';
 }
 
-/* ══════════════ PASSWORD TOGGLE ══════════════ */
+/* ════════════════════ PASSWORD TOGGLE ════════════════════ */
 function togglePw(){
-  const i=document.getElementById('pw'),e=document.getElementById('eye');
+  const i=document.getElementById('pw');
+  const e=document.getElementById('eye');
   i.type=i.type==='password'?'text':'password';
   e.className='fas fa-'+(i.type==='text'?'eye-slash':'eye');
 }
 
-/* ══════════════════════════════════════════
-   DISCORD LOGIN
-══════════════════════════════════════════ */
+/* ════════════════════ DISCORD LOGIN ════════════════════ */
 function loginDiscord(){
   const scope=encodeURIComponent('identify email');
   window.location.href=`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}`+
     `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${scope}`;
 }
 
-function handleDiscordUser(u){
-  const avatar = u.avatar
-    ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png`
-    : `https://cdn.discordapp.com/embed/avatars/${(u.discriminator||0)%5}.png`;
-  const email = (u.email||'').toLowerCase()||null;
+/* ════════════════════ HANDLE DISCORD CALLBACK ════════════════════ */
+window.addEventListener('load',()=>{
+  const frag=new URLSearchParams(window.location.hash.slice(1));
+  const token=frag.get('access_token');
 
-  const userData = { id:u.id, name:u.global_name||u.username, avatar, email, loginVia:'discord' };
-
-  // حفظ
-  localStorage.setItem('user',         JSON.stringify(userData));
-  localStorage.setItem('plusdev_user', JSON.stringify(userData));
-
-  // Cache Discord
-  const du = JSON.parse(localStorage.getItem('pd_discord_users')||'{}');
-  du[u.id] = userData;
-  localStorage.setItem('pd_discord_users', JSON.stringify(du));
-  if(email) saveEmailLink(email, u.id);
-
-  // هل جاء من ربط ستيم؟
-  const linking = sessionStorage.getItem('pd_linking');
-  if(linking==='steam_to_discord'){
-    sessionStorage.removeItem('pd_linking');
-    const steamUser = JSON.parse(localStorage.getItem('pd_pending_steam')||'null');
-    if(steamUser){
-      localStorage.removeItem('pd_pending_steam');
-      const merged = { ...userData, steamId:steamUser.steamId, loginVia:'both' };
-      saveSteamLink(steamUser.steamId, u.id);
-      localStorage.setItem('user',         JSON.stringify(merged));
-      localStorage.setItem('plusdev_user', JSON.stringify(merged));
-      loginOk(merged, true, 'تم ربط ستيم بالديسكورد! 🎮🔗');
-      return;
-    }
-  }
-
-  loginOk(userData, true, 'مرحباً '+userData.name+'! جاري التحويل…');
-}
-
-/* ══════════════════════════════════════════
-   STEAM LOGIN  (OpenID 2.0)
-══════════════════════════════════════════ */
-function loginSteam(){
-  const returnTo = encodeURIComponent(REDIRECT_URI + '?steam=1');
-  const realm    = encodeURIComponent(new URL(REDIRECT_URI).origin + '/');
-  window.location.href =
-    'https://steamcommunity.com/openid/login' +
-    '?openid.ns='         + encodeURIComponent('http://specs.openid.net/auth/2.0') +
-    '&openid.mode=checkid_setup' +
-    '&openid.return_to='  + returnTo +
-    '&openid.realm='      + realm +
-    '&openid.identity='   + encodeURIComponent('http://specs.openid.net/auth/2.0/identifier_select') +
-    '&openid.claimed_id=' + encodeURIComponent('http://specs.openid.net/auth/2.0/identifier_select');
-}
-
-let _pendingSteam = null;
-
-async function handleSteamCallback(params){
-  const claimed = params.get('openid.claimed_id')||'';
-  const match   = claimed.match(/\/(\d{17})$/);
-  if(!match){ showAlert('فشل التحقق من ستيم، حاول مرة ثانية.'); return; }
-
-  const steamId = match[1];
-  showAlert('جاري تحميل بيانات ستيم…','inf');
-  switchTab('steam');
-
-  // جلب اسم وصورة عبر proxy مجاني
-  let name = 'مستخدم ستيم', avatar = 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
-  try{
-    const r = await fetch(
-      `https://api.allorigins.win/get?url=${encodeURIComponent('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=&steamids='+steamId)}`,
-      {signal:AbortSignal.timeout(6000)}
-    );
-    const j  = await r.json();
-    const p  = JSON.parse(j.contents)?.response?.players?.[0];
-    if(p){ name=p.personaname||name; avatar=p.avatarfull||avatar; }
-  }catch{}
-
-  // عرض معاينة
-  document.getElementById('steam-av').src    = avatar;
-  document.getElementById('steam-uname').textContent = name;
-  document.getElementById('steam-uid').textContent   = 'Steam ID: '+steamId;
-  document.getElementById('steam-preview').classList.add('on');
-  document.getElementById('steam-login-btn').style.display = 'none';
-
-  clearAlert();
-
-  // هل مرتبط مسبقاً؟
-  const linkedDiscord = getSteamLink(steamId);
-  if(linkedDiscord){
-    const du = JSON.parse(localStorage.getItem('pd_discord_users')||'{}');
-    const dc = du[linkedDiscord];
-    if(dc){
-      const merged = {...dc, steamId, loginVia:'both'};
-      loginOk(merged, true, 'أهلاً '+dc.name+'! تم التحقق عبر ستيم 🎮');
-      return;
-    }
-  }
-
-  // حساب ستيم جديد
-  _pendingSteam = { steamId, name, avatar };
-  const hasDiscord = Object.keys(JSON.parse(localStorage.getItem('pd_discord_users')||'{}')).length > 0;
-
-  if(hasDiscord){
-    document.getElementById('steam-link-offer').classList.add('on');
-    showAlert('حساب ستيم جاهز! تبغى تربطه بالديسكورد؟','inf');
-  } else {
-    steamFinish();
-  }
-}
-
-function steamLinkDiscord(){
-  if(!_pendingSteam) return;
-  // احفظ مؤقتاً وروّح لديسكورد
-  localStorage.setItem('pd_pending_steam', JSON.stringify(_pendingSteam));
-  sessionStorage.setItem('pd_linking','steam_to_discord');
-  loginDiscord();
-}
-
-function steamSkipLink(){
-  document.getElementById('steam-link-offer').classList.remove('on');
-  steamFinish();
-}
-
-function steamFinish(){
-  if(!_pendingSteam) return;
-  const { steamId, name, avatar } = _pendingSteam;
-  const user = { id:'steam_'+steamId, name, avatar, steamId, loginVia:'steam' };
-  saveSteamLink(steamId, null);
-  loginOk(user, true, 'أهلاً '+name+'! جاري التحويل 🎮');
-  _pendingSteam = null;
-}
-
-/* ══════════════════════════════════════════
-   EMAIL LOGIN
-══════════════════════════════════════════ */
-let pendingLink = null;
-
-async function submitEmail(e){
-  e.preventDefault(); clearAlert();
-  const email = document.getElementById('em').value.trim().toLowerCase();
-  const pass  = document.getElementById('pw').value;
-  const rem   = document.getElementById('rem').checked;
-  const btn   = document.getElementById('sbtn');
-
-  if(!email||!pass){ showAlert('يرجى تعبئة جميع الحقول.'); return; }
-  if(pass.length<6){ showAlert('كلمة المرور 6 أحرف على الأقل.'); return; }
-
-  btn.disabled=true; btn.innerHTML='جاري التحقق <span class="spin"></span>';
-
-  const discordId = getLinkedDiscordId(email);
-  const accounts  = getAccounts();
-
-  if(discordId){
-    if(accounts[email]){
-      if(accounts[email].pass===hash(pass)) loginOk(accounts[email].user,rem);
-      else showAlert('كلمة المرور غير صحيحة.');
-    } else {
-      pendingLink={email,pass,discordId,rem};
-      document.getElementById('link-banner').classList.add('on');
-      showAlert('وجدنا ديسكورد مرتبط — راجع التنبيه أعلاه.','inf');
-    }
-  } else {
-    if(accounts[email]){
-      if(accounts[email].pass===hash(pass)) loginOk(accounts[email].user,rem);
-      else showAlert('كلمة المرور غير صحيحة.');
-    } else {
-      const newUser={ id:'em_'+Date.now(), name:email.split('@')[0], avatar:`https://cdn.discordapp.com/embed/avatars/${Math.floor(Math.random()*5)}.png`, email, loginVia:'email' };
-      saveAccount(email,pass,newUser);
-      loginOk(newUser,rem,'تم إنشاء حسابك! 🎉');
-    }
-  }
-  btn.disabled=false; btn.innerHTML='تسجيل الدخول';
-}
-
-function confirmLink(){
-  if(!pendingLink) return;
-  const {email,pass,discordId,rem}=pendingLink;
-  const dc=JSON.parse(localStorage.getItem('pd_discord_users')||'{}')[discordId]||null;
-  const merged={ id:discordId, name:dc?dc.name:email.split('@')[0], avatar:dc?dc.avatar:'https://cdn.discordapp.com/embed/avatars/0.png', email, loginVia:'both', discordId };
-  saveAccount(email,pass,merged);
-  document.getElementById('link-banner').classList.remove('on');
-  loginOk(merged,rem,'تم ربط الحسابين! 🎉');
-  pendingLink=null;
-}
-
-function dismissLink(){
-  if(!pendingLink) return;
-  const {email,pass,rem}=pendingLink;
-  const newUser={ id:'em_'+Date.now(), name:email.split('@')[0], avatar:'https://cdn.discordapp.com/embed/avatars/0.png', email, loginVia:'email' };
-  saveAccount(email,pass,newUser);
-  document.getElementById('link-banner').classList.remove('on');
-  loginOk(newUser,rem);
-  pendingLink=null;
-}
-
-function forgotPw(){
-  const email=document.getElementById('em').value.trim();
-  if(!email){ showAlert('ادخل إيميلك أولاً.','inf'); document.getElementById('em').focus(); return; }
-  const disc=getLinkedDiscordId(email);
-  showAlert(disc ? 'حسابك مرتبط بديسكورد — سجّل عبر ديسكورد.' : 'لا يوجد حساب بهذا الإيميل.','inf');
-}
-
-/* ══════════════════════════════════════════
-   LOGIN SUCCESS
-══════════════════════════════════════════ */
-function loginOk(user,rem,msg){
-  const str=JSON.stringify(user);
-  localStorage.setItem('user',         str);
-  localStorage.setItem('plusdev_user', str);
-  if(msg) showAlert(msg,'ok');
-  else    showAlert('مرحباً '+( user.name||'')+'! جاري التحويل…','ok');
-  setTimeout(redirectHome, 1300);
-}
-function redirectHome(){ window.location.href='https://saai5l.github.io/Plus_/index.html'; }
-
-/* ══════════════════════════════════════════
-   WINDOW LOAD — Callbacks
-══════════════════════════════════════════ */
-window.addEventListener('load', ()=>{
-  const urlParams = new URLSearchParams(window.location.search);
-  const fragment  = new URLSearchParams(window.location.hash.slice(1));
-  const token     = fragment.get('access_token');
-
-  /* ── Steam callback ── */
-  if(urlParams.get('steam')==='1' && urlParams.get('openid.mode')==='id_res'){
-    window.history.replaceState({}, document.title, window.location.pathname);
-    handleSteamCallback(urlParams);
-    return;
-  }
-
-  /* ── Discord callback ── */
   if(token){
     showAlert('جاري تسجيل الدخول…','inf');
     fetch('https://discord.com/api/users/@me',{headers:{Authorization:`Bearer ${token}`}})
       .then(r=>r.json())
       .then(u=>handleDiscordUser(u))
       .catch(()=>showAlert('فشل الاتصال بديسكورد، جرب مرة ثانية.'));
-    window.history.replaceState({}, document.title, window.location.pathname);
-    return;
-  }
-
-  /* ── تحقق من جلسة موجودة ── */
-  try{
-    const raw = localStorage.getItem('plusdev_user') || localStorage.getItem('user');
-    if(raw){
-      const parsed = JSON.parse(raw);
-      if(parsed && parsed.id && parsed.name){
-        const str = JSON.stringify(parsed);
-        localStorage.setItem('user',         str);
-        localStorage.setItem('plusdev_user', str);
-        redirectHome();
-        return;
+    window.history.replaceState({},document.title,window.location.pathname);
+  } else {
+    // ✅ تحقق من كلا المفتاحين
+    try {
+      const raw = localStorage.getItem('plusdev_user') || localStorage.getItem('user');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.id && parsed.name) {
+          // تأكد من حفظ البيانات في كلا المفتاحين قبل التحويل
+          const userStr = JSON.stringify(parsed);
+          localStorage.setItem('user', userStr);
+          localStorage.setItem('plusdev_user', userStr);
+          redirectHome();
+          return;
+        }
       }
+      // إذا ما فيه بيانات صحيحة، امسح كل شي
+      localStorage.removeItem('plusdev_user');
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('plusdev_user');
+    } catch(e) {
+      localStorage.removeItem('plusdev_user');
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('plusdev_user');
     }
-    localStorage.removeItem('plusdev_user');
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('plusdev_user');
-  }catch(e){
-    localStorage.removeItem('plusdev_user');
-    localStorage.removeItem('user');
   }
 });
 
-/* ══════════════════════════════════════════
-   STORAGE HELPERS
-══════════════════════════════════════════ */
+function handleDiscordUser(u){
+  const avatar=u.avatar
+    ?`https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png`
+    :`https://cdn.discordapp.com/embed/avatars/${(u.discriminator||0)%5}.png`;
+
+  const email=(u.email||'').toLowerCase()||null;
+
+  const userData={
+    id:       u.id,
+    name:     u.global_name||u.username,
+    avatar:   avatar,
+    email:    email,
+    loginVia: 'discord'
+  };
+
+  /* Save main user session */
+  localStorage.setItem('plusdev_user', JSON.stringify(userData));
+  /* Backward compat with script.js */
+  localStorage.setItem('user', JSON.stringify(userData));
+
+  /* Cache Discord data for later merging */
+  const du=JSON.parse(localStorage.getItem('pd_discord_users')||'{}');
+  du[u.id]=userData;
+  localStorage.setItem('pd_discord_users',JSON.stringify(du));
+
+  /* Save email → discordId mapping if email available */
+  if(email) saveEmailLink(email, u.id);
+
+  loginOk(userData, true, 'مرحباً '+userData.name+'! جاري التحويل…');
+}
+
+/* ════════════════════ EMAIL LOGIN ════════════════════ */
+let pendingLink=null;
+
+async function submitEmail(e){
+  e.preventDefault(); clearAlert();
+  const email=document.getElementById('em').value.trim().toLowerCase();
+  const pass =document.getElementById('pw').value;
+  const rem  =document.getElementById('rem').checked;
+  const btn  =document.getElementById('sbtn');
+
+  if(!email||!pass){showAlert('يرجى تعبئة جميع الحقول.');return;}
+  if(pass.length<6){showAlert('كلمة المرور 6 أحرف على الأقل.');return;}
+
+  btn.disabled=true;
+  btn.innerHTML='جاري التحقق <span class="spin"></span>';
+
+  const discordId=getLinkedDiscordId(email);
+  const accounts =getAccounts();
+
+  if(discordId){
+    /* Email belongs to a Discord-linked account */
+    if(accounts[email]){
+      /* Already has password set → normal login */
+      if(accounts[email].pass===hash(pass)){
+        loginOk(accounts[email].user,rem);
+      } else {
+        showAlert('كلمة المرور غير صحيحة.');
+      }
+    } else {
+      /* First time using email for this Discord account → offer linking */
+      pendingLink={email,pass,discordId,rem};
+      document.getElementById('link-banner').classList.add('on');
+      showAlert('وجدنا ديسكورد مرتبط — راجع التنبيه أعلاه.','inf');
+    }
+  } else {
+    /* Regular email account */
+    if(accounts[email]){
+      if(accounts[email].pass===hash(pass)){
+        loginOk(accounts[email].user,rem);
+      } else {
+        showAlert('كلمة المرور غير صحيحة.');
+      }
+    } else {
+      /* Auto-register on first login */
+      const newUser={
+        id:      'em_'+Date.now(),
+        name:    email.split('@')[0],
+        avatar:  `https://cdn.discordapp.com/embed/avatars/${Math.floor(Math.random()*5)}.png`,
+        email:   email,
+        loginVia:'email'
+      };
+      saveAccount(email,pass,newUser);
+      loginOk(newUser,rem,'تم إنشاء حسابك وتسجيل الدخول! 🎉');
+    }
+  }
+
+  btn.disabled=false;
+  btn.innerHTML='تسجيل الدخول';
+}
+
+/* ════════════════════ LINK ACTIONS ════════════════════ */
+function confirmLink(){
+  if(!pendingLink) return;
+  const {email,pass,discordId,rem}=pendingLink;
+  const du=JSON.parse(localStorage.getItem('pd_discord_users')||'{}');
+  const dc=du[discordId]||null;
+  const merged={
+    id:        discordId,
+    name:      dc?dc.name:email.split('@')[0],
+    avatar:    dc?dc.avatar:`https://cdn.discordapp.com/embed/avatars/0.png`,
+    email:     email,
+    loginVia:  'both',
+    discordId: discordId
+  };
+  saveAccount(email,pass,merged);
+  document.getElementById('link-banner').classList.remove('on');
+  loginOk(merged,rem,'تم ربط الحسابين! الآن تقدر تسجل بكلتا الطريقتين 🎉');
+  pendingLink=null;
+}
+
+function dismissLink(){
+  if(!pendingLink) return;
+  const {email,pass,rem}=pendingLink;
+  const newUser={
+    id:'em_'+Date.now(),
+    name:email.split('@')[0],
+    avatar:`https://cdn.discordapp.com/embed/avatars/0.png`,
+    email:email,loginVia:'email'
+  };
+  saveAccount(email,pass,newUser);
+  document.getElementById('link-banner').classList.remove('on');
+  loginOk(newUser,rem);
+  pendingLink=null;
+}
+
+/* ════════════════════ FORGOT ════════════════════ */
+function forgotPw(){
+  const email=document.getElementById('em').value.trim();
+  if(!email){showAlert('ادخل إيميلك أولاً.','inf');document.getElementById('em').focus();return;}
+  const disc=getLinkedDiscordId(email);
+  if(disc){showAlert('حسابك مرتبط بديسكورد — سجّل دخولك بالديسكورد وعدّل الباسورد.','inf');}
+  else{showAlert('لا يوجد حساب بهذا الإيميل. سجّل دخولك أولاً.','inf');}
+}
+
+/* ════════════════════ LOGIN SUCCESS ════════════════════ */
+function loginOk(user,rem,msg){
+  // ✅ احفظ البيانات في كلا المفتاحين بشكل متزامن
+  const userStr = JSON.stringify(user);
+  try {
+    localStorage.setItem('user', userStr);
+    localStorage.setItem('plusdev_user', userStr);
+    // تحقق من الحفظ
+    const verify = localStorage.getItem('user');
+    if (!verify) throw new Error('فشل الحفظ');
+  } catch(e) {
+    showAlert('حدث خطأ في حفظ بيانات الجلسة، جرب مرة ثانية.');
+    return;
+  }
+  if(msg) showAlert(msg,'ok');
+  else showAlert('مرحباً ' + (user.name||'') + '! جاري التحويل…','ok');
+  setTimeout(redirectHome, 1200);
+}
+function redirectHome(){ window.location.href='https://saai5l.github.io/Plus_/index.html'; }
+
+/* ════════════════════ STORAGE HELPERS ════════════════════ */
 function saveEmailLink(email,discordId){
   const l=JSON.parse(localStorage.getItem('pd_email_links')||'{}');
   l[email]=discordId;
@@ -777,17 +627,11 @@ function saveAccount(email,pass,user){
   a[email]={pass:hash(pass),user};
   localStorage.setItem('pd_email_accounts',JSON.stringify(a));
 }
-function saveSteamLink(steamId,discordId){
-  const l=JSON.parse(localStorage.getItem('pd_steam_links')||'{}');
-  l[steamId]=discordId;
-  localStorage.setItem('pd_steam_links',JSON.stringify(l));
-}
-function getSteamLink(steamId){
-  return (JSON.parse(localStorage.getItem('pd_steam_links')||'{}')||{})[steamId]||null;
-}
+
+/* Simple hash — upgrade to bcrypt/Firebase Auth in production */
 function hash(s){
   let h=0;
-  for(let i=0;i<s.length;i++) h=Math.imul(31,h)+s.charCodeAt(i)|0;
+  for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.charCodeAt(i)|0;}
   return h.toString(36);
 }
 </script>

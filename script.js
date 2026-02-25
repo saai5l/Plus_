@@ -1152,26 +1152,19 @@ document.getElementById('confirm-yes').onclick = function() {
 
 function logoutUser() {
     openCustomConfirm(
-        "هل أنت متأكد من رغبتك في تسجيل الخروج؟ سيتم مسح جميع بيانات الجلسة.", 
+        "هل أنت متأكد من رغبتك في تسجيل الخروج؟", 
         "تسجيل الخروج", 
         "fa-sign-out-alt", 
         function() {
-            // ═══ مسح كامل لجميع بيانات الموقع ═══
-            localStorage.clear();
-            sessionStorage.clear();
-
-            // مسح الكوكيز
-            document.cookie.split(';').forEach(c => {
-                document.cookie = c.trim().split('=')[0] +
-                    '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
-            });
-
+            localStorage.removeItem('user');
+            localStorage.removeItem('plusdev_user');
+            sessionStorage.removeItem('plusdev_user');
             if (typeof showNotification === "function") {
-                showNotification("تم تسجيل الخروج وحذف جميع البيانات");
+                showNotification("تم تسجيل الخروج بنجاح");
             }
 
             setTimeout(() => {
-                window.location.href = 'login.html';
+                window.location.reload(); 
             }, 800);
         }
     );
