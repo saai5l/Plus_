@@ -1,4 +1,3 @@
-
 const CONFIG = {
 
   SERVER_NAME: "Plus Dev",
