@@ -1346,23 +1346,29 @@ function executeDecision(appId, status) {
                 const decisionWebhook = isAccepted
                     ? CONFIG.WEBHOOKS.staff
                     : (CONFIG.WEBHOOKS.rejected || CONFIG.WEBHOOKS.staff);
+                // بيانات الأدمن الحالي
+                const adminUser = JSON.parse(localStorage.getItem('user') || '{}');
+                const adminName = adminUser.username || adminUser.global_name || 'أدمن';
+                const adminId   = adminUser.id || '';
+                const adminTag  = adminId ? `<@${adminId}>` : adminName;
                 const decisionData = {
                     content: isAccepted
-                        ? `✅ **تم قبول طلب!** — <@${app.discordId}>`
-                        : `❌ **تم رفض طلب** — <@${app.discordId}>`,
+                        ? `✅ **The Order accepted!** — <@${app.discordId}>`
+                        : `❌ **The Order rejected!** — <@${app.discordId}>`,
                     embeds: [{
-                        title: isAccepted ? '✅ تم قبول الطلب' : '❌ تم رفض الطلب',
+                        title: isAccepted ? '✅ The Order accepted.' : '❌ The Order rejected',
                         color: isAccepted ? 0x2ecc71 : 0xe74c3c,
                         fields: [
-                            { name: '👤 اسم الشخصية', value: '```' + (app.name || '---') + '```', inline: true },
-                            { name: '💼 الوظيفة',     value: '```' + (app.job  || '---') + '```', inline: true },
-                            { name: '🔗 الديسكورد',   value: `<@${app.discordId}>`,               inline: true },
-                            { name: '📋 رقم الطلب',   value: '`' + appId + '`',                  inline: true },
-                            { name: '⚖️ القرار',       value: isAccepted ? '✅ **مقبول**' : '❌ **مرفوض**', inline: true },
-                            { name: '📅 وقت القرار',   value: new Date().toLocaleString('ar-SA'), inline: true },
-                            ...(adminNote ? [{ name: '📝 ملاحظة الإدارة', value: '>>> ' + adminNote, inline: false }] : [])
+                            { name: '👤 Character name', value: '```' + (app.name || '---') + '```', inline: false },
+                            { name: '💼 Job',     value: '```' + (app.job  || '---') + '```', inline: false },
+                            { name: '🔗 Discord Id',   value: `<@${app.discordId}>`,               inline: false },
+                            { name: '📋 Order number',   value: '`' + appId + '`',                  inline: false },
+                            { name: '⚖️ Decision',       value: isAccepted ? '✅ **مقبول**' : '❌ **مرفوض**', inline: false },
+                            { name: '📅 Decision time',   value: new Date().toLocaleString('ar-SA'), inline: false },
+                            { name: '👮 by',       value: adminTag,                            inline: false },
+                            ...(adminNote ? [{ name: '📝 Management Note', value: '>>> ' + adminNote, inline: false }] : [])
                         ],
-                        footer: { text: `${CONFIG.SERVER_NAME} • قرار إداري` },
+                        footer: { text: `${CONFIG.SERVER_NAME} • Administrative decision` },
                         timestamp: new Date().toISOString()
                     }]
                 };
