@@ -891,22 +891,9 @@ function loadAdminData() {
                 </tr>`;
         });
 
-        // تحديث المخططات البيانية
-        if (typeof updateAdminCharts === 'function') {
-            updateAdminCharts(apps);
-        }
-
         // تطبيق الفلتر الحالي بعد التحميل
         if (currentAdminFilter !== 'all') filterAdminTable(currentAdminFilter);
     });
-}
-
-// تهيئة المخططات عند فتح لوحة التحكم
-function openAdminDashboard() {
-    setTimeout(() => {
-        if (typeof initAdminCharts === 'function') initAdminCharts();
-        if (typeof refreshActivity === 'function') refreshActivity();
-    }, 300);
 }
 
 function submitDecision(index, status) {
