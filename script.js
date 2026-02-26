@@ -1342,7 +1342,10 @@ function executeDecision(appId, status) {
             // ═══ إرسال رسالة ديسكورد عند القبول/الرفض ═══
             try {
                 const isAccepted = status === "مقبول";
-                const decisionWebhook = CONFIG.WEBHOOKS.staff;
+                // webhook منفصل للرفض
+                const decisionWebhook = isAccepted
+                    ? CONFIG.WEBHOOKS.staff
+                    : (CONFIG.WEBHOOKS.rejected || CONFIG.WEBHOOKS.staff);
                 const decisionData = {
                     content: isAccepted
                         ? `✅ **تم قبول طلب!** — <@${app.discordId}>`

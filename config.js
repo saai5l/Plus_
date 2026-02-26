@@ -9,12 +9,13 @@ const CONFIG = {
   REDIRECT_URI: "https://saai5l.github.io/Plus_/login.html",
 
   WEBHOOKS: {
-    police:  "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
-    ems:     "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
-    staff:   "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
-    tickets: "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
-    gang:    "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
-    store:   "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99"
+    police:   "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    ems:      "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    staff:    "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    tickets:  "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    gang:     "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    store:    "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    rejected: "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99"
   },
 
   FIREBASE: {
