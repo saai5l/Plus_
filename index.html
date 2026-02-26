@@ -2763,23 +2763,22 @@ function animateNum(id, target) {
   requestAnimationFrame(step);
 }
 
-// تهيئة عند فتح لوحة التحكم
-const _origShowPage = window.showPage;
-if (typeof _origShowPage === 'function') {
-  window.showPage = function(page) {
-    _origShowPage(page);
-    if (page === 'admin-dashboard') {
-      setTimeout(() => {
-        initAdminCharts();
-        refreshActivity();
-        // جلب الطلبات وتحديث المخططات
-        if (typeof firebase !== 'undefined' && typeof loadApplications === 'function') {
-          loadApplications();
-        }
-      }, 200);
-    }
-  };
-}
+// تهيئة عند فتح لوحة التحكم — ننتظر تحميل script.js أولاً
+window.addEventListener('load', function() {
+  // نحفظ نسخة من showPage الأصلية ونضيف عليها
+  const _orig = window.showPage;
+  if (typeof _orig === 'function') {
+    window.showPage = function(page) {
+      _orig(page);
+      if (page === 'admin-dashboard') {
+        setTimeout(() => {
+          initAdminCharts();
+          refreshActivity();
+        }, 250);
+      }
+    };
+  }
+});
 
 // تحديث المخططات عند تغيير حالة طلب
 document.addEventListener('statusChanged', function(e) {
