@@ -7222,3 +7222,58 @@ body {
   border: 1px solid rgba(231,76,60,0.3);
   color: #e74c3c;
 }
+
+/* ============================================
+   Language Toggle Button Styles
+   زر تبديل اللغة داخل قائمة المستخدم
+   ============================================ */
+#lang-toggle-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  padding: 10px 14px !important;
+  margin: 2px 0;
+}
+
+#lang-toggle-btn:hover {
+  background: rgba(252, 120, 35, 0.12) !important;
+  color: #fc7823 !important;
+}
+
+#lang-toggle-btn span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#lang-toggle-btn i {
+  color: #fc7823;
+  font-size: 0.95em;
+}
+
+#lang-toggle-flag {
+  font-size: 1.2em;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* تأثير الانتقال السلس عند تغيير الاتجاه */
+html[dir="ltr"] .dropdown-content,
+html[dir="ltr"] .user-dropdown {
+  left: 0;
+  right: auto;
+}
+
+html[dir="ltr"] .nav-links {
+  flex-direction: row-reverse;
+}
+
+/* تأثير fade عند تغيير اللغة */
+body.lang-switching * {
+  transition: opacity 0.15s ease !important;
+  opacity: 0.7;
+}

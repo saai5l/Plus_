@@ -23,6 +23,7 @@
 <link href="Plus_Dev_No_Wellpeper.png" rel="shortcut icon" type="image/png"/>
 <link href="home-redesign.css" rel="stylesheet"/>
 <link href="home-fixes.css" rel="stylesheet"/>
+<script src="translations.js"></script>
 </head>
 <body>
 <div class="custom-modal" id="req-modal">
@@ -95,16 +96,20 @@
 </div>
 <hr/>
 <a href="#" id="track-btn" onclick="showPage('tracking-page')">
-<i class="fas fa-search-location"></i> تتبع طلبك
+<i class="fas fa-search-location"></i> <span data-t="track">تتبع طلبك</span>
             </a>
 <a href="javascript:void(0)" onclick="openTicketModal()">
-<i class="fas fa-ticket-alt"></i> فتح تذكرة دعم
+<i class="fas fa-ticket-alt"></i> <span data-t="ticket">فتح تذكرة دعم</span>
             </a>
 <a class="ix-3" href="#" id="admin-btn" onclick="showPage('admin-dashboard')">
-<i class="fas fa-user-shield"></i> لوحة الإدارة
+<i class="fas fa-user-shield"></i> <span data-t="admin">لوحة الإدارة</span>
             </a>
+<a href="javascript:void(0)" onclick="toggleLanguage()" id="lang-toggle-btn" style="display:flex;align-items:center;justify-content:space-between;">
+<span><i class="fas fa-globe"></i> <span id="lang-toggle-label">English</span></span>
+<span id="lang-toggle-flag" style="font-size:1.1em;">🇬🇧</span>
+</a>
 <a class="logout-item" href="javascript:void(0)" onclick="logoutUser()">
-<i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+<i class="fas fa-sign-out-alt"></i> <span data-t="logout">تسجيل الخروج</span>
             </a>
 </div>
 </div>
@@ -113,11 +118,11 @@
 <i class="fas fa-bars" id="menu-icon"></i>
 </button>
 <div class="nav-links" id="nav-links">
-<a class="active" href="#" onclick="showPage('home')">Home</a>
-<a href="#" onclick="showPage('rules')">Rules</a>
-<a href="#" onclick="showPage('tutorials')">Explanations</a>
-<a href="#" onclick="showPage('jobs')">Apply Jobs</a>
-<a href="#" onclick="showPage('store')">Store</a>
+<a class="active" href="#" onclick="showPage('home')" data-t="nav_home">الرئيسية</a>
+<a href="#" onclick="showPage('rules')" data-t="nav_rules">القوانين</a>
+<a href="#" onclick="showPage('tutorials')" data-t="nav_tutorials">الشروحات</a>
+<a href="#" onclick="showPage('jobs')" data-t="nav_jobs">التوظيف</a>
+<a href="#" onclick="showPage('store')" data-t="nav_store">المتجر</a>
 </div>
 <div class="social-links">
 <a class="plus-discord-btn" href="https://discord.gg/pus" target="_blank">
@@ -2195,7 +2200,7 @@
           <div class="footer-col-title">تواصل معنا</div>
           <a href="https://discord.gg/pus" target="_blank"><i class="fab fa-discord"></i> ديسكورد</a>
           <a href="#" onclick="openTicketModal()"><i class="fas fa-ticket-alt"></i> فتح تذكرة</a>
-          <a onclick="showPage('tracking-page')"><i class="fas fa-search-location"></i> تتبع طلبك</a>
+          <a onclick="showPage('tracking-page')"><i class="fas fa-search-location"></i> <span data-t="track">تتبع طلبك</span></a>
         </div>
       </div>
       <!-- Social -->
