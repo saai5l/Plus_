@@ -307,10 +307,18 @@ function showAlert(msg,type='err'){
   el.innerHTML=`<i class="fas ${icons[type]}"></i> ${msg}`;
 }
 function clearAlert(){const el=document.getElementById('alert');el.className='alert';el.innerHTML='';}
-function loginDiscord(){
+async function generatePKCE(){
+  const verifier=Array.from(crypto.getRandomValues(new Uint8Array(32))).map(b=>b.toString(16).padStart(2,'0')).join('');
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier));
+  const challenge=btoa(String.fromCharCode(...new Uint8Array(digest))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+  return{verifier,challenge};
+}
+async function loginDiscord(){
   const state=Math.random().toString(36).slice(2);
+  const{verifier,challenge}=await generatePKCE();
   sessionStorage.setItem('oauth_state',state);
-  window.location.href=`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify+email&state=${state}`;
+  sessionStorage.setItem('code_verifier',verifier);
+  window.location.href=`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify+email&state=${state}&code_challenge=${challenge}&code_challenge_method=S256`;
 }
 function togglePw(){
   const i=document.getElementById('pw'),e=document.getElementById('eye');
@@ -352,18 +360,28 @@ function dismissLink(){document.getElementById('link-banner').classList.remove('
 (async function handleCallback(){
   const params=new URLSearchParams(location.search);
   const code=params.get('code');
+  const state=params.get('state');
   if(!code)return;
+  if(state!==sessionStorage.getItem('oauth_state')){showAlert('خطأ في التحقق، حاول مرة أخرى');return;}
   switchTab('discord');
-  showAlert('جاري التحقق من حسابك...','inf');
+  showAlert('جاري تسجيل الدخول...','inf');
   try{
-    const res=await fetch(`https://discord-auth-worker.your-domain.workers.dev/auth?code=${code}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`);
-    const data=await res.json();
-    if(!data.id){showAlert('فشل تسجيل الدخول');return;}
-    localStorage.setItem('user',JSON.stringify({id:data.id,username:data.username,avatar:data.avatar?`https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`:'',email:data.email||''}));
+    const codeVerifier=sessionStorage.getItem('code_verifier');
+    const tokenRes=await fetch('https://discord.com/api/oauth2/token',{
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:new URLSearchParams({client_id:CLIENT_ID,grant_type:'authorization_code',code,redirect_uri:REDIRECT_URI,code_verifier:codeVerifier||''})
+    });
+    const tokenData=await tokenRes.json();
+    if(!tokenData.access_token){showAlert('فشل الحصول على التوكن');return;}
+    const userRes=await fetch('https://discord.com/api/users/@me',{headers:{Authorization:`Bearer ${tokenData.access_token}`}});
+    const user=await userRes.json();
+    if(!user.id){showAlert('فشل جلب بيانات المستخدم');return;}
+    localStorage.setItem('user',JSON.stringify({id:user.id,username:user.global_name||user.username,avatar:user.avatar?`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`:'',email:user.email||''}));
     showAlert('تم تسجيل الدخول بنجاح ✓','ok');
     history.replaceState({},'',location.pathname);
     setTimeout(()=>{window.location.href='index.html';},900);
-  }catch(e){showAlert('فشل الاتصال بالخادم');}
+  }catch(e){showAlert('حدث خطأ، حاول مرة أخرى');}
 })();
 </script>
 </body>
