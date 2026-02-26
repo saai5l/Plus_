@@ -336,6 +336,96 @@
   </div>
 </div>
 
+<!-- ═══ قسم الإحصائيات المتقدمة ═══ -->
+<div class="adm-analytics-section">
+
+  <!-- كروت إضافية -->
+  <div class="adm-extra-stats">
+    <div class="adm-extra-card adm-extra-tickets">
+      <div class="adm-extra-icon"><i class="fas fa-ticket-alt"></i></div>
+      <div class="adm-extra-info">
+        <span class="adm-extra-num" id="stat-tickets-total">0</span>
+        <span class="adm-extra-label">إجمالي التذاكر</span>
+      </div>
+      <div class="adm-extra-trend"><i class="fas fa-arrow-up"></i></div>
+    </div>
+    <div class="adm-extra-card adm-extra-orders">
+      <div class="adm-extra-icon"><i class="fas fa-box"></i></div>
+      <div class="adm-extra-info">
+        <span class="adm-extra-num" id="stat-orders-total">0</span>
+        <span class="adm-extra-label">طلبات المتجر</span>
+      </div>
+      <div class="adm-extra-trend"><i class="fas fa-arrow-up"></i></div>
+    </div>
+    <div class="adm-extra-card adm-extra-today">
+      <div class="adm-extra-icon"><i class="fas fa-calendar-day"></i></div>
+      <div class="adm-extra-info">
+        <span class="adm-extra-num" id="stat-today-apps">0</span>
+        <span class="adm-extra-label">طلبات اليوم</span>
+      </div>
+      <div class="adm-extra-trend adm-trend-new"><i class="fas fa-star"></i></div>
+    </div>
+    <div class="adm-extra-card adm-extra-rate">
+      <div class="adm-extra-icon"><i class="fas fa-percentage"></i></div>
+      <div class="adm-extra-info">
+        <span class="adm-extra-num" id="stat-accept-rate">0%</span>
+        <span class="adm-extra-label">نسبة القبول</span>
+      </div>
+      <div class="adm-extra-trend adm-trend-rate"><i class="fas fa-chart-line"></i></div>
+    </div>
+  </div>
+
+  <!-- المخططات البيانية -->
+  <div class="adm-charts-row">
+
+    <!-- مخطط دائري — توزيع الطلبات حسب الحالة -->
+    <div class="adm-chart-card">
+      <div class="adm-chart-header">
+        <div class="adm-panel-icon"><i class="fas fa-chart-pie"></i></div>
+        <div>
+          <h3 class="adm-panel-title">توزيع الطلبات</h3>
+          <p class="adm-panel-sub">مقبول / معلق / مرفوض</p>
+        </div>
+      </div>
+      <div class="adm-chart-wrap">
+        <canvas id="chart-status" height="220"></canvas>
+      </div>
+      <div class="adm-chart-legend" id="status-legend"></div>
+    </div>
+
+    <!-- مخطط أعمدة — الطلبات حسب الوظيفة -->
+    <div class="adm-chart-card">
+      <div class="adm-chart-header">
+        <div class="adm-panel-icon adm-icon-orange"><i class="fas fa-chart-bar"></i></div>
+        <div>
+          <h3 class="adm-panel-title">الطلبات حسب الوظيفة</h3>
+          <p class="adm-panel-sub">شرطة / إسعاف / إدارة / عصابات</p>
+        </div>
+      </div>
+      <div class="adm-chart-wrap">
+        <canvas id="chart-jobs" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- نشاط حديث -->
+    <div class="adm-chart-card adm-activity-card">
+      <div class="adm-chart-header">
+        <div class="adm-panel-icon adm-icon-blue"><i class="fas fa-history"></i></div>
+        <div>
+          <h3 class="adm-panel-title">النشاط الحديث</h3>
+          <p class="adm-panel-sub">آخر إجراءات الأدمن</p>
+        </div>
+        <button class="adm-refresh-btn" onclick="refreshActivity()" style="margin-right:auto;margin-left:0"><i class="fas fa-sync-alt"></i></button>
+      </div>
+      <div class="adm-activity-list" id="adm-activity-list">
+        <div class="adm-activity-empty"><i class="fas fa-clock"></i> لا يوجد نشاط حديث</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- ═══ نهاية الإحصائيات ═══ -->
+
 <!-- Controls + Admins -->
 <div class="adm-two-col">
 
@@ -2221,5 +2311,253 @@
 
 <script src="home-animations.js"></script>
 <script src="home-fixes.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════
+   Plus Dev — Admin Analytics Engine
+   محرك الإحصائيات والمخططات البيانية
+═══════════════════════════════════════════ */
+
+// نشاط الأدمن — سجل محلي
+const ADM_ACTIVITY_KEY = 'plusdev_admin_activity';
+
+function getActivityLog() {
+  try { return JSON.parse(localStorage.getItem(ADM_ACTIVITY_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function addActivityLog(type, text) {
+  const log = getActivityLog();
+  log.unshift({
+    type, text,
+    time: new Date().toLocaleString('ar-SA', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
+  });
+  if (log.length > 30) log.pop();
+  localStorage.setItem(ADM_ACTIVITY_KEY, JSON.stringify(log));
+  refreshActivity();
+}
+
+function refreshActivity() {
+  const log = getActivityLog();
+  const el = document.getElementById('adm-activity-list');
+  if (!el) return;
+  if (!log.length) {
+    el.innerHTML = '<div class="adm-activity-empty"><i class="fas fa-clock"></i> لا يوجد نشاط حديث</div>';
+    return;
+  }
+  const icons = { approved: 'fa-check', rejected: 'fa-times', pending: 'fa-hourglass-half', admin: 'fa-user-shield', ticket: 'fa-ticket-alt' };
+  el.innerHTML = log.map(item => `
+    <div class="adm-activity-item act-${item.type}">
+      <div class="adm-act-icon"><i class="fas ${icons[item.type] || 'fa-info'}"></i></div>
+      <div class="adm-act-content">
+        <div class="adm-act-text">${item.text}</div>
+        <div class="adm-act-time">${item.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// مخططات Chart.js
+let chartStatus = null;
+let chartJobs = null;
+
+function initAdminCharts() {
+  if (typeof Chart === 'undefined') return;
+
+  Chart.defaults.color = 'rgba(255,255,255,0.5)';
+  Chart.defaults.font.family = "'Tajawal', sans-serif";
+
+  // مخطط الحالة (دائري)
+  const ctxStatus = document.getElementById('chart-status');
+  if (ctxStatus) {
+    if (chartStatus) chartStatus.destroy();
+    chartStatus = new Chart(ctxStatus, {
+      type: 'doughnut',
+      data: {
+        labels: ['مقبول', 'معلق', 'مرفوض'],
+        datasets: [{
+          data: [0, 0, 0],
+          backgroundColor: ['rgba(46,204,113,0.85)', 'rgba(243,156,18,0.85)', 'rgba(231,76,60,0.85)'],
+          borderColor: ['#2ecc71', '#f39c12', '#e74c3c'],
+          borderWidth: 2,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '65%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(20,20,25,0.95)',
+            borderColor: 'rgba(252,120,35,0.3)',
+            borderWidth: 1,
+            padding: 10,
+            titleFont: { size: 13, weight: 'bold' },
+            bodyFont: { size: 12 }
+          }
+        }
+      }
+    });
+    updateStatusLegend([0,0,0]);
+  }
+
+  // مخطط الوظائف (أعمدة)
+  const ctxJobs = document.getElementById('chart-jobs');
+  if (ctxJobs) {
+    if (chartJobs) chartJobs.destroy();
+    chartJobs = new Chart(ctxJobs, {
+      type: 'bar',
+      data: {
+        labels: ['الشرطة', 'الإسعاف', 'الإدارة', 'العصابات'],
+        datasets: [{
+          label: 'عدد الطلبات',
+          data: [0, 0, 0, 0],
+          backgroundColor: [
+            'rgba(52,152,219,0.7)',
+            'rgba(46,204,113,0.7)',
+            'rgba(252,120,35,0.7)',
+            'rgba(231,76,60,0.7)'
+          ],
+          borderColor: ['#3498db','#2ecc71','#fc7823','#e74c3c'],
+          borderWidth: 2,
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(20,20,25,0.95)',
+            borderColor: 'rgba(252,120,35,0.3)',
+            borderWidth: 1,
+            padding: 10
+          }
+        },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: 'rgba(255,255,255,0.5)' } },
+          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: 'rgba(255,255,255,0.5)', precision: 0 }, beginAtZero: true }
+        }
+      }
+    });
+  }
+}
+
+function updateStatusLegend(data) {
+  const el = document.getElementById('status-legend');
+  if (!el) return;
+  const labels = [
+    { label: 'مقبول', color: '#2ecc71', val: data[0] },
+    { label: 'معلق',  color: '#f39c12', val: data[1] },
+    { label: 'مرفوض', color: '#e74c3c', val: data[2] }
+  ];
+  el.innerHTML = labels.map(l => `
+    <div class="adm-legend-item">
+      <div class="adm-legend-dot" style="background:${l.color}"></div>
+      <span>${l.label} (${l.val})</span>
+    </div>
+  `).join('');
+}
+
+function updateAdminCharts(apps) {
+  if (!apps || typeof Chart === 'undefined') return;
+
+  // حساب الأرقام
+  const approved = apps.filter(a => a.status === 'مقبول').length;
+  const pending  = apps.filter(a => a.status === 'معلق').length;
+  const rejected = apps.filter(a => a.status === 'رفض').length;
+
+  const police = apps.filter(a => a.job === 'police').length;
+  const ems    = apps.filter(a => a.job === 'ems').length;
+  const staff  = apps.filter(a => a.job === 'staff').length;
+  const gang   = apps.filter(a => a.job && a.job.startsWith('gang')).length;
+
+  // تحديث الكروت الإضافية
+  animateNum('stat-tickets-total', 0);
+  animateNum('stat-orders-total', 0);
+
+  // طلبات اليوم
+  const today = new Date().toDateString();
+  const todayApps = apps.filter(a => a.date && new Date(a.date).toDateString() === today).length;
+  animateNum('stat-today-apps', todayApps);
+
+  // نسبة القبول
+  const total = apps.length;
+  const rate = total ? Math.round((approved / total) * 100) : 0;
+  const rateEl = document.getElementById('stat-accept-rate');
+  if (rateEl) rateEl.textContent = rate + '%';
+
+  // تحديث المخطط الدائري
+  if (chartStatus) {
+    chartStatus.data.datasets[0].data = [approved, pending, rejected];
+    chartStatus.update('active');
+    updateStatusLegend([approved, pending, rejected]);
+  }
+
+  // تحديث مخطط الأعمدة
+  if (chartJobs) {
+    chartJobs.data.datasets[0].data = [police, ems, staff, gang];
+    chartJobs.update('active');
+  }
+}
+
+function animateNum(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const start = parseInt(el.textContent) || 0;
+  const diff = target - start;
+  const dur = 800;
+  const startTime = performance.now();
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / dur, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(start + diff * eased);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// تهيئة عند فتح لوحة التحكم
+const _origShowPage = window.showPage;
+if (typeof _origShowPage === 'function') {
+  window.showPage = function(page) {
+    _origShowPage(page);
+    if (page === 'admin-dashboard') {
+      setTimeout(() => {
+        initAdminCharts();
+        refreshActivity();
+        // جلب الطلبات وتحديث المخططات
+        if (typeof firebase !== 'undefined' && typeof loadApplications === 'function') {
+          loadApplications();
+        }
+      }, 200);
+    }
+  };
+}
+
+// تحديث المخططات عند تغيير حالة طلب
+document.addEventListener('statusChanged', function(e) {
+  const action = e.detail;
+  if (action) {
+    const typeMap = { 'مقبول': 'approved', 'رفض': 'rejected', 'معلق': 'pending' };
+    addActivityLog(typeMap[action.status] || 'pending',
+      `تم ${action.status === 'مقبول' ? 'قبول' : action.status === 'رفض' ? 'رفض' : 'تعليق'} طلب ${action.name || ''} — ${action.job || ''}`
+    );
+  }
+});
+
+// تهيئة أولية عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', function() {
+  refreshActivity();
+  // إذا كانت لوحة التحكم ظاهرة
+  if (document.getElementById('admin-dashboard')?.classList.contains('active')) {
+    setTimeout(initAdminCharts, 300);
+  }
+});
+</script>
+
 </body>
 </html>
