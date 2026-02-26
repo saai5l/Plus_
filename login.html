@@ -344,7 +344,8 @@ async function submitEmail(e){
     const snap=await getDoc(doc(db,'users',cred.user.uid));
     if(!snap.exists()){showAlert('الحساب غير موجود');btn.disabled=false;btn.innerHTML='تسجيل الدخول';return;}
     const data=snap.data();
-    localStorage.setItem('user',JSON.stringify({id:data.discordId||cred.user.uid,username:data.username||cred.user.email,avatar:data.avatar||'',email:cred.user.email}));
+    const uName = data.username || data.global_name || cred.user.email;
+    localStorage.setItem('user',JSON.stringify({id:data.discordId||cred.user.uid,name:uName,username:uName,avatar:data.avatar||'',email:cred.user.email}));
     showAlert('تم تسجيل الدخول بنجاح ✓','ok');
     setTimeout(()=>{window.location.href='index.html';},900);
   }catch(err){
@@ -377,7 +378,8 @@ function dismissLink(){document.getElementById('link-banner').classList.remove('
     const userRes=await fetch('https://discord.com/api/users/@me',{headers:{Authorization:`Bearer ${tokenData.access_token}`}});
     const user=await userRes.json();
     if(!user.id){showAlert('فشل جلب بيانات المستخدم');return;}
-    localStorage.setItem('user',JSON.stringify({id:user.id,username:user.global_name||user.username,avatar:user.avatar?`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`:'',email:user.email||''}));
+    const displayName = user.global_name || user.username || user.id;
+    localStorage.setItem('user',JSON.stringify({id:user.id,name:displayName,username:displayName,global_name:user.global_name||'',avatar:user.avatar?`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`:'',email:user.email||''}));
     showAlert('تم تسجيل الدخول بنجاح ✓','ok');
     history.replaceState({},'',location.pathname);
     setTimeout(()=>{window.location.href='index.html';},900);

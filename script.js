@@ -707,7 +707,8 @@ window.addEventListener('load', () => {
         const raw = localStorage.getItem('user') || localStorage.getItem('plusdev_user');
         if (raw) {
             const parsed = JSON.parse(raw);
-            if (parsed && parsed.id && parsed.name) {
+            if (parsed && parsed.id) {
+                parsed.name = parsed.name || parsed.username || parsed.global_name || parsed.id;
                 localStorage.setItem('user', JSON.stringify(parsed));
                 localStorage.setItem('plusdev_user', JSON.stringify(parsed));
                 updateUI(parsed);
@@ -734,7 +735,7 @@ function updateUI(user) {
         if (userArea) userArea.style.display = 'flex';
         
         if (userAvatar) userAvatar.src = user.avatar || '';
-        if (userDisplayName) userDisplayName.innerText = user.name || '';
+        if (userDisplayName) userDisplayName.innerText = user.name || user.username || user.global_name || '';
         
         if (userDiscordId) {
             userDiscordId.innerText = "ID: " + user.id;
@@ -1957,7 +1958,7 @@ function initLoginNotification(user) {
     if (user && !welcomed) {
         sessionStorage.setItem('pd_welcomed', '1');
         setTimeout(() => {
-            addNotification('success', `مرحباً ${user.name}! 👋`, 'تم تسجيل دخولك بنجاح');
+            addNotification('success', `مرحباً ${user.name || user.username || user.global_name || ''}! 👋`, 'تم تسجيل دخولك بنجاح');
         }, 800);
     }
 }
