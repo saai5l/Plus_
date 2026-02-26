@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<title>404 — Plus Dev</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+  :root {
+    --orange: #fc7823;
+    --orange-dim: #e05e10;
+    --bg: #080810;
+    --bg2: #0e0e18;
+    --white: #f0f0f0;
+    --muted: rgba(255,255,255,0.35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Tajawal', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ═══ خلفية متحركة ═══ */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% -10%, rgba(252,120,35,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 30% 30% at 90% 80%, rgba(252,120,35,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 30% at 10% 80%, rgba(252,120,35,0.07) 0%, transparent 60%);
+  }
+
+  /* شبكة */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(252,120,35,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(252,120,35,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+  }
+
+  /* جزيئات عائمة */
+  .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: var(--orange);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0%   { opacity: 0; transform: translateY(0) scale(0); }
+    10%  { opacity: 0.6; transform: translateY(-20px) scale(1); }
+    90%  { opacity: 0.3; }
+    100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+  }
+
+  /* ═══ المحتوى ═══ */
+  .container {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 680px;
+    width: 100%;
+    animation: fadeInUp 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* اللوجو */
+  .logo-wrap {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .logo-wrap img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(252,120,35,0.5));
+    animation: logoPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes logoPulse {
+    0%,100% { filter: drop-shadow(0 0 20px rgba(252,120,35,0.5)); }
+    50%      { filter: drop-shadow(0 0 40px rgba(252,120,35,0.8)); }
+  }
+
+  /* رقم 404 */
+  .error-code {
+    font-size: clamp(7rem, 20vw, 12rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -4px;
+    background: linear-gradient(135deg, #fc7823 0%, #ff9a50 40%, #e05e10 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    animation: glitch 5s ease-in-out infinite;
+    margin-bottom: 4px;
+    text-shadow: none;
+  }
+
+  /* تأثير Glitch */
+  @keyframes glitch {
+    0%,90%,100% { transform: translate(0); filter: none; }
+    92% {
+      transform: translate(-3px, 1px);
+      filter: drop-shadow(3px 0 0 rgba(252,120,35,0.7)) drop-shadow(-3px 0 0 rgba(0,200,255,0.4));
+    }
+    94% {
+      transform: translate(3px, -1px);
+      filter: drop-shadow(-3px 0 0 rgba(252,120,35,0.7)) drop-shadow(3px 0 0 rgba(255,0,100,0.4));
+    }
+    96% { transform: translate(0); filter: none; }
+    98% {
+      transform: translate(-2px, 2px);
+      filter: drop-shadow(2px 0 0 rgba(252,120,35,0.5));
+    }
+  }
+
+  /* الخط تحت 404 */
+  .error-line {
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #fc7823, transparent);
+    margin: 0 auto 20px;
+    animation: linePulse 2s ease-in-out infinite;
+  }
+
+  @keyframes linePulse {
+    0%,100% { opacity: 0.6; width: 120px; }
+    50%      { opacity: 1;   width: 180px; }
+  }
+
+  /* العنوان */
+  .error-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+
+  .error-title span {
+    color: var(--orange);
+  }
+
+  /* الوصف */
+  .error-desc {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 36px;
+    font-weight: 400;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* الأزرار */
+  .btn-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #fc7823, #e05e10);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 6px 24px rgba(252,120,35,0.35);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 36px rgba(252,120,35,0.5);
+  }
+
+  .btn-outline {
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 14px 28px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Tajawal', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-outline:hover {
+    background: rgba(252,120,35,0.12);
+    border-color: rgba(252,120,35,0.4);
+    color: var(--orange);
+    transform: translateY(-2px);
+  }
+
+  /* فاصل */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(252,120,35,0.2), transparent);
+    margin-bottom: 28px;
+  }
+
+  /* روابط سريعة */
+  .quick-links {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .quick-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-family: 'Tajawal', sans-serif;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .quick-link:hover {
+    background: rgba(252,120,35,0.1);
+    border-color: rgba(252,120,35,0.3);
+    color: var(--orange);
+    transform: translateY(-1px);
+  }
+
+  .quick-link i { font-size: 0.78rem; }
+
+  /* عداد العودة */
+  .redirect-notice {
+    margin-top: 28px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  #countdown {
+    color: var(--orange);
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+
+  /* ═══ Responsive ═══ */
+  @media (max-width: 480px) {
+    .error-code { letter-spacing: -2px; }
+    .btn-group { flex-direction: column; align-items: center; }
+    .btn-primary, .btn-outline { width: 100%; max-width: 280px; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- خلفية -->
+<div class="bg-layer"></div>
+<div class="bg-grid"></div>
+<div class="particles" id="particles"></div>
+
+<!-- المحتوى الرئيسي -->
+<div class="container">
+
+  <!-- اللوجو -->
+  <div class="logo-wrap">
+    <img src="Plus_Dev_No_Wellpeper.png" alt="Plus Dev" onerror="this.style.display='none'"/>
+  </div>
+
+  <!-- 404 -->
+  <div class="error-code">404</div>
+  <div class="error-line"></div>
+
+  <!-- النص -->
+  <h1 class="error-title">الصفحة <span>غير موجودة</span></h1>
+  <p class="error-desc">
+    يبدو إن الصفحة اللي تدورها انتهت أو الرابط غلط.<br/>
+    ما تقلق، قدر ترجع للرئيسية بسهولة 👇
+  </p>
+
+  <!-- أزرار -->
+  <div class="btn-group">
+    <a href="index.html" class="btn-primary">
+      <i class="fas fa-home"></i>
+      الرئيسية
+    </a>
+    <a href="https://discord.gg/UCDtkfQUtK" target="_blank" class="btn-outline">
+      <i class="fab fa-discord"></i>
+      الديسكورد
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- روابط سريعة -->
+  <div class="quick-links">
+    <a href="index.html#rules" class="quick-link" onclick="goTo('rules')">
+      <i class="fas fa-scroll"></i> القوانين
+    </a>
+    <a href="index.html#jobs" class="quick-link" onclick="goTo('jobs')">
+      <i class="fas fa-briefcase"></i> التوظيف
+    </a>
+    <a href="index.html#store" class="quick-link" onclick="goTo('store')">
+      <i class="fas fa-store"></i> المتجر
+    </a>
+    <a href="index.html#tutorials" class="quick-link" onclick="goTo('tutorials')">
+      <i class="fas fa-book-open"></i> الشروحات
+    </a>
+  </div>
+
+  <!-- عداد العودة التلقائية -->
+  <div class="redirect-notice">
+    <i class="fas fa-clock" style="font-size:0.75rem;"></i>
+    سيتم تحويلك للرئيسية خلال
+    <span id="countdown">10</span>
+    ثانية
+  </div>
+
+</div>
+
+<script>
+  // ═══ جزيئات عائمة ═══
+  const particlesEl = document.getElementById('particles');
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${50 + Math.random() * 50}%;
+      width: ${2 + Math.random() * 3}px;
+      height: ${2 + Math.random() * 3}px;
+      animation-duration: ${4 + Math.random() * 6}s;
+      animation-delay: ${Math.random() * 6}s;
+      opacity: ${0.3 + Math.random() * 0.4};
+    `;
+    particlesEl.appendChild(p);
+  }
+
+  // ═══ عداد العودة التلقائية ═══
+  let seconds = 10;
+  const countdownEl = document.getElementById('countdown');
+  const timer = setInterval(() => {
+    seconds--;
+    countdownEl.textContent = seconds;
+    countdownEl.style.transform = 'scale(1.3)';
+    setTimeout(() => countdownEl.style.transform = 'scale(1)', 200);
+    if (seconds <= 0) {
+      clearInterval(timer);
+      window.location.href = 'index.html';
+    }
+  }, 1000);
+
+  // ═══ روابط سريعة ═══
+  function goTo(page) {
+    localStorage.setItem('plusdev_goto', page);
+  }
+</script>
+
+</body>
+</html>
