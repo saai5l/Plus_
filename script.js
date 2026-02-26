@@ -376,20 +376,27 @@ document.getElementById('job-form').addEventListener('submit', async function(e)
     async function sendApplicationToDiscord(newAppId, jobType, characterName, characterId, phoneNumber, discordUser, reason, submitBtn) {
         const jobTitle   = getJobTitle(jobType);
         const webhookUrl = jobConfig[jobType].webhook;
+        // لون وإيموجي حسب الوظيفة
+        const jobColors = { police: 0x3498db, ems: 0x2ecc71, staff: 0xfc7823 };
+        const jobEmojis = { police: '👮', ems: '🚑', staff: '🛡️' };
+        const embedColor = jobColors[jobType] || 0xfc7823;
+        const jobEmoji  = jobEmojis[jobType] || (jobType.startsWith('gang') ? '💀' : '📋');
+
         const data = {
+            content: `📬 **تقديم جديد وصل!**`,
             embeds: [{
-                title: `تقديم جديد - ${jobTitle}`,
-                description: `**رقم الطلب:** \`${newAppId}\``,
-                color: 0xfc7823,
+                author: { name: `${jobEmoji} طلب توظيف جديد — ${jobTitle}` },
+                title: `📋 رقم الطلب: ${newAppId}`,
+                color: embedColor,
                 fields: [
-                    { name: "Name - الاسم",               value: characterName,      inline: false },
-                    { name: "Steam - ستيم",               value: characterId,         inline: false },
-                    { name: "Discord ID",                  value: `<@${discordUser}>`, inline: false },
-                    { name: "Time - الوقت المتاح",         value: phoneNumber,         inline: false },
-                    { name: "Reason - سبب التقديم",        value: reason,              inline: false }
+                    { name: '👤 اسم الشخصية',   value: '```' + characterName + '```', inline: true  },
+                    { name: '🎮 رقم الستيم',     value: '```' + characterId   + '```', inline: true  },
+                    { name: '⏰ الوقت المتاح',   value: '```' + phoneNumber    + '```', inline: true  },
+                    { name: '🔗 الديسكورد',      value: `<@${discordUser}>`,            inline: true  },
+                    { name: '📝 سبب التقديم',    value: '>>> ' + reason,                inline: false },
                 ],
-                footer: { text: "Plus Dev System" },
-                timestamp: new Date()
+                footer: { text: `${CONFIG.SERVER_NAME} • نظام التوظيف` },
+                timestamp: new Date().toISOString()
             }]
         };
         try {
@@ -1316,8 +1323,8 @@ function executeDecision(appId, status) {
             status: status,
             adminNote: adminNote,
             decidedAt: new Date().toLocaleString("ar-SA")
-        }).then(() => {
-            // إشعار شخصي للمستخدم عبر Firebase
+        }).then(async () => {
+            // إشعار Firebase للمستخدم
             const userId = app.discordId || app.userId;
             if (userId) {
                 const icon = status === "مقبول" ? "✅" : "❌";
@@ -1331,6 +1338,38 @@ function executeDecision(appId, status) {
                     read: false
                 });
             }
+
+            // ═══ إرسال رسالة ديسكورد عند القبول/الرفض ═══
+            try {
+                const isAccepted = status === "مقبول";
+                const decisionWebhook = CONFIG.WEBHOOKS.staff;
+                const decisionData = {
+                    content: isAccepted
+                        ? `✅ **تم قبول طلب!** — <@${app.discordId}>`
+                        : `❌ **تم رفض طلب** — <@${app.discordId}>`,
+                    embeds: [{
+                        title: isAccepted ? '✅ تم قبول الطلب' : '❌ تم رفض الطلب',
+                        color: isAccepted ? 0x2ecc71 : 0xe74c3c,
+                        fields: [
+                            { name: '👤 اسم الشخصية', value: '```' + (app.name || '---') + '```', inline: true },
+                            { name: '💼 الوظيفة',     value: '```' + (app.job  || '---') + '```', inline: true },
+                            { name: '🔗 الديسكورد',   value: `<@${app.discordId}>`,               inline: true },
+                            { name: '📋 رقم الطلب',   value: '`' + appId + '`',                  inline: true },
+                            { name: '⚖️ القرار',       value: isAccepted ? '✅ **مقبول**' : '❌ **مرفوض**', inline: true },
+                            { name: '📅 وقت القرار',   value: new Date().toLocaleString('ar-SA'), inline: true },
+                            ...(adminNote ? [{ name: '📝 ملاحظة الإدارة', value: '>>> ' + adminNote, inline: false }] : [])
+                        ],
+                        footer: { text: `${CONFIG.SERVER_NAME} • قرار إداري` },
+                        timestamp: new Date().toISOString()
+                    }]
+                };
+                await fetch(decisionWebhook, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(decisionData)
+                });
+            } catch(e) { console.warn('فشل إرسال رسالة القرار للديسكورد', e); }
+
             closeConfirmModal();
             const statusText = status === "مقبول" ? "قبول" : "رفض";
             showNotification("✅ تم " + statusText + " الطلب بنجاح");
