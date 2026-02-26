@@ -1327,8 +1327,8 @@ function executeDecision(appId, status) {
             // إشعار Firebase للمستخدم
             const userId = app.discordId || app.userId;
             if (userId) {
-                const icon = status === "مقبول" ? "✅" : "❌";
-                const msgLabel = status === "مقبول" ? "تم قبول طلبك" : "تم رفض طلبك";
+                const icon = status === "accepted" ? "✅" : "❌";
+                const msgLabel = status === "accepted" ? "تم قبول طلبك" : "تم رفض طلبك";
                 const noteMsg = adminNote ? (" — ملاحظة الإدارة: " + adminNote) : "";
                 database.ref("userNotifications/" + userId + "/" + Date.now()).set({
                     title: icon + " " + msgLabel + " — " + app.job,
@@ -1341,7 +1341,7 @@ function executeDecision(appId, status) {
 
             // ═══ إرسال رسالة ديسكورد عند القبول/الرفض ═══
             try {
-                const isAccepted = status === "مقبول";
+                const isAccepted = status === "accepted";
                 // webhook منفصل للرفض
                 const decisionWebhook = isAccepted
                     ? CONFIG.WEBHOOKS.staff
@@ -1363,7 +1363,7 @@ function executeDecision(appId, status) {
                             { name: '💼 Job',     value: '```' + (app.job  || '---') + '```', inline: false },
                             { name: '🔗 Discord Id',   value: `<@${app.discordId}>`,               inline: false },
                             { name: '📋 Order number',   value: '`' + appId + '`',                  inline: false },
-                            { name: '⚖️ Decision',       value: isAccepted ? '✅ **مقبول**' : '❌ **مرفوض**', inline: false },
+                            { name: '⚖️ Decision',       value: isAccepted ? '✅ **accepted**' : '❌ **rejected**', inline: false },
                             { name: '📅 Decision time',   value: new Date().toLocaleString('ar-SA'), inline: false },
                             { name: '👮 by',       value: adminTag,                            inline: false },
                             ...(adminNote ? [{ name: '📝 Management Note', value: '>>> ' + adminNote, inline: false }] : [])
@@ -1380,7 +1380,7 @@ function executeDecision(appId, status) {
             } catch(e) { console.warn('فشل إرسال رسالة القرار للديسكورد', e); }
 
             closeConfirmModal();
-            const statusText = status === "مقبول" ? "قبول" : "رفض";
+            const statusText = status === "accepted" ? "قبول" : "رفض";
             showNotification("✅ تم " + statusText + " الطلب بنجاح");
         });
     }).catch(error => {
