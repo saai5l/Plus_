@@ -8,10 +8,10 @@
 <link href="style.css" rel="stylesheet"/>
 <link href="ai-chat-enhanced.css" rel="stylesheet"/>
 <meta content="website" property="og:type"/>
-<meta content="Plus Dev" property="og:site_name"/>
-<meta content="Plus Dev - موقع السيرفر الرسمي" property="og:title"/>
+<meta content="YOUR SERVER NAME" property="og:site_name"/>
+<meta content="YOUR SERVER NAME - موقع السيرفر الرسمي" property="og:title"/>
 <meta content="الموقع الرسمي للسيرفر. انضم الآن!" property="og:description"/>
-<meta content="https://saai5l.github.io/Plus_" property="og:url"/>
+<meta content="YOUR_SITE_URL" property="og:url"/>
 <meta content="Plus_Dev_No_Wellpeper.png" property="og:image"/>
 <meta content="800" property="og:image:width"/>
 <meta content="420" property="og:image:height"/>
@@ -21,8 +21,8 @@
 <!-- Favicon -->
 <link href="Plus_Dev_No_Wellpeper.png" rel="icon" type="image/png"/>
 <link href="Plus_Dev_No_Wellpeper.png" rel="shortcut icon" type="image/png"/>
-
-
+<link href="home-redesign.css" rel="stylesheet"/>
+<link href="home-fixes.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="custom-modal" id="req-modal">
@@ -289,6 +289,9 @@
     <div class="laws-hero-icon"><i class="fas fa-user-shield"></i></div>
     <h1 class="laws-hero-title">لوحة الإدارة</h1>
     <p class="laws-hero-sub">تحكم كامل بالطلبات والأدمنز وحالة السيرفر — صلاحيات مقيدة</p>
+    <div style="margin-top:12px">
+      <span id="admin-role-badge" style="display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;border:1px solid;font-size:0.82rem;font-weight:700"></span>
+    </div>
     <div class="tut-stats-row">
       <div class="tut-stat"><i class="fas fa-layer-group"></i><span id="total-apps-hero">0 طلب</span></div>
       <div class="tut-stat"><i class="fas fa-check-circle"></i><span id="approved-apps-hero">0 مقبول</span></div>
@@ -481,6 +484,24 @@
     </div>
   </div>
 
+  <!-- إدارة الإدارة العليا — المالك فقط -->
+  <div class="adm-panel adm-panel-managers" id="owner-only-section" style="display:none;">
+    <div class="adm-panel-head">
+      <div class="adm-panel-icon" style="background:rgba(255,215,0,0.12)"><i class="fas fa-crown" style="color:#ffd700"></i></div>
+      <div>
+        <h3 class="adm-panel-title">إدارة الإدارة العليا</h3>
+        <p class="adm-panel-sub">المالك فقط — إضافة/حذف الإدارة العليا</p>
+      </div>
+    </div>
+    <div class="adm-add-row">
+      <input class="adm-input" id="new-super-admin-id" placeholder="Discord ID للإدارة العليا..." type="text"/>
+      <button class="adm-add-btn" onclick="addSuperAdminId()" style="background:linear-gradient(135deg,#9b59b6,#6c3483)"><i class="fas fa-plus"></i> إضافة</button>
+    </div>
+    <div class="adm-ids-list" id="super-admin-ids-list">
+      <div class="adm-ids-loading">لا يوجد إدارة عليا مضافة</div>
+    </div>
+  </div>
+
 </div>
 
 <!-- Applications Table -->
@@ -561,6 +582,140 @@
   </div>
   <div class="adm-list-wrap" id="orders-list-admin">
     <div class="adm-list-empty"><i class="fas fa-box"></i>اضغط "تحديث" لتحميل الطلبات</div>
+  </div>
+</div>
+
+<!-- ═══ قسم الإدارة العليا — مستوى 2+ ═══ -->
+<div id="super-admin-section" style="display:none;margin-top:24px;">
+
+  <div class="sa-section-title">
+    <i class="fas fa-crown"></i>
+    <span>منطقة الإدارة العليا</span>
+    <div class="sa-badge">مقيّد — مستوى 2+</div>
+  </div>
+
+  <div class="sa-tabs-wrap">
+    <button class="sa-tab active" onclick="showSaTab('sa-shifts', this)">
+      <i class="fas fa-calendar-alt"></i> جدول الشيفتات
+    </button>
+    <button class="sa-tab" onclick="showSaTab('sa-vacations', this)">
+      <i class="fas fa-umbrella-beach"></i> طلبات الإجازة
+    </button>
+  </div>
+
+  <!-- جدول الشيفتات -->
+  <div class="sa-content active" id="sa-shifts">
+    <div class="adm-panel">
+      <div class="adm-panel-head">
+        <div class="adm-panel-icon" style="background:rgba(252,120,35,0.15)"><i class="fas fa-calendar-alt" style="color:#fc7823"></i></div>
+        <div>
+          <h3 class="adm-panel-title">جدول الشيفتات</h3>
+          <p class="adm-panel-sub">كل أدمن يسجل وقت دوامه</p>
+        </div>
+        <button class="adm-add-btn" onclick="openShiftModal()" style="margin-right:auto">
+          <i class="fas fa-plus"></i> تسجيل شيفت
+        </button>
+      </div>
+      <div class="sa-week-filter">
+        <button class="sa-week-btn active" onclick="filterShifts('all',this)">الكل</button>
+        <button class="sa-week-btn" onclick="filterShifts('السبت',this)">السبت</button>
+        <button class="sa-week-btn" onclick="filterShifts('الأحد',this)">الأحد</button>
+        <button class="sa-week-btn" onclick="filterShifts('الاثنين',this)">الاثنين</button>
+        <button class="sa-week-btn" onclick="filterShifts('الثلاثاء',this)">الثلاثاء</button>
+        <button class="sa-week-btn" onclick="filterShifts('الأربعاء',this)">الأربعاء</button>
+        <button class="sa-week-btn" onclick="filterShifts('الخميس',this)">الخميس</button>
+        <button class="sa-week-btn" onclick="filterShifts('الجمعة',this)">الجمعة</button>
+      </div>
+      <div id="shifts-list" class="sa-list">
+        <div class="sa-empty"><i class="fas fa-calendar-times"></i><p>لا يوجد شيفتات مسجلة</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- طلبات الإجازة -->
+  <div class="sa-content" id="sa-vacations">
+    <div class="adm-panel">
+      <div class="adm-panel-head">
+        <div class="adm-panel-icon" style="background:rgba(52,152,219,0.15)"><i class="fas fa-umbrella-beach" style="color:#3498db"></i></div>
+        <div>
+          <h3 class="adm-panel-title">طلبات الإجازة</h3>
+          <p class="adm-panel-sub">الإدارة العليا ترى الكل — المالك يوافق/يرفض</p>
+        </div>
+        <span class="adm-count-badge adm-badge-blue" id="vacation-pending-count" style="margin-right:auto">0 معلق</span>
+      </div>
+      <div class="adm-sub-filters">
+        <button class="adm-filter-btn adm-filter-active" onclick="filterVacations('all',this)"><i class="fas fa-th"></i> الكل</button>
+        <button class="adm-filter-btn adm-filter-pending" onclick="filterVacations('pending',this)"><i class="fas fa-hourglass-half"></i> معلق</button>
+        <button class="adm-filter-btn adm-filter-approved" onclick="filterVacations('approved',this)"><i class="fas fa-check"></i> موافق</button>
+        <button class="adm-filter-btn adm-filter-rejected" onclick="filterVacations('rejected',this)"><i class="fas fa-times"></i> مرفوض</button>
+      </div>
+      <div id="vacations-list" class="sa-list">
+        <div class="sa-empty"><i class="fas fa-umbrella-beach"></i><p>لا يوجد طلبات</p></div>
+      </div>
+    </div>
+
+    <!-- فورم طلب إجازة -->
+    <div class="adm-panel" style="margin-top:16px">
+      <div class="adm-panel-head">
+        <div class="adm-panel-icon" style="background:rgba(46,204,113,0.15)"><i class="fas fa-paper-plane" style="color:#2ecc71"></i></div>
+        <div>
+          <h3 class="adm-panel-title">تقديم طلب إجازة</h3>
+          <p class="adm-panel-sub">سيُرسل للمالك للموافقة</p>
+        </div>
+      </div>
+      <div class="sa-vacation-form">
+        <div class="sa-form-row">
+          <div class="sa-form-group">
+            <label>من تاريخ</label>
+            <input type="date" id="vac-from" class="adm-input">
+          </div>
+          <div class="sa-form-group">
+            <label>إلى تاريخ</label>
+            <input type="date" id="vac-to" class="adm-input">
+          </div>
+        </div>
+        <div class="sa-form-group" style="margin-top:10px">
+          <label>سبب الإجازة</label>
+          <textarea id="vac-reason" class="adm-input" rows="3" placeholder="اكتب سبب إجازتك..."></textarea>
+        </div>
+        <button class="adm-add-btn" onclick="submitVacationRequest()" style="width:100%;justify-content:center;margin-top:10px">
+          <i class="fas fa-paper-plane"></i> إرسال الطلب
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /super-admin-section -->
+
+<!-- Modal: تسجيل شيفت -->
+<div id="shift-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:10000;align-items:center;justify-content:center">
+  <div style="background:#0e0e18;border:1px solid rgba(252,120,35,0.3);border-radius:20px;padding:28px;width:90%;max-width:440px;position:relative">
+    <button onclick="closeShiftModal()" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.07);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+    <div style="font-size:1.05rem;font-weight:800;color:#fc7823;margin-bottom:20px;display:flex;align-items:center;gap:8px"><i class="fas fa-calendar-plus"></i> تسجيل شيفت</div>
+    <div class="sa-form-row">
+      <div class="sa-form-group">
+        <label>اليوم</label>
+        <select id="shift-day" class="adm-input" style="background:#0e0e18;color:#fff">
+          <option>السبت</option><option>الأحد</option><option>الاثنين</option>
+          <option>الثلاثاء</option><option>الأربعاء</option><option>الخميس</option><option>الجمعة</option>
+        </select>
+      </div>
+      <div class="sa-form-group">
+        <label>من الساعة</label>
+        <input type="time" id="shift-from" class="adm-input">
+      </div>
+      <div class="sa-form-group">
+        <label>إلى الساعة</label>
+        <input type="time" id="shift-to" class="adm-input">
+      </div>
+    </div>
+    <div class="sa-form-group" style="margin-top:10px">
+      <label>ملاحظة (اختياري)</label>
+      <input type="text" id="shift-note" class="adm-input" placeholder="مثال: شيفت مسائي">
+    </div>
+    <button class="adm-add-btn" onclick="submitShift()" style="width:100%;justify-content:center;margin-top:14px">
+      <i class="fas fa-check"></i> تسجيل
+    </button>
   </div>
 </div>
 
@@ -2219,7 +2374,7 @@
   </div>
 </footer>
 
-
-
+<script src="home-animations.js"></script>
+<script src="home-fixes.js"></script>
 </body>
 </html>

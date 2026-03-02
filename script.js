@@ -1,5 +1,45 @@
 const WEBHOOKS = CONFIG.WEBHOOKS;
 
+/* ============================================================
+   نظام المستويات — 3 مستويات
+   ROLE_OWNER  : المالك  — صلاحيات كاملة
+   ROLE_SUPER  : إدارة عليا — شيفتات + إجازات
+   ROLE_ADMIN  : أدمن عادي — طلبات + تذاكر
+   ============================================================ */
+
+const ROLE_NONE  = 0;
+const ROLE_ADMIN = 1;
+const ROLE_SUPER = 2;
+const ROLE_OWNER = 3;
+
+function getOwnerIds() {
+  try { return (CONFIG._owners || []).map(b => atob(b)); }
+  catch(e) { return []; }
+}
+
+function getAdminPassword() {
+  try { return atob(CONFIG._ap || ''); }
+  catch(e) { return ''; }
+}
+
+let SUPER_ADMIN_IDS = [];
+let ADMIN_IDS = [];
+
+function getUserRole(userId) {
+  const id = String(userId);
+  if (getOwnerIds().includes(id))      return ROLE_OWNER;
+  if (SUPER_ADMIN_IDS.includes(id))    return ROLE_SUPER;
+  if (ADMIN_IDS.includes(id))          return ROLE_ADMIN;
+  return ROLE_NONE;
+}
+
+function isOwner(userId)      { return getUserRole(userId) >= ROLE_OWNER; }
+function isSuperAdmin(userId) { return getUserRole(userId) >= ROLE_SUPER; }
+function isAdmin(userId)      { return getUserRole(userId) >= ROLE_ADMIN; }
+
+let _adminPassVerified = false;
+function verifyAdminPassword(inputPass) { return inputPass === getAdminPassword(); }
+
 /* ============================================================ */
 
 const firebaseConfig = CONFIG.FIREBASE;
@@ -16,17 +56,25 @@ let ADMIN_IDS = []; // يُحمَّل من Firebase تلقائياً
 
 // تحميل الأدمنز من Firebase وتحديث الـ UI
 function loadAdminIds() {
+    // تحميل الأدمنز العاديين
     database.ref('adminIds').on('value', (snap) => {
         const data = snap.val();
         if (data && typeof data === 'object') {
             ADMIN_IDS = Object.values(data).map(a => a.id).filter(Boolean);
         } else {
-            ADMIN_IDS = ["1453875192009986166",""];
+            ADMIN_IDS = [];
         }
-        // أعد رسم زر الأدمن بعد تحديث القائمة
         const savedUser = JSON.parse(localStorage.getItem('user') || 'null');
         if (savedUser) updateUI(savedUser);
         renderAdminIds();
+    });
+
+    // تحميل الإدارة العليا
+    database.ref('superAdminIds').on('value', (snap) => {
+        const data = snap.val();
+        SUPER_ADMIN_IDS = data && typeof data === 'object'
+            ? Object.values(data).map(a => a.id).filter(Boolean)
+            : [];
     });
 }
 
@@ -2413,15 +2461,6 @@ window.showPage = function(pageId) {
 // Run on first load
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initScrollReveal, 500);
-
-  // Handle redirect from 404 page
-  const urlParams = new URLSearchParams(window.location.search);
-  const gotoPage = urlParams.get('page');
-  if (gotoPage) {
-    setTimeout(() => showPage(gotoPage), 600);
-    // Clean the URL
-    history.replaceState({}, '', window.location.pathname);
-  }
 });
 
 // ===== Tracking Tabs =====
@@ -2444,10 +2483,330 @@ window.addEventListener('scroll', function() {
   if (prog) {
     const total = document.documentElement.scrollHeight - window.innerHeight;
     const pct = total > 0 ? window.scrollY / total : 0;
-    prog.style.transform = `scaleX(${pct})`;
+    prog.style.transform = `scaleX(${1 - pct})`;
   }
 
   // Navbar scroll effect
   const nav = document.querySelector('.navbar');
   if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
 }, { passive: true });
+
+// ============================================================
+// ═══ نظام الإدارة العليا — Shifts & Vacations ═══
+// ============================================================
+
+// تحقق وإظهار الأقسام حسب المستوى
+function checkAdminLevels() {
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user) return;
+
+  const role = getUserRole(user.id);
+
+  // قسم الإدارة العليا (مستوى 2+)
+  const superSection = document.getElementById('super-admin-section');
+  if (superSection) {
+    superSection.style.display = role >= ROLE_SUPER ? 'block' : 'none';
+  }
+
+  // قسم المالك فقط (مستوى 3)
+  const ownerSection = document.getElementById('owner-only-section');
+  if (ownerSection) {
+    ownerSection.style.display = role >= ROLE_OWNER ? 'block' : 'none';
+  }
+
+  // شارة المستوى في لوحة الإدارة
+  const roleBadge = document.getElementById('admin-role-badge');
+  if (roleBadge) {
+    const labels = { [ROLE_OWNER]: { text: '👑 مالك', color: '#ffd700' },
+                     [ROLE_SUPER]: { text: '🛡️ إدارة عليا', color: '#9b59b6' },
+                     [ROLE_ADMIN]: { text: '⚙️ أدمن', color: '#fc7823' } };
+    const lbl = labels[role];
+    if (lbl) {
+      roleBadge.textContent = lbl.text;
+      roleBadge.style.color = lbl.color;
+      roleBadge.style.background = lbl.color + '22';
+      roleBadge.style.borderColor = lbl.color + '44';
+    }
+  }
+
+  // إذا مستوى 2+ → حمّل البيانات
+  if (role >= ROLE_SUPER) {
+    loadShifts();
+    loadVacations();
+  }
+}
+
+// تبويبات الإدارة العليا
+function showSaTab(tabId, btn) {
+  document.querySelectorAll('.sa-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.sa-tab').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById(tabId);
+  if (el) el.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ═══ الشيفتات ═══
+let allShifts = [];
+
+function openShiftModal() {
+  const m = document.getElementById('shift-modal-overlay');
+  if (m) { m.style.display = 'flex'; }
+}
+
+function closeShiftModal() {
+  const m = document.getElementById('shift-modal-overlay');
+  if (m) { m.style.display = 'none'; }
+}
+
+async function submitShift() {
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user) { showNotification('⚠️ يجب تسجيل الدخول أولاً', true); return; }
+
+  const day  = document.getElementById('shift-day').value;
+  const from = document.getElementById('shift-from').value;
+  const to   = document.getElementById('shift-to').value;
+  const note = document.getElementById('shift-note').value.trim();
+
+  if (!from || !to) { showNotification('⚠️ حدد وقت البداية والنهاية', true); return; }
+
+  const role = getUserRole(user.id);
+  const roleLabels = { [ROLE_OWNER]: 'مالك', [ROLE_SUPER]: 'إدارة عليا', [ROLE_ADMIN]: 'أدمن' };
+
+  const shift = {
+    adminId:   user.id,
+    adminName: user.name || user.username,
+    avatar:    user.avatar || '',
+    role:      roleLabels[role] || 'أدمن',
+    day, from, to, note,
+    createdAt: new Date().toLocaleDateString('ar-SA')
+  };
+
+  try {
+    await database.ref('shifts').push(shift);
+    showNotification('✅ تم تسجيل الشيفت');
+    closeShiftModal();
+    loadShifts();
+  } catch(e) {
+    showNotification('❌ فشل التسجيل', true);
+  }
+}
+
+function loadShifts() {
+  database.ref('shifts').on('value', snap => {
+    const data = snap.val();
+    allShifts = data ? Object.entries(data).map(([id, v]) => ({id, ...v})) : [];
+    renderShifts(allShifts);
+  });
+}
+
+function filterShifts(day, btn) {
+  document.querySelectorAll('.sa-week-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderShifts(day === 'all' ? allShifts : allShifts.filter(s => s.day === day));
+}
+
+function renderShifts(shifts) {
+  const list = document.getElementById('shifts-list');
+  if (!list) return;
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!shifts.length) {
+    list.innerHTML = '<div class="sa-empty"><i class="fas fa-calendar-times"></i><p>لا يوجد شيفتات مسجلة</p></div>';
+    return;
+  }
+  const roleColors = { 'مالك': '#ffd700', 'إدارة عليا': '#9b59b6', 'أدمن': '#fc7823' };
+  list.innerHTML = shifts.map(s => {
+    const canDelete = user && (isOwner(user.id) || isSuperAdmin(user.id) || s.adminId === user.id);
+    const color = roleColors[s.role] || '#fc7823';
+    return `
+    <div class="sa-card">
+      <div class="sa-card-avatar">
+        ${s.avatar ? `<img src="${s.avatar}" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\\"fas fa-user\\"></i>'">` : '<i class="fas fa-user"></i>'}
+      </div>
+      <div class="sa-card-info">
+        <div class="sa-card-name">${s.adminName}
+          <span class="sa-role-tag" style="background:${color}22;color:${color};border-color:${color}44">${s.role || 'أدمن'}</span>
+        </div>
+        <div class="sa-card-meta">
+          <span class="sa-day-badge">${s.day}</span>
+          <span><i class="fas fa-clock"></i> ${s.from} — ${s.to}</span>
+          ${s.note ? `<span class="sa-note">${s.note}</span>` : ''}
+          <span style="color:rgba(255,255,255,0.2);font-size:0.72rem">${s.createdAt}</span>
+        </div>
+      </div>
+      ${canDelete ? `<button class="sa-del-btn" onclick="deleteShift('${s.id}')"><i class="fas fa-trash"></i></button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function deleteShift(id) {
+  await database.ref('shifts/' + id).remove();
+  showNotification('🗑️ تم حذف الشيفت');
+}
+
+// ═══ الإجازات ═══
+let allVacations = [];
+
+async function submitVacationRequest() {
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user) { showNotification('⚠️ يجب تسجيل الدخول أولاً', true); return; }
+
+  const from   = document.getElementById('vac-from').value;
+  const to     = document.getElementById('vac-to').value;
+  const reason = document.getElementById('vac-reason').value.trim();
+
+  if (!from || !to || !reason) { showNotification('⚠️ يرجى تعبئة جميع الحقول', true); return; }
+  if (new Date(from) > new Date(to)) { showNotification('⚠️ تاريخ البداية بعد النهاية!', true); return; }
+
+  const role = getUserRole(user.id);
+  const roleLabels = { [ROLE_OWNER]: 'مالك', [ROLE_SUPER]: 'إدارة عليا', [ROLE_ADMIN]: 'أدمن' };
+
+  const req = {
+    adminId:   user.id,
+    adminName: user.name || user.username,
+    avatar:    user.avatar || '',
+    role:      roleLabels[role] || 'أدمن',
+    from, to, reason,
+    status:    'pending',
+    createdAt: new Date().toLocaleDateString('ar-SA')
+  };
+
+  try {
+    await database.ref('vacations').push(req);
+    showNotification('✅ تم إرسال طلب الإجازة');
+    document.getElementById('vac-from').value = '';
+    document.getElementById('vac-to').value = '';
+    document.getElementById('vac-reason').value = '';
+  } catch(e) {
+    showNotification('❌ فشل الإرسال', true);
+  }
+}
+
+function loadVacations() {
+  database.ref('vacations').on('value', snap => {
+    const data = snap.val();
+    allVacations = data ? Object.entries(data).map(([id,v]) => ({id,...v})) : [];
+    renderVacations(allVacations);
+    const pending = allVacations.filter(v => v.status === 'pending').length;
+    const badge = document.getElementById('vacation-pending-count');
+    if (badge) badge.textContent = `${pending} معلق`;
+  });
+}
+
+function filterVacations(status, btn) {
+  document.querySelectorAll('#sa-vacations .adm-filter-btn').forEach(b => b.classList.remove('adm-filter-active'));
+  if (btn) btn.classList.add('adm-filter-active');
+  renderVacations(status === 'all' ? allVacations : allVacations.filter(v => v.status === status));
+}
+
+function renderVacations(list) {
+  const el = document.getElementById('vacations-list');
+  if (!el) return;
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const canApprove = user && isOwner(user.id);
+
+  if (!list.length) {
+    el.innerHTML = '<div class="sa-empty"><i class="fas fa-umbrella-beach"></i><p>لا يوجد طلبات إجازة</p></div>';
+    return;
+  }
+  const colors = { pending: '#e67e22', approved: '#2ecc71', rejected: '#e74c3c' };
+  const labels = { pending: 'معلق', approved: 'موافق', rejected: 'مرفوض' };
+  const roleColors = { 'مالك': '#ffd700', 'إدارة عليا': '#9b59b6', 'أدمن': '#fc7823' };
+
+  el.innerHTML = list.map(v => {
+    const rc = roleColors[v.role] || '#fc7823';
+    return `
+    <div class="sa-card">
+      <div class="sa-card-avatar">
+        ${v.avatar ? `<img src="${v.avatar}" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\\"fas fa-user\\"></i>'">` : '<i class="fas fa-user"></i>'}
+      </div>
+      <div class="sa-card-info">
+        <div class="sa-card-name">${v.adminName}
+          <span class="sa-role-tag" style="background:${rc}22;color:${rc};border-color:${rc}44">${v.role||'أدمن'}</span>
+        </div>
+        <div class="sa-card-meta">
+          <span style="font-size:0.8rem"><i class="fas fa-calendar"></i> ${v.from} — ${v.to}</span>
+          <span class="sa-note">${v.reason}</span>
+          <span style="color:rgba(255,255,255,0.25);font-size:0.72rem">طُلبت: ${v.createdAt}</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
+        <span style="background:${colors[v.status]}22;color:${colors[v.status]};border:1px solid ${colors[v.status]}44;border-radius:6px;padding:3px 10px;font-size:0.75rem;font-weight:700">${labels[v.status]}</span>
+        ${canApprove && v.status === 'pending' ? `
+        <div style="display:flex;gap:5px">
+          <button class="sa-action-btn sa-approve-btn" onclick="updateVacation('${v.id}','approved')"><i class="fas fa-check"></i> موافقة</button>
+          <button class="sa-action-btn sa-reject-btn" onclick="updateVacation('${v.id}','rejected')"><i class="fas fa-times"></i> رفض</button>
+        </div>` : ''}
+        ${canApprove ? `<button class="sa-del-btn" onclick="deleteVacation('${v.id}')"><i class="fas fa-trash"></i></button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function updateVacation(id, status) {
+  await database.ref('vacations/' + id).update({ status });
+  showNotification(status === 'approved' ? '✅ تمت الموافقة' : '❌ تم الرفض');
+}
+
+async function deleteVacation(id) {
+  await database.ref('vacations/' + id).remove();
+  showNotification('🗑️ تم الحذف');
+}
+
+// ═══ إدارة الإدارة العليا (المالك فقط) ═══
+function renderSuperAdminIds() {
+  const list = document.getElementById('super-admin-ids-list');
+  if (!list) return;
+  if (!SUPER_ADMIN_IDS.length) {
+    list.innerHTML = '<div class="adm-ids-loading" style="color:rgba(255,255,255,0.3)">لا يوجد إدارة عليا مضافة</div>';
+    return;
+  }
+  list.innerHTML = SUPER_ADMIN_IDS.map(id => `
+    <div class="adm-id-row">
+      <span class="adm-id-text">${id}</span>
+      <span class="adm-id-badge" style="background:rgba(155,89,182,0.15);color:#9b59b6;border-color:rgba(155,89,182,0.3)">إدارة عليا</span>
+      <button class="adm-del-id" onclick="removeSuperAdminId('${id}')"><i class="fas fa-times"></i></button>
+    </div>`).join('');
+}
+
+async function addSuperAdminId() {
+  const input = document.getElementById('new-super-admin-id');
+  const id = input?.value.trim();
+  if (!id) { showNotification('⚠️ أدخل Discord ID', true); return; }
+
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user || !isOwner(user.id)) { showNotification('⛔ المالك فقط يقدر يضيف إدارة عليا', true); return; }
+
+  const ref = database.ref('superAdminIds');
+  const snap = await ref.once('value');
+  const data = snap.val() || {};
+  const exists = Object.values(data).some(a => a.id === id);
+  if (exists) { showNotification('⚠️ هذا الـ ID موجود مسبقاً', true); return; }
+
+  await ref.push({ id });
+  if (input) input.value = '';
+  showNotification('✅ تمت إضافة الإدارة العليا');
+}
+
+async function removeSuperAdminId(targetId) {
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user || !isOwner(user.id)) { showNotification('⛔ المالك فقط', true); return; }
+
+  const snap = await database.ref('superAdminIds').once('value');
+  const data = snap.val() || {};
+  for (const [key, val] of Object.entries(data)) {
+    if (val.id === targetId) {
+      await database.ref('superAdminIds/' + key).remove();
+      break;
+    }
+  }
+  showNotification('🗑️ تم الحذف');
+}
+
+// hook على showPage
+const _saOrigShowPage = window.showPage;
+window.showPage = function(pageId) {
+  _saOrigShowPage(pageId);
+  if (pageId === 'admin-dashboard') {
+    setTimeout(checkAdminLevels, 300);
+  }
+};

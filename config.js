@@ -8,6 +8,12 @@ const CONFIG = {
 
   REDIRECT_URI: "https://saai5l.github.io/Plus_/login.html",
 
+  _owners: [
+    "1453875192009986166"
+  ],
+
+  _ap: "Plus210",
+
   WEBHOOKS: {
     police:   "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
     ems:      "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
@@ -29,11 +35,7 @@ const CONFIG = {
   },
 
   PRIMARY_COLOR: "#fc7823",
-
-  LOGO_URL: "Plus_Dev_No_Wellpeper.png",
-
-  OG_IMAGE: "Plus_Dev_No_Wellpeper.png",
-
-
-  SITE_URL: "https://saai5l.github.io/Plus_"
+  LOGO_URL:      "Plus_Dev_No_Wellpeper.png",
+  OG_IMAGE:      "Plus_Dev_No_Wellpeper.png",
+  SITE_URL:      "https://saai5l.github.io/Plus_"
 };
