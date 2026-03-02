@@ -51,8 +51,7 @@ if (typeof firebase !== 'undefined') {
     console.error("خطأ: مكتبة Firebase لم يتم تحميلها بشكل صحيح في index.html");
 }
 
-// الأدمنز يُقرأون من Firebase — لا تعدّل هنا
-let ADMIN_IDS = []; // يُحمَّل من Firebase تلقائياً
+// الأدمنز يُقرأون من Firebase تلقائياً
 
 // تحميل الأدمنز من Firebase وتحديث الـ UI
 function loadAdminIds() {
