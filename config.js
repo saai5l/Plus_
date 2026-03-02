@@ -27,13 +27,13 @@ const CONFIG = {
   _ap: "UGx1c0RldkAyMDI1",
 
   WEBHOOKS: {
-    police:   "WEBHOOK_URL_POLICE_CHANNEL",
-    ems:      "WEBHOOK_URL_EMS_CHANNEL",
-    staff:    "WEBHOOK_URL_STAFF_CHANNEL",
-    tickets:  "WEBHOOK_URL_TICKETS_CHANNEL",
-    gang:     "WEBHOOK_URL_GANG_CHANNEL",
-    store:    "WEBHOOK_URL_STORE_CHANNEL",
-    rejected: "WEBHOOK_URL_REJECTED_CHANNEL"
+    police:   "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    ems:      "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    staff:    "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    tickets:  "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    gang:     "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    store:    "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
+    rejected: "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99"
   },
 
   FIREBASE: {
