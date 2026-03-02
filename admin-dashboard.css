@@ -1246,21 +1246,48 @@
 
 @media (max-width: 900px) {
   .adm-layout { flex-direction: column; }
+
   .adm-sidebar {
     width: 100%;
     height: auto;
     flex-direction: row;
-    flex-wrap: wrap;
-    padding: 12px 16px;
+    flex-wrap: nowrap;
+    padding: 8px 10px;
     gap: 4px;
-    position: static;
+    position: sticky;
+    top: 0;
     border-left: none;
     border-bottom: 1px solid rgba(252,120,35,0.1);
+    overflow-x: auto;
+    overflow-y: hidden;
+    z-index: 50;
+    background: rgba(8, 8, 14, 0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    align-items: center;
+    scrollbar-width: none;
   }
-  .adm-sidebar-logo { padding: 4px 10px 4px; border-bottom: none; margin-bottom: 0; }
+
+  .adm-sidebar::-webkit-scrollbar { display: none; }
+  .adm-sidebar-logo { display: none; }
   .adm-sidebar-section { display: none; }
-  .adm-nav-item { padding: 8px 12px; width: auto; font-size: 0.8rem; }
+
+  .adm-nav-item {
+    padding: 7px 12px;
+    width: auto;
+    font-size: 0.76rem;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
   .adm-nav-item.active::before { display: none; }
+
+  .adm-nav-badge {
+    font-size: 0.6rem;
+    padding: 1px 5px;
+    min-width: 14px;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -1283,5 +1310,4 @@
   .hero-left-content { flex-direction: column; align-items: flex-start; gap: 12px; }
   #admin-dashboard .laws-hero-inner { flex-direction: column; align-items: flex-start; }
   .hero-role-wrap { align-items: flex-start; }
-  .adm-sidebar { overflow-x: auto; }
 }
