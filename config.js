@@ -24,7 +24,7 @@ const CONFIG = {
 
   // باسورد الإدارة العليا والمالك — مشفر بـ base64
   // الباسورد الحالي: PlusDev@2025  — غيّره!
-  _ap: "UGx1c0RldkAyMDI1",
+  _ap: "PlusDev",
 
   WEBHOOKS: {
     police:   "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
