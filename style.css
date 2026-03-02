@@ -6198,7 +6198,7 @@ body.light-theme .setting-item {
   top: 0; left: 0; right: 0;
   height: 3px;
   background: linear-gradient(90deg, #fc7823, #e05e10);
-  transform-origin: right;
+  transform-origin: left;
   transform: scaleX(0);
   z-index: 99999;
   transition: transform 0.1s linear;
@@ -7093,7 +7093,9 @@ body {
 #scroll-progress {
   position: fixed !important; top: 0 !important; left: 0 !important; height: 3px !important;
   background: linear-gradient(90deg, #fc7823, #ff9a50) !important;
-  z-index: 10000 !important; transition: width 0.1s linear !important;
+  z-index: 10000 !important; transition: transform 0.1s linear !important;
+  transform-origin: left !important; transform: scaleX(0) !important;
+  right: 0 !important;
   box-shadow: 0 0 10px rgba(252,120,35,0.6) !important;
 }
 

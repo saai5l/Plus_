@@ -405,7 +405,7 @@
 
   // ═══ روابط سريعة ═══
   function goTo(page) {
-    localStorage.setItem('plusdev_goto', page);
+    window.location.href = 'index.html?page=' + page;
   }
 </script>
 

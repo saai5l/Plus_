@@ -2413,6 +2413,15 @@ window.showPage = function(pageId) {
 // Run on first load
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initScrollReveal, 500);
+
+  // Handle redirect from 404 page
+  const urlParams = new URLSearchParams(window.location.search);
+  const gotoPage = urlParams.get('page');
+  if (gotoPage) {
+    setTimeout(() => showPage(gotoPage), 600);
+    // Clean the URL
+    history.replaceState({}, '', window.location.pathname);
+  }
 });
 
 // ===== Tracking Tabs =====
@@ -2435,7 +2444,7 @@ window.addEventListener('scroll', function() {
   if (prog) {
     const total = document.documentElement.scrollHeight - window.innerHeight;
     const pct = total > 0 ? window.scrollY / total : 0;
-    prog.style.transform = `scaleX(${1 - pct})`;
+    prog.style.transform = `scaleX(${pct})`;
   }
 
   // Navbar scroll effect
