@@ -27,6 +27,13 @@ const CONFIG = {
   _ap: "UGx1c0RldkAyMDI1",
 
   WEBHOOKS: {
+    police:   "WEBHOOK_URL_POLICE_CHANNEL",
+    ems:      "WEBHOOK_URL_EMS_CHANNEL",
+    staff:    "WEBHOOK_URL_STAFF_CHANNEL",
+    tickets:  "WEBHOOK_URL_TICKETS_CHANNEL",
+    gang:     "WEBHOOK_URL_GANG_CHANNEL",
+    store:    "WEBHOOK_URL_STORE_CHANNEL",
+    rejected: "WEBHOOK_URL_REJECTED_CHANNEL"
   },
 
   FIREBASE: {
