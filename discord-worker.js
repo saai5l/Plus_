@@ -1,9 +1,6 @@
 
 const DISCORD_CLIENT_ID     = "1453875994988380373";
-// ⚠️ تحذير أمني: لا تضع الـ Client Secret هنا مطلقاً
-// استخدم Cloudflare Workers Secrets بدلاً من ذلك:
-// wrangler secret put DISCORD_CLIENT_SECRET
-const DISCORD_CLIENT_SECRET = typeof DISCORD_SECRET !== 'undefined' ? DISCORD_SECRET : "";
+const DISCORD_CLIENT_SECRET = "zhHiLFr2Uz3s8Eo3ixP9vpQk9fd4BQFH"; // ← من Discord Developer Portal
 const REDIRECT_URI          = "https://saai5l.github.io/Plus_/login.html";
 
 // ===== CORS Headers =====

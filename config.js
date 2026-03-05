@@ -8,24 +8,6 @@ const CONFIG = {
 
   REDIRECT_URI: "https://saai5l.github.io/Plus_/login.html",
 
-  // ══════════════════════════════════════════
-  // نظام المستويات — 3 مستويات
-  //
-  // OWNER   : صلاحيات كاملة + باسورد سري
-  // SUPER   : إدارة عليا — إجازات + شيفتات
-  // ADMIN   : أدمن عادي — طلبات + تذاكر
-  // ══════════════════════════════════════════
-
-  // IDs المالك — مشفرة بـ base64
-  // لإضافة مالك جديد: btoa("DISCORD_ID")
-  _owners: [
-    "MTQ1Mzg3NTE5MjAwOTk4NjE2Ng=="
-  ],
-
-  // باسورد الإدارة العليا والمالك — مشفر بـ base64
-  // الباسورد الحالي: PlusDev@2025  — غيّره!
-  _ap: "PlusDev",
-
   WEBHOOKS: {
     police:   "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
     ems:      "https://discord.com/api/webhooks/1475703120406249566/rRjHiskUXbTveiZM_QOxfeARvSy9cAwPUJ1V6AQjSCGCoi4lz4RpOh40fmr7fc1Zap99",
@@ -47,7 +29,11 @@ const CONFIG = {
   },
 
   PRIMARY_COLOR: "#fc7823",
-  LOGO_URL:      "Plus_Dev_No_Wellpeper.png",
-  OG_IMAGE:      "Plus_Dev_No_Wellpeper.png",
-  SITE_URL:      "https://saai5l.github.io/Plus_"
+
+  LOGO_URL: "Plus_Dev_No_Wellpeper.png",
+
+  OG_IMAGE: "Plus_Dev_No_Wellpeper.png",
+
+
+  SITE_URL: "https://saai5l.github.io/Plus_"
 };
