@@ -1,0 +1,101 @@
+{
+  "name": "Plus Dev - النظام المتقدم للقوانين",
+  "short_name": "Plus Dev",
+  "description": "نظام متقدم لفهم ومتابعة قوانين السيرفر مع مساعد ذكي",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#080810",
+  "theme_color": "#fc7823",
+  "dir": "rtl",
+  "lang": "ar",
+  
+  "icons": [
+    {
+      "src": "/Plus_Dev_No_Wellpeper.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Plus_Dev_No_Wellpeper.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Plus_Dev_No_Wellpeper.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "/Plus_Dev_No_Wellpeper.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/Plus_Dev_No_Wellpeper.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+
+  "categories": ["productivity", "utilities"],
+  
+  "shortcuts": [
+    {
+      "name": "القوانين",
+      "short_name": "القوانين",
+      "description": "اعرض جميع قوانين السيرفر",
+      "url": "/index.html#rules",
+      "icons": [
+        {
+          "src": "/Plus_Dev_No_Wellpeper.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "التوظيف",
+      "short_name": "التوظيف",
+      "description": "انضم للفريق",
+      "url": "/index.html#jobs",
+      "icons": [
+        {
+          "src": "/Plus_Dev_No_Wellpeper.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "المتجر",
+      "short_name": "المتجر",
+      "description": "اطلع على المتجر",
+      "url": "/index.html#store",
+      "icons": [
+        {
+          "src": "/Plus_Dev_No_Wellpeper.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
