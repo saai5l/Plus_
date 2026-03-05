@@ -23,13 +23,8 @@
 <link href="Plus_Dev_No_Wellpeper.png" rel="shortcut icon" type="image/png"/>
 <link href="home-redesign.css" rel="stylesheet"/>
 <link href="home-fixes.css" rel="stylesheet"/>
-<!-- PWA Support - Plus Dev -->
-<link rel="manifest" href="/manifest.json"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-title" content="Plus Dev"/>
-<link rel="apple-touch-icon" href="/Plus_Dev_No_Wellpeper.png"/>
-<link rel="stylesheet" href="/pwa-styles.css"/>
+<!-- Advanced Systems CSS -->
+<link rel="stylesheet" href="advanced-systems.css">
 </head>
 <body>
 <div class="custom-modal" id="req-modal">
@@ -289,290 +284,241 @@
 <!-- admin-dashboard -->
 <div class="page" id="admin-dashboard">
 
-<!-- Hero -->
-<div class="laws-hero">
-  <div class="laws-hero-bg"></div>
-  <div class="laws-hero-inner">
-    <div class="laws-hero-icon"><i class="fas fa-user-shield"></i></div>
-    <h1 class="laws-hero-title">لوحة الإدارة</h1>
-    <p class="laws-hero-sub">تحكم كامل بالطلبات والأدمنز وحالة السيرفر — صلاحيات مقيدة</p>
-    <div class="tut-stats-row">
-      <div class="tut-stat"><i class="fas fa-layer-group"></i><span id="total-apps-hero">0 طلب</span></div>
-      <div class="tut-stat"><i class="fas fa-check-circle"></i><span id="approved-apps-hero">0 مقبول</span></div>
-      <div class="tut-stat"><i class="fas fa-hourglass-half"></i><span id="pending-apps-hero">0 معلق</span></div>
-      <div class="tut-stat"><i class="fas fa-times-circle"></i><span id="rejected-apps-hero">0 مرفوض</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="adm-container">
-
-<!-- Stats Row -->
-<div class="adm-stats-row">
-  <div class="adm-stat-card adm-stat-total">
-    <div class="adm-stat-icon"><i class="fas fa-layer-group"></i></div>
-    <div class="adm-stat-info">
-      <span class="adm-stat-num" id="total-apps">0</span>
-      <span class="adm-stat-label">إجمالي التقديمات</span>
-    </div>
-    <div class="adm-stat-shine"></div>
-  </div>
-  <div class="adm-stat-card adm-stat-approved">
-    <div class="adm-stat-icon"><i class="fas fa-check-circle"></i></div>
-    <div class="adm-stat-info">
-      <span class="adm-stat-num" id="approved-apps">0</span>
-      <span class="adm-stat-label">مقبول</span>
-    </div>
-    <div class="adm-stat-shine"></div>
-  </div>
-  <div class="adm-stat-card adm-stat-pending">
-    <div class="adm-stat-icon"><i class="fas fa-hourglass-half"></i></div>
-    <div class="adm-stat-info">
-      <span class="adm-stat-num" id="pending-apps">0</span>
-      <span class="adm-stat-label">قيد الانتظار</span>
-    </div>
-    <div class="adm-stat-shine"></div>
-  </div>
-  <div class="adm-stat-card adm-stat-rejected">
-    <div class="adm-stat-icon"><i class="fas fa-times-circle"></i></div>
-    <div class="adm-stat-info">
-      <span class="adm-stat-num" id="rejected-apps">0</span>
-      <span class="adm-stat-label">مرفوض</span>
-    </div>
-    <div class="adm-stat-shine"></div>
-  </div>
-</div>
-
-<!-- Controls + Admins -->
-<div class="adm-two-col">
-
-  <!-- Quick Controls -->
-  <div class="adm-panel adm-panel-controls">
-    <div class="adm-panel-head">
-      <div class="adm-panel-icon"><i class="fas fa-sliders-h"></i></div>
-      <div>
-        <h3 class="adm-panel-title">التحكم السريع</h3>
-        <p class="adm-panel-sub">فتح وإغلاق الوظائف فورياً</p>
-      </div>
-    </div>
-    <div class="adm-controls-body">
-      <div class="adm-master-toggle">
-        <div class="adm-master-label"><i class="fas fa-power-off"></i><span>التحكم الشامل</span></div>
-        <button class="adm-toggle-btn adm-toggle-off" id="toggle-all" onclick="toggleAllJobs()">
-          <span class="adm-toggle-knob"></span>
-        </button>
-      </div>
-      <div class="adm-toggle-divider"></div>
-      <div class="adm-toggle-row">
-        <div class="adm-toggle-info">
-          <span class="adm-toggle-icon adm-police-icon"><i class="fas fa-shield-alt"></i></span>
-          <span>الشرطة</span>
+  <!-- Hero Section -->
+  <div class="laws-hero">
+    <div class="laws-hero-bg"></div>
+    <div class="laws-hero-inner">
+      <div class="laws-hero-icon"><i class="fas fa-user-shield"></i></div>
+      <h1 class="laws-hero-title">لوحة الإدارة المتقدمة</h1>
+      <p class="laws-hero-sub">إدارة متكاملة للأدمنز والتحليلات والمحتوى</p>
+      <div class="tut-stats-row">
+        <div class="tut-stat">
+          <i class="fas fa-users"></i>
+          <span>إدارة الأدمنز</span>
         </div>
-        <button class="adm-toggle-btn adm-toggle-on" id="toggle-police" onclick="updateJobStatus('police')">
-          <span class="adm-toggle-knob"></span>
-        </button>
-      </div>
-      <div class="adm-toggle-row">
-        <div class="adm-toggle-info">
-          <span class="adm-toggle-icon adm-ems-icon"><i class="fas fa-ambulance"></i></span>
-          <span>الإسعاف</span>
+        <div class="tut-stat">
+          <i class="fas fa-chart-line"></i>
+          <span>التحليلات</span>
         </div>
-        <button class="adm-toggle-btn adm-toggle-on" id="toggle-ems" onclick="updateJobStatus('ems')">
-          <span class="adm-toggle-knob"></span>
-        </button>
-      </div>
-      <div class="adm-toggle-row">
-        <div class="adm-toggle-info">
-          <span class="adm-toggle-icon adm-staff-icon"><i class="fas fa-user-cog"></i></span>
-          <span>الإدارة</span>
+        <div class="tut-stat">
+          <i class="fas fa-file-alt"></i>
+          <span>إدارة المحتوى</span>
         </div>
-        <button class="adm-toggle-btn adm-toggle-on" id="toggle-staff" onclick="updateJobStatus('staff')">
-          <span class="adm-toggle-knob"></span>
-        </button>
       </div>
-      <div class="adm-toggle-row">
-        <div class="adm-toggle-info">
-          <span class="adm-toggle-icon" style="background:rgba(180,0,0,0.15);color:#cc2222"><i class="fas fa-skull"></i></span>
-          <span>العصابات (الكل)</span>
-        </div>
-        <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang" onclick="updateJobStatus('gang')">
-          <span class="adm-toggle-knob"></span>
-        </button>
-      </div>
+    </div>
+  </div>
 
-      <button class="adm-gangs-expand-btn" id="gangs-expand-btn" onclick="toggleGangsExpand()">
-        <i class="fas fa-chevron-down" id="gangs-expand-icon"></i> تحكم بكل عصابة
+  <div class="adm-container" style="padding: 32px 24px;">
+
+    <!-- TAB NAVIGATION -->
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; overflow-x: auto;">
+      
+      <button class="admin-tab-btn active" onclick="switchAdminTab('admins')" style="
+        background: rgba(252,120,35,0.15);
+        color: #fc7823;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: 'Tajawal', sans-serif;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+      ">
+        <i class="fas fa-users" style="margin-left: 6px;"></i> إدارة الأدمنز
       </button>
 
-      <div class="adm-gangs-list" id="adm-gangs-list" style="display:none;">
-        <div class="adm-toggle-divider"></div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(0,160,0,0.15);color:#00c800"><i class="fas fa-skull"></i></span><span>Families</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_families" onclick="updateJobStatus('gang_families')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(139,69,19,0.15);color:#8b4513"><i class="fas fa-skull"></i></span><span>Scrap</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_scrap" onclick="updateJobStatus('gang_scrap')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(128,0,128,0.15);color:#a020f0"><i class="fas fa-skull"></i></span><span>GSG</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_gsg" onclick="updateJobStatus('gang_gsg')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(139,0,0,0.15);color:#8b0000"><i class="fas fa-skull"></i></span><span>Yakuza</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_yakuza" onclick="updateJobStatus('gang_yakuza')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,0,0,0.15);color:#ff0000"><i class="fas fa-skull"></i></span><span>NeighborHood</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_neighborhood" onclick="updateJobStatus('gang_neighborhood')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(0,0,255,0.15);color:#0000ff"><i class="fas fa-skull"></i></span><span>Crips</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_crips" onclick="updateJobStatus('gang_crips')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(210,180,140,0.15);color:#d2b48c"><i class="fas fa-skull"></i></span><span>11 Street</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_11street" onclick="updateJobStatus('gang_11street')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,255,255,0.1);color:#fff"><i class="fas fa-skull"></i></span><span>Quietless</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_quietless" onclick="updateJobStatus('gang_quietless')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,0,0,0.15);color:#ff0000"><i class="fas fa-skull"></i></span><span>18 Street</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_18street" onclick="updateJobStatus('gang_18street')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,69,0,0.15);color:#ff4500"><i class="fas fa-skull"></i></span><span>14 Norteños</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_nortenos" onclick="updateJobStatus('gang_nortenos')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(176,196,222,0.15);color:#b0c4de"><i class="fas fa-skull"></i></span><span>el-patron</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_elpatron" onclick="updateJobStatus('gang_elpatron')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,255,0,0.15);color:#ffff00"><i class="fas fa-skull"></i></span><span>VAGOS</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_vagos" onclick="updateJobStatus('gang_vagos')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(255,165,0,0.15);color:#ffa500"><i class="fas fa-skull"></i></span><span>26 YARD</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_26yard" onclick="updateJobStatus('gang_26yard')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(0,0,139,0.15);color:#00008b"><i class="fas fa-skull"></i></span><span>BOOMERS</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_boomers" onclick="updateJobStatus('gang_boomers')"><span class="adm-toggle-knob"></span></button>
-        </div>
-        <div class="adm-toggle-row adm-gang-row">
-          <div class="adm-toggle-info"><span class="adm-toggle-icon" style="background:rgba(128,128,128,0.15);color:#808080"><i class="fas fa-skull"></i></span><span>ElMundo</span></div>
-          <button class="adm-toggle-btn adm-toggle-on" id="toggle-gang_elmundo" onclick="updateJobStatus('gang_elmundo')"><span class="adm-toggle-knob"></span></button>
-        </div>
+      <button class="admin-tab-btn" onclick="switchAdminTab('analytics')" style="
+        background: transparent;
+        color: rgba(255,255,255,0.5);
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: 'Tajawal', sans-serif;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+      ">
+        <i class="fas fa-chart-bar" style="margin-left: 6px;"></i> التحليلات
+      </button>
+
+      <button class="admin-tab-btn" onclick="switchAdminTab('content')" style="
+        background: transparent;
+        color: rgba(255,255,255,0.5);
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: 'Tajawal', sans-serif;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+      ">
+        <i class="fas fa-file-pen" style="margin-left: 6px;"></i> المحتوى
+      </button>
+
+    </div>
+
+    <!-- TAB 1: إدارة الأدمنز -->
+    <div id="admins-tab" class="admin-tab-content" style="animation: fadeIn 0.4s ease;">
+      <div id="admin-stats-container" style="margin-bottom: 24px;"></div>
+      <div id="admins-list-container" style="margin-bottom: 24px;"></div>
+    </div>
+
+    <!-- TAB 2: التحليلات -->
+    <div id="analytics-tab" class="admin-tab-content" style="display: none;">
+      
+      <!-- إحصائيات الطلبات -->
+      <div style="margin-bottom: 32px;">
+        <h3 style="color: #fc7823; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-layer-group"></i> إحصائيات الطلبات
+        </h3>
+        <div id="applications-stats" style="margin-bottom: 20px;"></div>
+        <h4 style="color: rgba(255,255,255,0.7); margin: 16px 0 12px; font-size: 1rem;">رسم بياني الطلبات</h4>
+        <div id="applications-chart" style="background: rgba(255,255,255,0.02); border-radius: 12px; padding: 20px;"></div>
       </div>
-    </div>
-  </div>
 
-  <!-- Admin Managers -->
-  <div class="adm-panel adm-panel-managers">
-    <div class="adm-panel-head">
-      <div class="adm-panel-icon adm-icon-orange"><i class="fas fa-user-shield"></i></div>
-      <div>
-        <h3 class="adm-panel-title">إدارة الأدمنز</h3>
-        <p class="adm-panel-sub">أضف أو احذف صلاحيات الأدمنز</p>
+      <!-- أكثر الوظائف طلباً -->
+      <div style="margin-bottom: 32px;">
+        <h3 style="color: #fc7823; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-trophy"></i> أكثر الوظائف طلباً
+        </h3>
+        <div id="job-stats" style="margin-bottom: 20px;"></div>
+        <h4 style="color: rgba(255,255,255,0.7); margin: 16px 0 12px; font-size: 1rem;">الرسم البياني</h4>
+        <div id="jobs-chart" style="background: rgba(255,255,255,0.02); border-radius: 12px; padding: 20px;"></div>
       </div>
+
+      <!-- إحصائيات اللاعبين -->
+      <div style="margin-bottom: 32px;">
+        <h3 style="color: #fc7823; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-users"></i> إحصائيات اللاعبين
+        </h3>
+        <div id="user-stats" style="margin-bottom: 20px;"></div>
+        <h4 style="color: rgba(255,255,255,0.7); margin: 16px 0 12px; font-size: 1rem;">اللاعبون الجدد</h4>
+        <div id="new-users-chart" style="background: rgba(255,255,255,0.02); border-radius: 12px; padding: 20px;"></div>
+      </div>
+
+      <!-- إحصائيات المتجر -->
+      <div style="margin-bottom: 32px;">
+        <h3 style="color: #fc7823; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-dollar-sign"></i> إحصائيات المتجر
+        </h3>
+        <div id="store-stats" style="margin-bottom: 20px;"></div>
+        <h4 style="color: rgba(255,255,255,0.7); margin: 16px 0 12px; font-size: 1rem;">الإيرادات اليومية</h4>
+        <div id="revenue-chart" style="background: rgba(255,255,255,0.02); border-radius: 12px; padding: 20px;"></div>
+      </div>
+
     </div>
-    <div class="adm-add-row">
-      <input class="adm-input" id="new-admin-id" placeholder="أدخل Discord ID..." type="text"/>
-      <button class="adm-add-btn" onclick="addAdminId()"><i class="fas fa-plus"></i> إضافة</button>
+
+    <!-- TAB 3: إدارة المحتوى -->
+    <div id="content-tab" class="admin-tab-content" style="display: none;">
+      
+      <!-- القوانين -->
+      <div style="margin-bottom: 32px;">
+        <div id="laws-manager-container"></div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 32px 0;">
+
+      <!-- الشروحات -->
+      <div style="margin-bottom: 32px;">
+        <div id="tutorials-manager-container"></div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 32px 0;">
+
+      <!-- متطلبات الوظائف -->
+      <div style="margin-bottom: 32px;">
+        <div id="jobs-requirements-container"></div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 32px 0;">
+
+      <!-- منتجات المتجر -->
+      <div style="margin-bottom: 32px;">
+        <div id="store-products-container"></div>
+      </div>
+
     </div>
-    <div class="adm-ids-list" id="admin-ids-list">
-      <div class="adm-ids-loading"><i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...</div>
-    </div>
+
   </div>
 
 </div>
+<!-- /admin-dashboard -->
 
-<!-- Applications Table -->
-<div class="adm-panel adm-panel-table">
-  <div class="adm-table-head">
-    <div class="adm-table-title-wrap">
-      <div class="adm-panel-icon"><i class="fas fa-clipboard-list"></i></div>
-      <h3 class="adm-panel-title">طلبات التوظيف</h3>
-    </div>
-    <div class="adm-filters">
-      <button class="adm-filter-btn adm-filter-active" onclick="filterAdminTable('all', this)"><i class="fas fa-th"></i> الكل</button>
-      <button class="adm-filter-btn adm-filter-pending" onclick="filterAdminTable('معلق', this)"><i class="fas fa-hourglass-half"></i> معلق</button>
-      <button class="adm-filter-btn adm-filter-approved" onclick="filterAdminTable('مقبول', this)"><i class="fas fa-check"></i> مقبول</button>
-      <button class="adm-filter-btn adm-filter-rejected" onclick="filterAdminTable('رفض', this)"><i class="fas fa-times"></i> مرفوض</button>
-    </div>
-  </div>
-  <div class="adm-table-wrap">
-    <table class="adm-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>اسم الشخصية</th>
-          <th>الوظيفة</th>
-          <th>ملاحظة</th>
-          <th>الحالة</th>
-          <th>إجراء</th>
-        </tr>
-      </thead>
-      <tbody id="jobs-table-body"></tbody>
-    </table>
-  </div>
-  <div class="adm-table-footer">
-    <button class="adm-clear-btn" onclick="clearLogs()">
-      <i class="fas fa-trash-alt"></i> تصفير جميع الطلبات
-    </button>
-  </div>
-</div>
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-<!-- تذاكر الدعم -->
-<div class="adm-panel adm-section-gap">
-  <div class="adm-table-head">
-    <div class="adm-table-title-wrap">
-      <div class="adm-panel-icon adm-icon-blue"><i class="fas fa-ticket-alt"></i></div>
-      <h3 class="adm-panel-title">تذاكر الدعم</h3>
-    </div>
-    <div class="adm-head-actions">
-      <span class="adm-count-badge adm-badge-blue" id="tickets-count-badge">0 تذكرة</span>
-      <button class="adm-refresh-btn" onclick="loadTickets()"><i class="fas fa-sync-alt"></i> تحديث</button>
-    </div>
-  </div>
-  <div class="adm-sub-filters" id="tkt-admin-filters">
-    <button class="adm-filter-btn adm-filter-active" onclick="filterTickets('all',this)"><i class="fas fa-th"></i> الكل</button>
-    <button class="adm-filter-btn adm-filter-blue" onclick="filterTickets('open',this)"><i class="fas fa-envelope-open"></i> مفتوحة</button>
-    <button class="adm-filter-btn adm-filter-approved" onclick="filterTickets('closed',this)"><i class="fas fa-check-circle"></i> مغلقة</button>
-  </div>
-  <div class="adm-list-wrap" id="tickets-list-admin">
-    <div class="adm-list-empty"><i class="fas fa-ticket-alt"></i>اضغط "تحديث" لتحميل التذاكر</div>
-  </div>
-</div>
+  .admin-tab-content {
+    animation: fadeIn 0.4s ease;
+  }
 
-<!-- طلبات المتجر -->
-<div class="adm-panel adm-panel-orders adm-section-gap">
-  <div class="adm-table-head">
-    <div class="adm-table-title-wrap">
-      <div class="adm-panel-icon adm-icon-green"><i class="fas fa-box"></i></div>
-      <h3 class="adm-panel-title">طلبات المتجر</h3>
-    </div>
-    <div class="adm-head-actions">
-      <span class="adm-count-badge adm-badge-green" id="orders-count-badge">0 طلب</span>
-      <button class="adm-refresh-btn" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> تحديث</button>
-    </div>
-  </div>
-  <div class="adm-sub-filters" id="orders-admin-filters">
-    <button class="adm-filter-btn adm-filter-active" onclick="filterOrders('all',this)"><i class="fas fa-th"></i> الكل</button>
-    <button class="adm-filter-btn adm-filter-pending" onclick="filterOrders('pending',this)"><i class="fas fa-hourglass-half"></i> قيد المعالجة</button>
-    <button class="adm-filter-btn adm-filter-approved" onclick="filterOrders('completed',this)"><i class="fas fa-check-circle"></i> مكتمل</button>
-    <button class="adm-filter-btn adm-filter-rejected" onclick="filterOrders('cancelled',this)"><i class="fas fa-times-circle"></i> ملغي</button>
-  </div>
-  <div class="adm-list-wrap" id="orders-list-admin">
-    <div class="adm-list-empty"><i class="fas fa-box"></i>اضغط "تحديث" لتحميل الطلبات</div>
-  </div>
-</div>
+  .admin-tab-btn:hover {
+    background: rgba(252, 120, 35, 0.1) !important;
+    color: #fc7823 !important;
+    transform: translateY(-2px);
+  }
 
-</div><!-- /adm-container -->
-</div>
+  .admin-tab-btn.active {
+    background: rgba(252, 120, 35, 0.15) !important;
+    color: #fc7823 !important;
+  }
+</style>
+
+<script>
+  function switchAdminTab(tabName) {
+    // التحقق من الصلاحيات
+    if (tabName === 'admins' && !canManageAdmins?.()) {
+      showAdminNotification?.('❌ ليس لديك صلاحية إدارة الأدمنز', 'error');
+      return;
+    }
+    
+    if (tabName === 'analytics' && !canViewAnalytics?.()) {
+      showAdminNotification?.('❌ ليس لديك صلاحية عرض التحليلات', 'error');
+      return;
+    }
+    
+    if (tabName === 'content' && !canManageContent?.()) {
+      showAdminNotification?.('❌ ليس لديك صلاحية إدارة المحتوى', 'error');
+      return;
+    }
+
+    // إخفاء جميع التابات
+    document.querySelectorAll('.admin-tab-content').forEach(tab => {
+      tab.style.display = 'none';
+    });
+
+    // إظهار التاب المختار
+    const selectedTab = document.getElementById(tabName + '-tab');
+    if (selectedTab) {
+      selectedTab.style.display = 'block';
+    }
+
+    // تحديث زر التاب النشط
+    document.querySelectorAll('.admin-tab-btn').forEach((btn, idx) => {
+      const btnTabName = ['admins', 'analytics', 'content'][idx];
+      if (btnTabName === tabName) {
+        btn.style.background = 'rgba(252,120,35,0.15)';
+        btn.style.color = '#fc7823';
+        btn.classList.add('active');
+      } else {
+        btn.style.background = 'transparent';
+        btn.style.color = 'rgba(255,255,255,0.5)';
+        btn.classList.remove('active');
+      }
+    });
+  }
+</script>
 <!-- HOME PAGE -->
 <div class="page active" id="home">
 <div class="container">
@@ -2229,22 +2175,11 @@
 <script src="home-animations.js"></script>
 <script src="home-fixes.js"></script>
 
-<!-- PWA & Chat Bot - Plus Dev -->
-<script src="/pwa-helper.js"></script>
-<script src="ai-chat-enhanced.js"></script>
-
-<!-- Service Worker Registration -->
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js', {
-    scope: '/'
-  }).then(reg => {
-    console.log('✅ Service Worker registered:', reg.scope);
-  }).catch(err => {
-    console.warn('⚠️ Service Worker failed:', err);
-  });
-}
-</script>
+<!-- Advanced Systems Scripts -->
+<script src="admin-advanced.js"></script>
+<script src="analytics-dashboard.js"></script>
+<script src="content-manager.js"></script>
+<script src="advanced-systems-integration.js"></script>
 
 </body>
 </html>
