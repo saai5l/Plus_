@@ -23,6 +23,13 @@
 <link href="Plus_Dev_No_Wellpeper.png" rel="shortcut icon" type="image/png"/>
 <link href="home-redesign.css" rel="stylesheet"/>
 <link href="home-fixes.css" rel="stylesheet"/>
+<!-- PWA Support - Plus Dev -->
+<link rel="manifest" href="/manifest.json"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Plus Dev"/>
+<link rel="apple-touch-icon" href="/Plus_Dev_No_Wellpeper.png"/>
+<link rel="stylesheet" href="/pwa-styles.css"/>
 </head>
 <body>
 <div class="custom-modal" id="req-modal">
@@ -2221,5 +2228,23 @@
 
 <script src="home-animations.js"></script>
 <script src="home-fixes.js"></script>
+
+<!-- PWA & Chat Bot - Plus Dev -->
+<script src="/pwa-helper.js"></script>
+<script src="ai-chat-enhanced.js"></script>
+
+<!-- Service Worker Registration -->
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js', {
+    scope: '/'
+  }).then(reg => {
+    console.log('✅ Service Worker registered:', reg.scope);
+  }).catch(err => {
+    console.warn('⚠️ Service Worker failed:', err);
+  });
+}
+</script>
+
 </body>
 </html>
