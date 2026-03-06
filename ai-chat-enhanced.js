@@ -127,153 +127,6 @@ let unreadCount = 0;
 let chatIsOpen = false;
 let searchMode = false;
 
-// ═══ نظام الحفظ والاسترجاع ═══
-const CHAT_STORAGE_KEY = 'plusdev_chat_history';
-const CHAT_PREFS_KEY = 'plusdev_chat_prefs';
-let darkModeEnabled = false;
-let notificationsEnabled = true;
-
-function saveChatHistory() {
-  try {
-    const historyToSave = conversationHistory.map(msg => ({
-      role: msg.role,
-      text: msg.text,
-      time: msg.time.toISOString()
-    }));
-    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(historyToSave));
-  } catch (e) {
-    console.warn('⚠️ فشل حفظ المحادثات:', e);
-  }
-}
-
-function loadChatHistory() {
-  try {
-    const saved = localStorage.getItem(CHAT_STORAGE_KEY);
-    if (saved) {
-      const history = JSON.parse(saved);
-      conversationHistory = history.map(msg => ({
-        ...msg,
-        time: new Date(msg.time)
-      }));
-      return true;
-    }
-  } catch (e) {
-    console.warn('⚠️ فشل تحميل المحادثات:', e);
-  }
-  return false;
-}
-
-function saveChatPreferences() {
-  try {
-    const prefs = {
-      darkMode: darkModeEnabled,
-      notificationsEnabled: notificationsEnabled
-    };
-    localStorage.setItem(CHAT_PREFS_KEY, JSON.stringify(prefs));
-  } catch (e) {
-    console.warn('⚠️ فشل حفظ التفضيلات:', e);
-  }
-}
-
-function loadChatPreferences() {
-  try {
-    const saved = localStorage.getItem(CHAT_PREFS_KEY);
-    if (saved) {
-      const prefs = JSON.parse(saved);
-      darkModeEnabled = prefs.darkMode || false;
-      notificationsEnabled = prefs.notificationsEnabled !== false;
-      if (darkModeEnabled) enableDarkMode();
-      return true;
-    }
-  } catch (e) {
-    console.warn('⚠️ فشل تحميل التفضيلات:', e);
-  }
-  return false;
-}
-
-function isDarkMode() {
-  return darkModeEnabled;
-}
-
-function areNotificationsEnabled() {
-  return notificationsEnabled;
-}
-
-function enableDarkMode() {
-  darkModeEnabled = true;
-  const chatWindow = document.getElementById('ai-chat-window');
-  if (chatWindow) {
-    chatWindow.classList.add('dark-mode');
-  }
-  saveChatPreferences();
-  showNotificationToast('🌙 وضع Dark Mode مفعل');
-}
-
-function disableDarkMode() {
-  darkModeEnabled = false;
-  const chatWindow = document.getElementById('ai-chat-window');
-  if (chatWindow) {
-    chatWindow.classList.remove('dark-mode');
-  }
-  saveChatPreferences();
-  showNotificationToast('☀️ وضع Light Mode مفعل');
-}
-
-function toggleDarkMode() {
-  if (darkModeEnabled) {
-    disableDarkMode();
-  } else {
-    enableDarkMode();
-  }
-}
-
-function disableNotifications() {
-  notificationsEnabled = false;
-  saveChatPreferences();
-  showNotificationToast('🔕 الإشعارات معطلة');
-}
-
-function enableNotifications() {
-  notificationsEnabled = true;
-  saveChatPreferences();
-  showNotificationToast('🔔 الإشعارات مفعلة');
-}
-
-function toggleNotifications() {
-  if (notificationsEnabled) {
-    disableNotifications();
-  } else {
-    enableNotifications();
-  }
-}
-
-function showNotificationToast(message, duration = 2500) {
-  if (!notificationsEnabled) return;
-  
-  const toast = document.createElement('div');
-  toast.style.cssText = `
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    background: linear-gradient(135deg, #fc7823, #e05e10);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 12px;
-    z-index: 99999;
-    animation: slideInLeft 0.3s ease;
-    box-shadow: 0 6px 20px rgba(252, 120, 35, 0.3);
-    font-family: 'Tajawal', sans-serif;
-    font-size: 0.9rem;
-  `;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  
-  setTimeout(() => {
-    toast.style.animation = 'slideOutLeft 0.3s ease forwards';
-    setTimeout(() => toast.remove(), 300);
-  }, duration);
-}
-
 // ============================================
 // دوال البحث والردود
 // ============================================
@@ -541,7 +394,6 @@ async function sendMessage() {
   input.value = '';
 
   conversationHistory.push({ role: 'user', text: question, time: new Date() });
-  saveChatHistory(); // ✅ حفظ بعد إضافة رسالة المستخدم
 
   addMessage('', false, true);
 
@@ -597,7 +449,6 @@ async function sendMessage() {
   }
 
   conversationHistory.push({ role: 'ai', text: response.message, time: new Date() });
-  saveChatHistory(); // ✅ حفظ بعد إضافة رسالة البوت
 
   // إعادة تفعيل الإدخال
   input.disabled = false;
@@ -653,24 +504,11 @@ function toggleChat() {
     unreadCount = 0;
     updateBubbleBadge();
 
-    // ✅ تحميل المحادثات المحفوظة
     if (conversationHistory.length === 0) {
-      const hasHistory = loadChatHistory();
-      
-      if (hasHistory && conversationHistory.length > 0) {
-        // عرض المحادثات المحفوظة
-        const chatBody = document.getElementById('chat-body');
-        chatBody.innerHTML = '';
-        conversationHistory.forEach(msg => {
-          addMessage(msg.text, msg.role === 'user');
-        });
-      } else {
-        // رسالة ترحيب جديدة
-        setTimeout(() => {
-          addMessage('اختر موضوعاً من الأسئلة السريعة أو اكتب سؤالك:', false);
-          addQuickButtons();
-        }, 350);
-      }
+      setTimeout(() => {
+        addMessage('اختر موضوعاً من الأسئلة السريعة أو اكتب سؤالك:', false);
+        addQuickButtons();
+      }, 350);
     }
 
     setTimeout(() => {
@@ -710,9 +548,6 @@ function toggleSearchMode() {
 // تهيئة الأحداث
 // ============================================
 document.addEventListener('DOMContentLoaded', function () {
-  // ✅ تحميل التفضيلات عند التحميل
-  loadChatPreferences();
-  
   const input = document.getElementById('ai-input');
   if (input) {
     input.addEventListener('keydown', function (e) {
@@ -740,46 +575,5 @@ document.addEventListener('DOMContentLoaded', function () {
     badge.className = 'bubble-badge';
     badge.style.display = 'none';
     bubble.appendChild(badge);
-  }
-
-  // ✅ إضافة أزرار التحكم في الشات
-  const chatHeader = document.querySelector('.chat-header');
-  if (chatHeader) {
-    const headerActions = chatHeader.querySelector('.header-actions');
-    if (headerActions) {
-      // زر Dark Mode
-      const darkModeBtn = document.createElement('button');
-      darkModeBtn.className = 'header-btn';
-      darkModeBtn.id = 'dark-mode-btn';
-      darkModeBtn.title = 'تبديل الوضع الليلي';
-      darkModeBtn.innerHTML = darkModeEnabled ? '☀️' : '🌙';
-      darkModeBtn.onclick = function(e) {
-        e.stopPropagation();
-        toggleDarkMode();
-        this.innerHTML = darkModeEnabled ? '☀️' : '🌙';
-      };
-
-      // زر الإشعارات
-      const notifBtn = document.createElement('button');
-      notifBtn.className = 'header-btn';
-      notifBtn.id = 'notif-btn';
-      notifBtn.title = 'تبديل الإشعارات';
-      notifBtn.innerHTML = notificationsEnabled ? '🔔' : '🔕';
-      notifBtn.onclick = function(e) {
-        e.stopPropagation();
-        toggleNotifications();
-        this.innerHTML = notificationsEnabled ? '🔔' : '🔕';
-      };
-
-      // إدراج الأزرار قبل زر الإغلاق
-      const closeBtn = headerActions.querySelector('.close-btn');
-      if (closeBtn) {
-        closeBtn.parentElement.insertBefore(darkModeBtn, closeBtn);
-        closeBtn.parentElement.insertBefore(notifBtn, closeBtn);
-      } else {
-        headerActions.appendChild(darkModeBtn);
-        headerActions.appendChild(notifBtn);
-      }
-    }
   }
 });
