@@ -717,6 +717,27 @@ mark.search-highlight {
   .quick-btn { font-size: 0.78rem; padding: 7px 11px; }
 }
 
+/* ===== شاشات صغيرة ===== */
+@media (max-width: 768px) {
+  .chat-window {
+    width: 96%;
+    height: 82vh;
+    bottom: 12px;
+    right: 2%;
+    border-radius: 18px;
+  }
+
+  .ai-bubble {
+    bottom: 18px;
+    right: 18px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .ai-bubble span { font-size: 28px; }
+  .quick-btn { font-size: 0.78rem; padding: 7px 11px; }
+}
+
 @media (max-width: 480px) {
   .chat-window {
     width: 100%;
@@ -727,4 +748,94 @@ mark.search-highlight {
   }
 
   .chat-header { padding: 13px 14px; }
+}
+
+/* ═══ Dark Mode Theme ═══ */
+.chat-window.dark-mode {
+  background: linear-gradient(160deg, rgba(10, 10, 12, 0.98) 0%, rgba(5, 5, 8, 0.99) 100%);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(252, 120, 35, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.chat-window.dark-mode .chat-body {
+  background: rgba(8, 8, 10, 0.9);
+}
+
+.chat-window.dark-mode .ai-msg {
+  background: linear-gradient(135deg, rgba(25, 25, 28, 0.95), rgba(20, 20, 24, 0.95));
+  border-color: rgba(252, 120, 35, 0.1);
+}
+
+.chat-window.dark-mode .user-msg {
+  background: linear-gradient(135deg, #d95c0d, #c04a08);
+  box-shadow: 0 4px 18px rgba(217, 92, 13, 0.25);
+}
+
+.chat-window.dark-mode .chat-footer {
+  background: rgba(10, 10, 12, 0.95);
+  border-top-color: rgba(252, 120, 35, 0.1);
+}
+
+.chat-window.dark-mode #ai-input {
+  background: rgba(20, 20, 24, 0.8);
+  border-color: rgba(252, 120, 35, 0.2);
+  color: #e0e0e0;
+}
+
+.chat-window.dark-mode #ai-input:focus {
+  background: rgba(25, 25, 30, 0.9);
+  border-color: #fc7823;
+  box-shadow: 0 0 0 3px rgba(252, 120, 35, 0.08);
+}
+
+.chat-window.dark-mode #ai-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.chat-window.dark-mode .response-message {
+  color: #c8c8c8;
+}
+
+.chat-window.dark-mode .law-item {
+  background: rgba(252, 120, 35, 0.03);
+  border-right-color: rgba(252, 120, 35, 0.3);
+}
+
+.chat-window.dark-mode .law-item:hover {
+  background: rgba(252, 120, 35, 0.08);
+  border-right-color: #fc7823;
+}
+
+.chat-window.dark-mode .law-text {
+  color: #d0d0d0;
+}
+
+/* ═══ أنيميشنات إضافية ═══ */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 6px 28px rgba(252, 120, 35, 0.5); }
+  50% { box-shadow: 0 6px 40px rgba(252, 120, 35, 0.8), 0 0 0 12px rgba(252, 120, 35, 0.08); }
 }

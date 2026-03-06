@@ -34,6 +34,31 @@ const CONFIG = {
 
   OG_IMAGE: "Plus_Dev_No_Wellpeper.png",
 
+  SITE_URL: "https://saai5l.github.io/Plus_",
 
-  SITE_URL: "https://saai5l.github.io/Plus_"
+  // ═══ خيارات البوت الجديدة ═══
+  BOT_CONFIG: {
+    // تفعيل/تعطيل ميزات البوت
+    enableChatHistory: true,      // حفظ المحادثات
+    enableDarkMode: true,         // وضع ليلي
+    enableNotifications: true,    // الإشعارات
+    enableSearchHighlight: true,  // تمييز البحث
+    
+    // مدة التخزين (بالأيام)
+    chatHistoryDays: 30,
+    
+    // حد أقصى للرسائل المحفوظة
+    maxSavedMessages: 100,
+    
+    // رسائل مخصصة
+    messages: {
+      welcome: '👋 أهلاً بك في مساعد Plus Dev!',
+      error: '❌ عذراً، حدث خطأ. حاول مجدداً',
+      noResults: '🔍 لم أجد نتائج لبحثك'
+    },
+
+    // إجابات تلقائية
+    autoRespond: true,
+    responseDelay: { min: 600, max: 1200 } // بالملي ثانية
+  }
 };
