@@ -2442,3 +2442,12 @@ window.addEventListener('scroll', function() {
   const nav = document.querySelector('.navbar');
   if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
 }, { passive: true });
+
+// تشغيل نظام الوظائف
+displayJobsPage();
+
+// تشغيل نظام السرقات
+displayRobberiesPage();
+
+// تحديث الملف الشخصي
+updateUserProfileDisplay();
