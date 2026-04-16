@@ -8,8 +8,8 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <style>
   :root {
-    --orange: #fc7823;
-    --orange-dim: #e05e10;
+    --orange: #B8860B;
+    --orange-dim: #9A7209;
     --bg: #080810;
     --bg2: #0e0e18;
     --white: #f0f0f0;
@@ -37,9 +37,9 @@
     inset: 0;
     z-index: 0;
     background:
-      radial-gradient(ellipse 60% 50% at 50% -10%, rgba(252,120,35,0.18) 0%, transparent 65%),
-      radial-gradient(ellipse 30% 30% at 90% 80%, rgba(252,120,35,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 30% 30% at 10% 80%, rgba(252,120,35,0.07) 0%, transparent 60%);
+      radial-gradient(ellipse 60% 50% at 50% -10%, rgba(184,134,11,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 30% 30% at 90% 80%, rgba(184,134,11,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 30% at 10% 80%, rgba(184,134,11,0.07) 0%, transparent 60%);
   }
 
   /* شبكة */
@@ -48,8 +48,8 @@
     inset: 0;
     z-index: 0;
     background-image:
-      linear-gradient(rgba(252,120,35,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(252,120,35,0.04) 1px, transparent 1px);
+      linear-gradient(rgba(184,134,11,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(184,134,11,0.04) 1px, transparent 1px);
     background-size: 50px 50px;
     mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
   }
@@ -99,13 +99,13 @@
     width: 80px;
     height: 80px;
     object-fit: contain;
-    filter: drop-shadow(0 0 20px rgba(252,120,35,0.5));
+    filter: drop-shadow(0 0 20px rgba(184,134,11,0.5));
     animation: logoPulse 3s ease-in-out infinite;
   }
 
   @keyframes logoPulse {
-    0%,100% { filter: drop-shadow(0 0 20px rgba(252,120,35,0.5)); }
-    50%      { filter: drop-shadow(0 0 40px rgba(252,120,35,0.8)); }
+    0%,100% { filter: drop-shadow(0 0 20px rgba(184,134,11,0.5)); }
+    50%      { filter: drop-shadow(0 0 40px rgba(184,134,11,0.8)); }
   }
 
   /* رقم 404 */
@@ -114,7 +114,7 @@
     font-weight: 900;
     line-height: 1;
     letter-spacing: -4px;
-    background: linear-gradient(135deg, #fc7823 0%, #ff9a50 40%, #e05e10 100%);
+    background: linear-gradient(135deg, #B8860B 0%, #ff9a50 40%, #9A7209 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -129,16 +129,16 @@
     0%,90%,100% { transform: translate(0); filter: none; }
     92% {
       transform: translate(-3px, 1px);
-      filter: drop-shadow(3px 0 0 rgba(252,120,35,0.7)) drop-shadow(-3px 0 0 rgba(0,200,255,0.4));
+      filter: drop-shadow(3px 0 0 rgba(184,134,11,0.7)) drop-shadow(-3px 0 0 rgba(0,200,255,0.4));
     }
     94% {
       transform: translate(3px, -1px);
-      filter: drop-shadow(-3px 0 0 rgba(252,120,35,0.7)) drop-shadow(3px 0 0 rgba(255,0,100,0.4));
+      filter: drop-shadow(-3px 0 0 rgba(184,134,11,0.7)) drop-shadow(3px 0 0 rgba(255,0,100,0.4));
     }
     96% { transform: translate(0); filter: none; }
     98% {
       transform: translate(-2px, 2px);
-      filter: drop-shadow(2px 0 0 rgba(252,120,35,0.5));
+      filter: drop-shadow(2px 0 0 rgba(184,134,11,0.5));
     }
   }
 
@@ -146,7 +146,7 @@
   .error-line {
     width: 120px;
     height: 3px;
-    background: linear-gradient(90deg, transparent, #fc7823, transparent);
+    background: linear-gradient(90deg, transparent, #B8860B, transparent);
     margin: 0 auto 20px;
     animation: linePulse 2s ease-in-out infinite;
   }
@@ -191,7 +191,7 @@
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, #fc7823, #e05e10);
+    background: linear-gradient(135deg, #B8860B, #9A7209);
     color: white;
     border: none;
     padding: 14px 28px;
@@ -205,12 +205,12 @@
     align-items: center;
     gap: 8px;
     transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    box-shadow: 0 6px 24px rgba(252,120,35,0.35);
+    box-shadow: 0 6px 24px rgba(184,134,11,0.35);
   }
 
   .btn-primary:hover {
     transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 12px 36px rgba(252,120,35,0.5);
+    box-shadow: 0 12px 36px rgba(184,134,11,0.5);
   }
 
   .btn-outline {
@@ -232,8 +232,8 @@
   }
 
   .btn-outline:hover {
-    background: rgba(252,120,35,0.12);
-    border-color: rgba(252,120,35,0.4);
+    background: rgba(184,134,11,0.12);
+    border-color: rgba(184,134,11,0.4);
     color: var(--orange);
     transform: translateY(-2px);
   }
@@ -242,7 +242,7 @@
   .divider {
     width: 100%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(252,120,35,0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(184,134,11,0.2), transparent);
     margin-bottom: 28px;
   }
 
@@ -271,8 +271,8 @@
   }
 
   .quick-link:hover {
-    background: rgba(252,120,35,0.1);
-    border-color: rgba(252,120,35,0.3);
+    background: rgba(184,134,11,0.1);
+    border-color: rgba(184,134,11,0.3);
     color: var(--orange);
     transform: translateY(-1px);
   }
@@ -317,7 +317,7 @@
 
   <!-- اللوجو -->
   <div class="logo-wrap">
-    <img src="Plus_Dev_No_Wellpeper.png" alt="Plus Dev" onerror="this.style.display='none'"/>
+    <img src="ServerLogo.png" alt="Plus Dev" onerror="this.style.display='none'"/>
   </div>
 
   <!-- 404 -->

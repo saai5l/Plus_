@@ -28,11 +28,11 @@ const CONFIG = {
     appId:             "1:493882886067:web:ed8f0db9678a7e8a042dc6"
   },
 
-  PRIMARY_COLOR: "#fc7823",
+  PRIMARY_COLOR: "#B8860B",
 
-  LOGO_URL: "Plus_Dev_No_Wellpeper.png",
+  LOGO_URL: "ServerLogo.png",
 
-  OG_IMAGE: "Plus_Dev_No_Wellpeper.png",
+  OG_IMAGE: "ServerLogo.png",
 
 
   SITE_URL: "https://saai5l.github.io/Plus_"

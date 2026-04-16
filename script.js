@@ -80,7 +80,7 @@ function showPage(pageId) {
     overlay.id = 'page-transition-overlay';
     overlay.style.cssText = `
       position:fixed;inset:0;z-index:99997;pointer-events:none;
-      background:linear-gradient(135deg,rgba(252,120,35,0.08),rgba(0,0,0,0.5));
+      background:linear-gradient(135deg,rgba(184,134,11,0.08),rgba(0,0,0,0.5));
       opacity:0;transition:opacity 0.2s ease;
     `;
     document.body.appendChild(overlay);
@@ -262,7 +262,7 @@ function showRequirements(jobType) {
     const reqList = document.getElementById('req-list');
     const requirements = jobRequirements[jobType] || ['يجب الالتزام بالقوانين'];
 
-    reqList.innerHTML = requirements.map(r => `<p style="margin:10px 0;"><i class="fa-solid fa-check" style="color:#fc7823;"></i> ${r}</p>`).join('');
+    reqList.innerHTML = requirements.map(r => `<p style="margin:10px 0;"><i class="fa-solid fa-check" style="color:#B8860B;"></i> ${r}</p>`).join('');
     reqModal.style.display = 'flex';
 
     document.getElementById('accept-req').onclick = function() {
@@ -588,7 +588,7 @@ class Particle {
         if (this.size > 0.2) this.size -= 0.002; 
     }
     draw() {
-        ctx.fillStyle = 'rgba(252, 120, 35, 0.4)'; 
+        ctx.fillStyle = 'rgba(184, 134, 11, 0.4)'; 
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -751,7 +751,7 @@ function updateUI(user) {
 
         if (ADMIN_IDS.includes(user.id)) {
             userStatus.innerText = "Higher Administration";
-            userStatus.style.color = "#fc7823";
+            userStatus.style.color = "#B8860B";
             if (document.getElementById('admin-btn')) {
                 document.getElementById('admin-btn').style.display = 'flex';
             }
@@ -1273,7 +1273,7 @@ function openCustomConfirm(message, title, iconClass, action) {
     if (message.includes("حذف") || message.includes("تصفير")) {
         iconElem.style.color = "#e74c3c";
     } else {
-        iconElem.style.color = "#fc7823";
+        iconElem.style.color = "#B8860B";
     }
 
     document.getElementById('confirm-modal').style.display = 'flex';
@@ -1448,7 +1448,7 @@ function openProductModal(name, price, cat, emoji, desc, featuresStr, oldPrice) 
         priceEl.style.color = '#2ecc71';
     } else {
         priceEl.textContent = price + '$';
-        priceEl.style.color = '#fc7823';
+        priceEl.style.color = '#B8860B';
     }
 
     // Features
@@ -1595,9 +1595,9 @@ async function confirmPurchase() {
         badge.innerHTML = `<i class="fas fa-box"></i> ${orderId} <i class="fas fa-copy" style="font-size:0.75rem;opacity:0.6"></i>`;
         badge.onclick = () => {
             navigator.clipboard.writeText(orderId);
-            badge.style.background = 'rgba(252,120,35,0.15)';
-            badge.style.borderColor = 'rgba(252,120,35,0.4)';
-            badge.style.color = '#fc7823';
+            badge.style.background = 'rgba(184,134,11,0.15)';
+            badge.style.borderColor = 'rgba(184,134,11,0.4)';
+            badge.style.color = '#B8860B';
             setTimeout(() => {
                 badge.style.background = '';
                 badge.style.borderColor = '';
@@ -1660,15 +1660,15 @@ function loadMyOrders(userId) {
             <div style="background:rgba(14,14,16,0.97);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:16px 18px;transition:all 0.3s;">
               <div style="display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;">
                 <div style="display:flex;align-items:center;gap:12px;">
-                  <div style="width:44px;height:44px;border-radius:12px;background:rgba(252,120,35,0.1);border:1px solid rgba(252,120,35,0.2);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">${o.productEmoji}</div>
+                  <div style="width:44px;height:44px;border-radius:12px;background:rgba(184,134,11,0.1);border:1px solid rgba(184,134,11,0.2);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">${o.productEmoji}</div>
                   <div>
                     <div style="font-weight:700;font-size:0.95rem">${o.productName}</div>
                     <div style="color:rgba(255,255,255,0.3);font-size:0.75rem;margin-top:2px">${o.createdAt}</div>
                   </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-                  <span style="background:rgba(252,120,35,0.1);color:#fc7823;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
-                  <span style="font-size:1.1rem;font-weight:900;color:#fc7823">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
+                  <span style="background:rgba(184,134,11,0.1);color:#B8860B;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
+                  <span style="font-size:1.1rem;font-weight:900;color:#B8860B">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
                   <span style="background:${s.bg};color:${s.color};border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${s.label}</span>
                 </div>
               </div>
@@ -1719,12 +1719,12 @@ function renderOrders(list) {
               <div>
                 <div style="font-weight:700;font-size:0.9rem">${o.productName}</div>
                 <div style="color:rgba(255,255,255,0.3);font-size:0.75rem;margin-top:2px">${o.userName} · ${o.createdAt}</div>
-                <div style="color:rgba(252,120,35,0.6);font-size:0.72rem;margin-top:2px;display:flex;align-items:center;gap:4px"><i class="fab fa-discord" style="color:#5865f2"></i> <code style="background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.2);border-radius:4px;padding:1px 6px;color:#a0a9ff;font-size:0.7rem">${o.discordId || o.userId || '—'}</code></div>
+                <div style="color:rgba(184,134,11,0.6);font-size:0.72rem;margin-top:2px;display:flex;align-items:center;gap:4px"><i class="fab fa-discord" style="color:#5865f2"></i> <code style="background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.2);border-radius:4px;padding:1px 6px;color:#a0a9ff;font-size:0.7rem">${o.discordId || o.userId || '—'}</code></div>
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-              <span style="background:rgba(252,120,35,0.1);color:#fc7823;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
-              <span style="font-weight:900;color:#fc7823">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
+              <span style="background:rgba(184,134,11,0.1);color:#B8860B;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
+              <span style="font-weight:900;color:#B8860B">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
               <span style="background:${s.bg};color:${s.color};border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${s.label}</span>
               ${o.status === 'pending' ? `
               <button onclick="updateOrderStatus('${o.id}','completed')" style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.2);color:#2ecc71;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.78rem"><i class="fas fa-check"></i> إتمام</button>
@@ -2186,7 +2186,7 @@ function renderTickets(tickets) {
           <div style="display:flex;align-items:flex-start;gap:12px">
             <div style="flex:1;min-width:0">
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">
-                <span style="background:rgba(252,120,35,0.1);color:#fc7823;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
+                <span style="background:rgba(184,134,11,0.1);color:#B8860B;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
                 <span style="background:${statusBg};color:${statusColor};border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${statusText}</span>
                 <span style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.4);border-radius:6px;padding:2px 10px;font-size:0.72rem">${t.type}</span>
               </div>
@@ -2319,7 +2319,7 @@ function loadMyTickets(userId) {
             <div style="background:rgba(16,16,20,0.95);border:1px solid ${hasReply ? 'rgba(46,204,113,0.3)' : 'rgba(255,255,255,0.07)'};border-radius:16px;padding:18px 20px;transition:all 0.3s;${hasReply ? 'box-shadow:0 0 20px rgba(46,204,113,0.08)' : ''}">
               <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px">
                 <div style="display:flex;align-items:center;gap:10px">
-                  <div style="width:36px;height:36px;border-radius:10px;background:rgba(252,120,35,0.1);border:1px solid rgba(252,120,35,0.2);display:flex;align-items:center;justify-content:center;color:#fc7823;font-size:0.9rem;flex-shrink:0">
+                  <div style="width:36px;height:36px;border-radius:10px;background:rgba(184,134,11,0.1);border:1px solid rgba(184,134,11,0.2);display:flex;align-items:center;justify-content:center;color:#B8860B;font-size:0.9rem;flex-shrink:0">
                     <i class="fas fa-ticket-alt"></i>
                   </div>
                   <div>
@@ -2328,7 +2328,7 @@ function loadMyTickets(userId) {
                   </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-                  <span style="background:rgba(252,120,35,0.1);color:#fc7823;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
+                  <span style="background:rgba(184,134,11,0.1);color:#B8860B;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
                   <span style="background:${isOpen ? 'rgba(52,152,219,0.1)' : 'rgba(46,204,113,0.1)'};color:${isOpen ? '#3498db' : '#2ecc71'};border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">
                     ${isOpen ? '🔵 مفتوحة' : '✅ مغلقة'}
                   </span>
