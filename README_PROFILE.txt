@@ -1,0 +1,1 @@
+Added profile page integration. Set CONFIG.PROFILE_API_BASE in config.js to your backend API URL.
