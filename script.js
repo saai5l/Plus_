@@ -1572,7 +1572,7 @@ async function confirmPurchase() {
                         { name: '🔖 Discord ID', value: '<@' + user.id + '> `' + user.id + '`',            inline: true  },
                         ...(note ? [{ name: '📝 ملاحظة', value: note, inline: false }] : [])
                     ],
-                    footer: { text: 'Plus Dev Store • ' + now },
+                    footer: { text: 'Pevix Development Store • ' + now },
                     thumbnail: { url: user.avatar ? 'https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.png?size=64' : '' }
                 }]
             })
@@ -2133,7 +2133,7 @@ async function submitTicket() {
                         { name: '📝 التفاصيل', value: body, inline: false },
                         { name: '🕐 الوقت', value: now, inline: true },
                     ],
-                    footer: { text: 'Plus Dev Support — ارد من لوحة الإدمن في الموقع' },
+                    footer: { text: 'Pevix Development Support — ارد من لوحة الإدمن في الموقع' },
                     timestamp: new Date().toISOString()
                 }]
             })

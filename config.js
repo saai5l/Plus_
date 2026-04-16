@@ -1,6 +1,6 @@
 const CONFIG = {
 
-  SERVER_NAME: "Plus Dev",
+  SERVER_NAME: "Pevix Development",
 
   DISCORD_INVITE: "https://discord.gg/UCDtkfQUtK",
 
