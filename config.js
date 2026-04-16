@@ -35,5 +35,7 @@ const CONFIG = {
   OG_IMAGE: "ServerLogo.png",
 
 
+  PROFILE_API_BASE: "",
+
   SITE_URL: "https://saai5l.github.io/Plus_"
 };
