@@ -2,7 +2,7 @@ const CONFIG = {
 
   SERVER_NAME: "Pevix Development",
 
-  DISCORD_INVITE: "https://discord.gg/UCDtkfQUtK",
+  DISCORD_INVITE: "https://discord.gg/pev",
 
   DISCORD_CLIENT_ID: "1453875994988380373",
 

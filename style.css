@@ -4415,9 +4415,9 @@ body.light-theme .setting-item {
 
 /* ── Discord Button ── */
 .btn-discord:hover {
-  border-color: rgba(88,101,242,0.6) !important;
+  border-color: rgba(184, 134, 11) !important;
   color: #7289da !important;
-  background: rgba(88,101,242,0.08) !important;
+  background: rgba(184, 134, 11) !important;
 }
 .btn-discord:hover i { color: #7289da; }
 
@@ -5224,8 +5224,8 @@ body.light-theme .setting-item {
   display: flex;
   align-items: center;
   gap: 9px;
-  background: rgba(88,101,242,0.08);
-  border: 1px solid rgba(88,101,242,0.2);
+  background: rgba(184, 134, 11,0.08);
+  border: 1px solid rgba(184, 134, 11,0.2);
   border-radius: 10px;
   padding: 10px 14px;
   margin: 14px 0;
@@ -5233,7 +5233,7 @@ body.light-theme .setting-item {
   font-size: 0.82rem;
 }
 
-.purch-discord-row i { color: #5865f2; font-size: 1rem; }
+.purch-discord-row i { color: #B8860B; font-size: 1rem; }
 
 .purch-actions {
   display: flex;
@@ -5351,8 +5351,8 @@ body.light-theme .setting-item {
 .ix-33 { background:linear-gradient(135deg,#e74c3c,#c0392b); }
 .ix-34 { background:rgba(155,89,182,0.12);border-color:rgba(155,89,182,0.3);color:#9b59b6; }
 .ix-35 { background:rgba(155,89,182,0.1);color:#9b59b6;border-color:rgba(155,89,182,0.3); }
-.ix-36 { background:rgba(88,101,242,0.12);border-color:rgba(88,101,242,0.3);color:#5865f2; }
-.ix-37 { background:rgba(88,101,242,0.1);color:#5865f2;border-color:rgba(88,101,242,0.3); }
+.ix-36 { background:rgba(184, 134, 11,0.12);border-color:rgba(184, 134, 11,0.3);color:#B8860B; }
+.ix-37 { background:rgba(184, 134, 11,0.1);color:#B8860B;border-color:rgba(184, 134, 11,0.3); }
 .ix-38 { display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-top:30px; }
 .ix-39 { border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:30px;background:rgba(15,15,15,0.9);text-align:center;transition:all 0.3s; }
 .ix-40 { width:65px;height:65px;background:rgba(52,152,219,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.8rem;color:#3498db; }
@@ -5877,9 +5877,9 @@ body.light-theme .setting-item {
   text-decoration: none; color: white;
   font-size: 0.88rem; font-weight: 600;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(88,101,242,0.3);
+  box-shadow: 0 4px 20px rgba(184,134,11,0.3);
 }
-.footer-discord-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(88,101,242,0.45); }
+.footer-discord-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(184, 134, 11,0.45); }
 .fdb-online {
   display: flex; align-items: center; gap: 5px;
   font-size: 0.72rem; color: rgba(255,255,255,0.7);

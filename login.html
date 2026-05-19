@@ -9,203 +9,681 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <meta name="theme-color" content="#B8860B">
   <style>
-    :root { --primary:#B8860B; --primary-dark:#B8860B; --discord:#5865F2; --discord-dark:#4752c4; }
-    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Tajawal',sans-serif;background:#050505;color:#e0e0e0;min-height:100vh;display:flex;overflow:hidden;}
-
-    /* ═══ BRAND PANEL ═══ */
-    .brand-panel{
-      flex:1;background:linear-gradient(160deg,#0c0c0e,#080808);
-      border-left:1px solid rgba(184,134,11,0.1);
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      padding:60px 50px;position:relative;overflow:hidden;
+    :root {
+      --gold: #B8860B;
+      --gold-dim: #9A7209;
+      --gold-light: #D4A017;
+      --discord: #5865F2;
+      --discord-dark: #4752c4;
+      --bg: #070709;
+      --bg2: #0d0d10;
+      --bg3: #111116;
+      --surface: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.07);
+      --border-gold: rgba(184,134,11,0.25);
+      --text: #f0ede8;
+      --text-muted: rgba(240,237,232,0.45);
+      --text-dim: rgba(240,237,232,0.2);
     }
-    .brand-panel::before{
-      content:'';position:absolute;inset:0;
-      background-image:linear-gradient(rgba(184,134,11,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(184,134,11,0.04) 1px,transparent 1px);
-      background-size:50px 50px;
+    *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow: hidden;
     }
-    .bp-orb{position:absolute;border-radius:50%;pointer-events:none;}
-    .bp-orb-1{width:450px;height:450px;top:-120px;right:-120px;background:radial-gradient(circle,rgba(184,134,11,0.09) 0%,transparent 70%);}
-    .bp-orb-2{width:320px;height:320px;bottom:-80px;left:-80px;background:radial-gradient(circle,rgba(184,134,11,0.05) 0%,transparent 70%);}
 
-    .bp-content{position:relative;z-index:2;text-align:center;max-width:400px;}
-    .bp-logo{
-      width:88px;height:88px;border-radius:50%;
-      border:2px solid rgba(184,134,11,0.5);
-      box-shadow:0 0 40px rgba(184,134,11,0.2),0 0 80px rgba(184,134,11,0.08);
-      margin-bottom:26px;
-      animation:logoPulse 3s ease-in-out infinite;
+    /* ══════════════════════════════
+       LEFT: VISUAL PANEL
+    ══════════════════════════════ */
+    .visual-panel {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 60px;
     }
-    @keyframes logoPulse{0%,100%{box-shadow:0 0 40px rgba(184,134,11,0.2),0 0 80px rgba(184,134,11,0.08);}50%{box-shadow:0 0 60px rgba(184,134,11,0.35),0 0 100px rgba(184,134,11,0.12);}}
 
-    .bp-title{font-size:2.8rem;font-weight:900;color:#fff;line-height:1.1;margin-bottom:12px;}
-    .bp-title span{color:var(--primary);}
-    .bp-desc{color:#555;font-size:0.9rem;line-height:1.7;margin-bottom:32px;}
-
-    .bp-stats{display:flex;gap:14px;justify-content:center;margin-bottom:32px;}
-    .bp-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px 18px;flex:1;text-align:center;}
-    .bp-stat-num{font-size:1.35rem;font-weight:900;color:#fff;}
-    .bp-stat-num span{color:var(--primary);}
-    .bp-stat-lbl{font-size:0.7rem;color:#444;margin-top:3px;}
-
-    .bp-features{display:flex;flex-direction:column;gap:10px;text-align:right;}
-    .bp-feat{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px 16px;transition:all 0.3s;}
-    .bp-feat:hover{border-color:rgba(184,134,11,0.2);background:rgba(184,134,11,0.04);}
-    .bp-feat-icon{width:36px;height:36px;background:rgba(184,134,11,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:0.88rem;flex-shrink:0;}
-    .bp-feat-text{font-size:0.83rem;color:#777;line-height:1.4;}
-    .bp-feat-text strong{color:#ccc;display:block;font-size:0.86rem;}
-
-    /* ═══ FORM PANEL ═══ */
-    .form-panel{
-      width:480px;flex-shrink:0;
-      background:rgba(9,9,11,0.99);
-      border-left:1px solid rgba(255,255,255,0.05);
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      padding:50px 44px;position:relative;overflow-y:auto;
+    /* animated noise grain overlay */
+    .visual-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 0;
     }
-    .form-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--primary),transparent);}
 
-    .back-btn{
-      position:absolute;top:18px;right:18px;
-      display:flex;align-items:center;gap:7px;
-      color:#444;text-decoration:none;font-size:0.82rem;
-      padding:8px 14px;background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.07);border-radius:10px;
-      transition:all 0.25s;
+    /* large gold orb */
+    .orb-main {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle at 40% 40%,
+        rgba(184,134,11,0.13) 0%,
+        rgba(184,134,11,0.05) 40%,
+        transparent 70%);
+      animation: orbBreath 6s ease-in-out infinite;
     }
-    .back-btn:hover{color:var(--primary);border-color:rgba(184,134,11,0.3);}
-
-    .form-inner{width:100%;max-width:360px;}
-
-    .form-greeting{margin-bottom:26px;}
-    .form-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(184,134,11,0.1);border:1px solid rgba(184,134,11,0.22);color:var(--primary);font-size:0.74rem;padding:4px 12px;border-radius:20px;margin-bottom:12px;}
-    .form-tag-dot{width:7px;height:7px;background:#2ecc71;border-radius:50%;animation:blink 2s infinite;}
-    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.4;}}
-    .form-greeting h2{font-size:1.55rem;font-weight:900;color:#fff;}
-    .form-greeting p{color:#555;font-size:0.84rem;margin-top:5px;}
-
-    .tabs{display:flex;gap:4px;background:rgba(255,255,255,0.04);border-radius:10px;padding:4px;margin-bottom:22px;}
-    .tab{flex:1;padding:9px 0;border:none;border-radius:7px;font-family:'Tajawal',sans-serif;font-size:0.87rem;font-weight:700;color:#555;background:transparent;cursor:pointer;transition:all 0.25s;}
-    .tab.on{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;box-shadow:0 4px 14px rgba(184,134,11,0.28);}
-    .tab i{margin-left:5px;}
-
-    .panel{display:none;animation:panIn 0.3s ease;}
-    .panel.on{display:block;}
-    @keyframes panIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-
-    .alert{display:none;align-items:center;gap:9px;padding:11px 14px;border-radius:10px;font-size:0.84rem;font-weight:600;margin-bottom:18px;animation:aIn 0.3s ease;}
-    @keyframes aIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
-    .alert.on{display:flex;}
-    .alert.err{background:rgba(231,76,60,0.12);border:1px solid rgba(231,76,60,0.28);color:#ff7070;}
-    .alert.ok{background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.28);color:#5dda8f;}
-    .alert.inf{background:rgba(184,134,11,0.1);border:1px solid rgba(184,134,11,0.28);color:#fca366;}
-
-    .discord-btn{
-      width:100%;display:flex;align-items:center;justify-content:center;gap:11px;
-      padding:15px;background:linear-gradient(135deg,var(--discord),var(--discord-dark));
-      border:none;border-radius:14px;color:#fff;
-      font-family:'Tajawal',sans-serif;font-size:0.98rem;font-weight:800;
-      cursor:pointer;transition:all 0.25s;
-      box-shadow:0 6px 20px rgba(88,101,242,0.28);position:relative;overflow:hidden;
+    @keyframes orbBreath {
+      0%,100% { transform: translate(-50%,-50%) scale(1); }
+      50% { transform: translate(-50%,-50%) scale(1.08); }
     }
-    .discord-btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.1);opacity:0;transition:opacity 0.3s;}
-    .discord-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(88,101,242,0.45);}
-    .discord-btn:hover::after{opacity:1;}
-    .discord-btn i{font-size:1.2rem;}
-    .discord-note{font-size:0.77rem;color:#444;text-align:center;margin-top:11px;line-height:1.6;}
 
-    .alt-login-box{background:rgba(184,134,11,0.04);border:1px solid rgba(184,134,11,0.12);border-radius:14px;padding:16px;text-align:center;margin-top:16px;}
-    .alt-login-box p{font-size:0.81rem;color:#444;margin-bottom:10px;}
-    .alt-login-btn{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);color:#777;border-radius:10px;padding:10px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.85rem;font-weight:700;transition:all 0.25s;}
-    .alt-login-btn:hover{border-color:rgba(184,134,11,0.3);color:var(--primary);}
-
-    .div{display:flex;align-items:center;gap:10px;color:#333;font-size:0.77rem;margin:20px 0;}
-    .div::before,.div::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06);}
-
-    .link-banner{display:none;padding:13px 15px;background:linear-gradient(135deg,rgba(88,101,242,0.1),rgba(184,134,11,0.05));border:1px solid rgba(88,101,242,0.22);border-radius:12px;margin-bottom:18px;font-size:0.82rem;color:#666;line-height:1.6;}
-    .link-banner.on{display:block;}
-    .link-banner strong{color:#9da7fb;}
-    .link-actions{display:flex;gap:8px;margin-top:10px;}
-    .lbtn{flex:1;padding:9px;border-radius:8px;border:none;font-family:'Tajawal',sans-serif;font-size:0.82rem;font-weight:800;cursor:pointer;transition:all 0.2s;}
-    .lbtn-y{background:var(--discord);color:#fff;}
-    .lbtn-y:hover{background:var(--discord-dark);}
-    .lbtn-n{background:rgba(255,255,255,0.06);color:#555;}
-    .lbtn-n:hover{background:rgba(255,255,255,0.1);}
-
-    .fg{margin-bottom:15px;}
-    label{display:block;font-size:0.8rem;font-weight:700;color:#555;margin-bottom:7px;}
-    .iw{position:relative;}
-    .iw i.ic{position:absolute;top:50%;transform:translateY(-50%);right:14px;color:#444;font-size:0.84rem;pointer-events:none;transition:color 0.3s;}
-    input[type="email"],input[type="password"],input[type="text"]{
-      width:100%;padding:13px 42px 13px 44px;
-      background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.07);
-      border-radius:12px;color:#e0e0e0;font-family:'Tajawal',sans-serif;font-size:0.92rem;outline:none;transition:all 0.25s;
+    /* grid lines */
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(184,134,11,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(184,134,11,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 10%, transparent 100%);
     }
-    input:focus{border-color:rgba(184,134,11,0.5);background:rgba(184,134,11,0.04);box-shadow:0 0 0 3px rgba(184,134,11,0.08);}
-    input:focus~i.ic,.iw:focus-within i.ic{color:var(--primary);}
-    input::placeholder{color:rgba(255,255,255,0.17);}
-    .eye{position:absolute;top:50%;transform:translateY(-50%);left:12px;background:none;border:none;color:#444;cursor:pointer;font-size:0.84rem;padding:4px;transition:color 0.3s;}
-    .eye:hover{color:var(--primary);}
-    .extras{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;font-size:0.8rem;}
-    .rem{display:flex;align-items:center;gap:7px;cursor:pointer;color:#555;user-select:none;}
-    .rem input[type="checkbox"]{accent-color:var(--primary);width:14px;height:14px;}
-    .forgot{color:var(--primary);text-decoration:none;transition:opacity 0.25s;}
-    .forgot:hover{opacity:0.7;}
 
-    .sbtn{
-      width:100%;padding:14px;
-      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-      border:none;border-radius:14px;color:#fff;
-      font-family:'Tajawal',sans-serif;font-size:0.98rem;font-weight:800;
-      cursor:pointer;transition:all 0.25s;
-      box-shadow:0 6px 20px rgba(184,134,11,0.22);
+    /* diagonal accent line */
+    .diag-line {
+      position: absolute;
+      width: 1px;
+      height: 300px;
+      background: linear-gradient(to bottom, transparent, rgba(184,134,11,0.3), transparent);
+      transform: rotate(30deg);
+      top: 10%;
+      left: 20%;
+      animation: lineFade 4s ease-in-out infinite;
     }
-    .sbtn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(184,134,11,0.38);}
-    .sbtn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
-    .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:sp 0.7s linear infinite;vertical-align:middle;margin-left:7px;}
-    @keyframes sp{to{transform:rotate(360deg)}}
+    .diag-line:nth-child(3) {
+      left: 70%;
+      top: 50%;
+      height: 200px;
+      transform: rotate(-20deg);
+      animation-delay: 2s;
+    }
+    @keyframes lineFade {
+      0%,100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
 
-    .sw{text-align:center;margin-top:15px;font-size:0.8rem;color:#444;}
-    .sw a{color:var(--primary);text-decoration:none;font-weight:700;}
-    .sw a:hover{text-decoration:underline;}
+    .vp-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 420px;
+    }
 
-    .foot{text-align:center;margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05);font-size:0.74rem;color:#333;}
-    .foot a{color:var(--primary);text-decoration:none;}
+    /* logo ring */
+    .logo-ring {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 1px solid rgba(184,134,11,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 32px;
+      position: relative;
+      animation: ringPulse 3s ease-in-out infinite;
+    }
+    @keyframes ringPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(184,134,11,0.2), 0 0 30px rgba(184,134,11,0.1); }
+      50% { box-shadow: 0 0 0 12px rgba(184,134,11,0), 0 0 50px rgba(184,134,11,0.2); }
+    }
+    .logo-ring::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1px solid rgba(184,134,11,0.12);
+    }
+    .logo-ring img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
 
-    @media(max-width:900px){
-      .brand-panel{display:none;}
-      .form-panel{width:100%;border:none;padding:40px 22px;}
+    .vp-title {
+      font-size: 2.6rem;
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+    .vp-title em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .vp-tagline {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    /* stats row */
+    .stats-row {
+      display: flex;
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 40px;
+      background: var(--border);
+    }
+    .stat-cell {
+      flex: 1;
+      background: var(--bg2);
+      padding: 16px 12px;
+      text-align: center;
+    }
+    .stat-cell:first-child { border-radius: 15px 0 0 15px; }
+    .stat-cell:last-child { border-radius: 0 15px 15px 0; }
+    .stat-num {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-lbl {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    /* feature list */
+    .feat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: right;
+    }
+    .feat-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px 16px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .feat-item:hover {
+      border-color: var(--border-gold);
+      background: rgba(184,134,11,0.04);
+    }
+    .feat-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(184,134,11,0.1);
+      border: 1px solid rgba(184,134,11,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+    .feat-text strong {
+      display: block;
+      font-size: 0.84rem;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .feat-text span {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    /* ══════════════════════════════
+       RIGHT: FORM PANEL
+    ══════════════════════════════ */
+    .form-panel {
+      width: 460px;
+      flex-shrink: 0;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 50px 44px;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    /* top gold line */
+    .form-panel::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      padding: 7px 13px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.25s;
+    }
+    .back-btn:hover { color: var(--gold); border-color: var(--border-gold); }
+
+    .form-inner { width: 100%; max-width: 340px; }
+
+    /* greeting */
+    .greeting { margin-bottom: 28px; }
+    .greeting-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(184,134,11,0.08);
+      border: 1px solid rgba(184,134,11,0.2);
+      color: var(--gold);
+      font-size: 0.72rem;
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      letter-spacing: 0.03em;
+    }
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: #2ecc71;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+    .greeting h2 {
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .greeting p { font-size: 0.84rem; color: var(--text-muted); }
+
+    /* tabs */
+    .tabs {
+      display: flex;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 22px;
+    }
+    .tab {
+      flex: 1;
+      padding: 9px 0;
+      border: none;
+      border-radius: 9px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .tab i { margin-left: 5px; }
+    .tab.on {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      color: #fff;
+      box-shadow: 0 3px 12px rgba(184,134,11,0.3);
+    }
+
+    /* panels */
+    .panel { display: none; animation: panIn 0.3s ease; }
+    .panel.on { display: block; }
+    @keyframes panIn { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
+
+    /* alert */
+    .alert {
+      display: none;
+      align-items: center;
+      gap: 9px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      animation: aIn 0.3s ease;
+    }
+    @keyframes aIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:none} }
+    .alert.on { display: flex; }
+    .alert.err { background:rgba(231,76,60,0.1); border:1px solid rgba(231,76,60,0.25); color:#ff7070; }
+    .alert.ok  { background:rgba(46,204,113,0.08); border:1px solid rgba(46,204,113,0.25); color:#5dda8f; }
+    .alert.inf { background:rgba(184,134,11,0.08); border:1px solid rgba(184,134,11,0.25); color:#fca366; }
+
+    /* Discord button */
+    .discord-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      padding: 15px;
+      background: linear-gradient(135deg, #5865F2, #4752c4);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 6px 20px rgba(88,101,242,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    .discord-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.5s;
+    }
+    .discord-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(88,101,242,0.4); }
+    .discord-btn:hover::before { left: 150%; }
+    .discord-btn i { font-size: 1.2rem; }
+
+    .discord-note {
+      font-size: 0.76rem;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    /* alt login box */
+    .alt-box {
+      margin-top: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+    .alt-box p { font-size: 0.79rem; color: var(--text-muted); margin-bottom: 10px; }
+    .alt-btn {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      transition: all 0.25s;
+    }
+    .alt-btn:hover { border-color: var(--border-gold); color: var(--gold); }
+
+    /* divider */
+    .div-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-dim);
+      font-size: 0.76rem;
+      margin: 20px 0;
+    }
+    .div-line::before, .div-line::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* link banner */
+    .link-banner {
+      display: none;
+      padding: 12px 14px;
+      background: rgba(88,101,242,0.08);
+      border: 1px solid rgba(88,101,242,0.2);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-size: 0.81rem;
+      color: #888;
+      line-height: 1.6;
+    }
+    .link-banner.on { display: block; }
+    .link-banner strong { color: #9da7fb; }
+    .link-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .lbtn {
+      flex: 1;
+      padding: 9px;
+      border-radius: 8px;
+      border: none;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lbtn-y { background: #5865F2; color: #fff; }
+    .lbtn-y:hover { background: #4752c4; }
+    .lbtn-n { background: var(--surface); color: #555; border: 1px solid var(--border); }
+    .lbtn-n:hover { background: rgba(255,255,255,0.06); }
+
+    /* form fields */
+    .fg { margin-bottom: 14px; }
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+      letter-spacing: 0.02em;
+    }
+    .iw { position: relative; }
+    .iw i.ic {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 14px;
+      color: rgba(255,255,255,0.2);
+      font-size: 0.82rem;
+      pointer-events: none;
+      transition: color 0.25s;
+    }
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 13px 42px 13px 44px;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.25s;
+    }
+    input:focus {
+      border-color: rgba(184,134,11,0.5);
+      background: rgba(184,134,11,0.04);
+      box-shadow: 0 0 0 3px rgba(184,134,11,0.07);
+    }
+    input:focus ~ i.ic { color: var(--gold); }
+    input::placeholder { color: rgba(255,255,255,0.15); }
+    .eye {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 12px;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.2);
+      cursor: pointer;
+      font-size: 0.82rem;
+      padding: 4px;
+      transition: color 0.25s;
+    }
+    .eye:hover { color: var(--gold); }
+
+    .extras {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      font-size: 0.79rem;
+    }
+    .rem { display: flex; align-items: center; gap: 7px; cursor: pointer; color: var(--text-muted); user-select: none; }
+    .rem input[type="checkbox"] { accent-color: var(--gold); width: 14px; height: 14px; }
+    .forgot { color: var(--gold); text-decoration: none; transition: opacity 0.2s; }
+    .forgot:hover { opacity: 0.7; }
+
+    /* submit button */
+    .sbtn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.98rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 6px 20px rgba(184,134,11,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .sbtn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.5s;
+    }
+    .sbtn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(184,134,11,0.38); }
+    .sbtn:hover::before { left: 150%; }
+    .sbtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .spin {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: sp 0.7s linear infinite;
+      vertical-align: middle;
+      margin-left: 7px;
+    }
+    @keyframes sp { to { transform: rotate(360deg); } }
+
+    .sw { text-align: center; margin-top: 14px; font-size: 0.79rem; color: var(--text-dim); }
+    .sw a { color: var(--gold); text-decoration: none; font-weight: 700; }
+    .sw a:hover { text-decoration: underline; }
+
+    /* footer */
+    .foot {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+    .foot a { color: rgba(184,134,11,0.6); text-decoration: none; }
+    .foot a:hover { color: var(--gold); }
+
+    /* responsive */
+    @media (max-width: 900px) {
+      .visual-panel { display: none; }
+      .form-panel { width: 100%; border: none; padding: 40px 24px; }
     }
   </style>
 </head>
 <body>
 
-<!-- Brand Panel -->
-<div class="brand-panel">
-  <div class="bp-orb bp-orb-1"></div>
-  <div class="bp-orb bp-orb-2"></div>
-  <div class="bp-content">
-    <img class="bp-logo" src="ServerLogo.png" alt="Pevix Development">
-    <div class="bp-title">Plus <span>Dev</span></div>
-    <p class="bp-desc">سيرفر FiveM احترافي متخصص — سكربتات، شروحات، ووظائف لمجتمع الرول بلاي العربي</p>
-    <div class="bp-stats">
-      <div class="bp-stat"><div class="bp-stat-num">128<span>+</span></div><div class="bp-stat-lbl">لاعب مزامن</div></div>
-      <div class="bp-stat"><div class="bp-stat-num">500<span>+</span></div><div class="bp-stat-lbl">عضو ديسكورد</div></div>
-      <div class="bp-stat"><div class="bp-stat-num">50<span>+</span></div><div class="bp-stat-lbl">سكربت</div></div>
+<!-- Visual Panel -->
+<div class="visual-panel">
+  <div class="orb-main"></div>
+  <div class="grid-lines"></div>
+  <div class="diag-line"></div>
+  <div class="diag-line"></div>
+
+  <div class="vp-content">
+    <div class="logo-ring">
+      <img src="ServerLogo.png" alt="Logo" onerror="this.style.display='none'">
     </div>
-    <div class="bp-features">
-      <div class="bp-feat">
-        <div class="bp-feat-icon"><i class="fas fa-shield-alt"></i></div>
-        <div class="bp-feat-text"><strong>أمان تام</strong>تسجيل دخول آمن عبر ديسكورد الرسمي</div>
+
+    <h1 class="vp-title">Pevix<br><em>Development</em></h1>
+    <p class="vp-tagline">سيرفر FiveM احترافي متخصص<br>سكربتات، شروحات، وتجربة رول بلاي لا مثيل لها</p>
+
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-num">128+</div>
+        <div class="stat-lbl">لاعب مزامن</div>
       </div>
-      <div class="bp-feat">
-        <div class="bp-feat-icon"><i class="fas fa-bolt"></i></div>
-        <div class="bp-feat-text"><strong>وصول فوري</strong>تتبع طلباتك وإدارة حسابك مباشرة</div>
+      <div class="stat-cell">
+        <div class="stat-num">500+</div>
+        <div class="stat-lbl">عضو ديسكورد</div>
       </div>
-      <div class="bp-feat">
-        <div class="bp-feat-icon"><i class="fas fa-headset"></i></div>
-        <div class="bp-feat-text"><strong>دعم مستمر</strong>فريق الدعم جاهز للمساعدة 24/7</div>
+      <div class="stat-cell">
+        <div class="stat-num">50+</div>
+        <div class="stat-lbl">سكربت</div>
+      </div>
+    </div>
+
+    <div class="feat-list">
+      <div class="feat-item">
+        <div class="feat-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="feat-text">
+          <strong>أمان تام</strong>
+          <span>تسجيل دخول آمن عبر ديسكورد الرسمي</span>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon"><i class="fas fa-bolt"></i></div>
+        <div class="feat-text">
+          <strong>وصول فوري</strong>
+          <span>تتبع طلباتك وإدارة حسابك مباشرة</span>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon"><i class="fas fa-headset"></i></div>
+        <div class="feat-text">
+          <strong>دعم مستمر</strong>
+          <span>فريق الدعم جاهز للمساعدة 24/7</span>
+        </div>
       </div>
     </div>
   </div>
@@ -214,11 +692,12 @@
 <!-- Form Panel -->
 <div class="form-panel">
   <a href="index.html" class="back-btn"><i class="fas fa-arrow-right"></i> الرئيسية</a>
+
   <div class="form-inner">
 
-    <div class="form-greeting">
-      <div class="form-tag">
-        <span class="form-tag-dot"></span>
+    <div class="greeting">
+      <div class="greeting-badge">
+        <span class="live-dot"></span>
         السيرفر شغّال الآن
       </div>
       <h2>أهلاً بك 👋</h2>
@@ -226,8 +705,12 @@
     </div>
 
     <div class="tabs">
-      <button class="tab on" onclick="switchTab('discord')"><i class="fab fa-discord"></i> ديسكورد</button>
-      <button class="tab" onclick="switchTab('email')"><i class="fas fa-envelope"></i> إيميل</button>
+      <button class="tab on" onclick="switchTab('discord')">
+        <i class="fab fa-discord"></i> ديسكورد
+      </button>
+      <button class="tab" onclick="switchTab('email')">
+        <i class="fas fa-envelope"></i> إيميل
+      </button>
     </div>
 
     <div class="alert" id="alert"></div>
@@ -238,9 +721,9 @@
         <i class="fab fa-discord"></i> تسجيل الدخول عبر Discord
       </button>
       <p class="discord-note">سيتم جلب بياناتك من ديسكورد تلقائياً وحفظها بأمان تام</p>
-      <div class="alt-login-box">
+      <div class="alt-box">
         <p>ما عندك حساب ديسكورد؟</p>
-        <button class="alt-login-btn" onclick="switchTab('email')">
+        <button class="alt-btn" onclick="switchTab('email')">
           <i class="fas fa-envelope" style="margin-left:6px;"></i> تسجيل بالإيميل وكلمة المرور
         </button>
       </div>
@@ -257,6 +740,7 @@
           <button class="lbtn lbtn-n" onclick="dismissLink()">دخول فقط</button>
         </div>
       </div>
+
       <form id="ef" onsubmit="submitEmail(event)" novalidate>
         <div class="fg">
           <label for="em">البريد الإلكتروني</label>
@@ -270,7 +754,9 @@
           <div class="iw">
             <input type="password" id="pw" placeholder="••••••••" autocomplete="current-password" required>
             <i class="fas fa-lock ic"></i>
-            <button type="button" class="eye" onclick="togglePw()"><i class="fas fa-eye" id="eye"></i></button>
+            <button type="button" class="eye" onclick="togglePw()">
+              <i class="fas fa-eye" id="eye"></i>
+            </button>
           </div>
         </div>
         <div class="extras">
@@ -279,111 +765,158 @@
         </div>
         <button type="submit" class="sbtn" id="sbtn">تسجيل الدخول</button>
       </form>
+
       <div class="sw">ما عندك حساب؟ <a href="#" onclick="switchTab('discord');return false">سجّل عبر ديسكورد</a></div>
     </div>
 
     <div class="foot">
       بالدخول توافق على <a href="#">شروط الاستخدام</a> و<a href="#">سياسة الخصوصية</a>
-      <br><br><span style="color:#1e1e1e">© اسم السيرفر 2025</span>
+      <br><br>© اسم السيرفر 2025
     </div>
+
   </div>
 </div>
 
 <script src="config.js"></script>
 <script>
-const CLIENT_ID = CONFIG.DISCORD_CLIENT_ID;
+const CLIENT_ID   = CONFIG.DISCORD_CLIENT_ID;
 const REDIRECT_URI = CONFIG.REDIRECT_URI;
 
-function switchTab(t){
-  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',(t==='discord'&&i===0)||(t==='email'&&i===1)));
-  document.getElementById('p-discord').classList.toggle('on',t==='discord');
-  document.getElementById('p-email').classList.toggle('on',t==='email');
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach((b,i) =>
+    b.classList.toggle('on', (t==='discord'&&i===0)||(t==='email'&&i===1))
+  );
+  document.getElementById('p-discord').classList.toggle('on', t==='discord');
+  document.getElementById('p-email').classList.toggle('on', t==='email');
   clearAlert();
 }
-function showAlert(msg,type='err'){
-  const icons={err:'fa-circle-exclamation',ok:'fa-circle-check',inf:'fa-circle-info'};
-  const el=document.getElementById('alert');
-  el.className=`alert on ${type}`;
-  el.innerHTML=`<i class="fas ${icons[type]}"></i> ${msg}`;
+
+function showAlert(msg, type='err') {
+  const icons = {err:'fa-circle-exclamation', ok:'fa-circle-check', inf:'fa-circle-info'};
+  const el = document.getElementById('alert');
+  el.className = `alert on ${type}`;
+  el.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
 }
-function clearAlert(){const el=document.getElementById('alert');el.className='alert';el.innerHTML='';}
-async function generatePKCE(){
-  const verifier=Array.from(crypto.getRandomValues(new Uint8Array(32))).map(b=>b.toString(16).padStart(2,'0')).join('');
-  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier));
-  const challenge=btoa(String.fromCharCode(...new Uint8Array(digest))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-  return{verifier,challenge};
+function clearAlert() {
+  const el = document.getElementById('alert');
+  el.className = 'alert';
+  el.innerHTML = '';
 }
-async function loginDiscord(){
-  const state=Math.random().toString(36).slice(2);
-  const{verifier,challenge}=await generatePKCE();
-  sessionStorage.setItem('oauth_state',state);
-  sessionStorage.setItem('code_verifier',verifier);
-  window.location.href=`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify+email&state=${state}&code_challenge=${challenge}&code_challenge_method=S256`;
+
+async function generatePKCE() {
+  const verifier = Array.from(crypto.getRandomValues(new Uint8Array(32)))
+    .map(b => b.toString(16).padStart(2,'0')).join('');
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
+  const challenge = btoa(String.fromCharCode(...new Uint8Array(digest)))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+  return { verifier, challenge };
 }
-function togglePw(){
-  const i=document.getElementById('pw'),e=document.getElementById('eye');
-  if(i.type==='password'){i.type='text';e.className='fas fa-eye-slash';}
-  else{i.type='password';e.className='fas fa-eye';}
+
+async function loginDiscord() {
+  const state = Math.random().toString(36).slice(2);
+  const { verifier, challenge } = await generatePKCE();
+  sessionStorage.setItem('oauth_state', state);
+  sessionStorage.setItem('code_verifier', verifier);
+  window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify+email&state=${state}&code_challenge=${challenge}&code_challenge_method=S256`;
 }
-async function submitEmail(e){
+
+function togglePw() {
+  const i = document.getElementById('pw'), e = document.getElementById('eye');
+  if (i.type === 'password') { i.type = 'text'; e.className = 'fas fa-eye-slash'; }
+  else { i.type = 'password'; e.className = 'fas fa-eye'; }
+}
+
+async function submitEmail(e) {
   e.preventDefault();
-  const em=document.getElementById('em').value.trim();
-  const pw=document.getElementById('pw').value;
-  const rem=document.getElementById('rem').checked;
-  if(!em||!pw){showAlert('يرجى ملء جميع الحقول');return;}
-  const btn=document.getElementById('sbtn');
-  btn.disabled=true;btn.innerHTML='<span class="spin"></span> جاري التحقق...';
+  const em  = document.getElementById('em').value.trim();
+  const pw  = document.getElementById('pw').value;
+  const rem = document.getElementById('rem').checked;
+  if (!em || !pw) { showAlert('يرجى ملء جميع الحقول'); return; }
+  const btn = document.getElementById('sbtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> جاري التحقق...';
   clearAlert();
-  try{
-    const{getAuth,signInWithEmailAndPassword,browserLocalPersistence,browserSessionPersistence,setPersistence}=await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js');
-    const auth=getAuth();
-    await setPersistence(auth,rem?browserLocalPersistence:browserSessionPersistence);
-    const cred=await signInWithEmailAndPassword(auth,em,pw);
-    const{getFirestore,doc,getDoc}=await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
-    const db=getFirestore();
-    const snap=await getDoc(doc(db,'users',cred.user.uid));
-    if(!snap.exists()){showAlert('الحساب غير موجود');btn.disabled=false;btn.innerHTML='تسجيل الدخول';return;}
-    const data=snap.data();
+  try {
+    const { getAuth, signInWithEmailAndPassword, browserLocalPersistence, browserSessionPersistence, setPersistence }
+      = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js');
+    const auth = getAuth();
+    await setPersistence(auth, rem ? browserLocalPersistence : browserSessionPersistence);
+    const cred = await signInWithEmailAndPassword(auth, em, pw);
+    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+    const db = getFirestore();
+    const snap = await getDoc(doc(db, 'users', cred.user.uid));
+    if (!snap.exists()) { showAlert('الحساب غير موجود'); btn.disabled=false; btn.innerHTML='تسجيل الدخول'; return; }
+    const data = snap.data();
     const uName = data.username || data.global_name || cred.user.email;
-    localStorage.setItem('user',JSON.stringify({id:data.discordId||cred.user.uid,name:uName,username:uName,avatar:data.avatar||'',email:cred.user.email}));
-    showAlert('تم تسجيل الدخول بنجاح ✓','ok');
-    setTimeout(()=>{window.location.href='index.html';},900);
-  }catch(err){
-    const msgs={'auth/user-not-found':'البريد غير مسجّل','auth/wrong-password':'كلمة المرور خاطئة','auth/invalid-email':'البريد غير صحيح','auth/too-many-requests':'محاولات كثيرة، حاول لاحقاً','auth/invalid-credential':'البريد أو الباسورد خاطئ'};
-    showAlert(msgs[err.code]||'حدث خطأ، حاول مرة أخرى');
-    btn.disabled=false;btn.innerHTML='تسجيل الدخول';
+    localStorage.setItem('user', JSON.stringify({
+      id: data.discordId || cred.user.uid,
+      name: uName, username: uName,
+      avatar: data.avatar || '',
+      email: cred.user.email
+    }));
+    showAlert('تم تسجيل الدخول بنجاح ✓', 'ok');
+    setTimeout(() => { window.location.href = 'index.html'; }, 900);
+  } catch(err) {
+    const msgs = {
+      'auth/user-not-found':    'البريد غير مسجّل',
+      'auth/wrong-password':    'كلمة المرور خاطئة',
+      'auth/invalid-email':     'البريد غير صحيح',
+      'auth/too-many-requests': 'محاولات كثيرة، حاول لاحقاً',
+      'auth/invalid-credential':'البريد أو الباسورد خاطئ'
+    };
+    showAlert(msgs[err.code] || 'حدث خطأ، حاول مرة أخرى');
+    btn.disabled = false;
+    btn.innerHTML = 'تسجيل الدخول';
   }
 }
-function forgotPw(){showAlert('تواصل مع الإدارة عبر الديسكورد لإعادة تعيين الباسورد','inf');}
-function confirmLink(){document.getElementById('link-banner').classList.remove('on');showAlert('تم ربط الحسابين بنجاح ✓','ok');}
-function dismissLink(){document.getElementById('link-banner').classList.remove('on');}
 
-(async function handleCallback(){
-  const params=new URLSearchParams(location.search);
-  const code=params.get('code');
-  const state=params.get('state');
-  if(!code)return;
-  if(state!==sessionStorage.getItem('oauth_state')){showAlert('خطأ في التحقق، حاول مرة أخرى');return;}
+function forgotPw() { showAlert('تواصل مع الإدارة عبر الديسكورد لإعادة تعيين الباسورد', 'inf'); }
+function confirmLink() { document.getElementById('link-banner').classList.remove('on'); showAlert('تم ربط الحسابين بنجاح ✓','ok'); }
+function dismissLink() { document.getElementById('link-banner').classList.remove('on'); }
+
+// OAuth2 callback
+(async function handleCallback() {
+  const params = new URLSearchParams(location.search);
+  const code   = params.get('code');
+  const state  = params.get('state');
+  if (!code) return;
+  if (state !== sessionStorage.getItem('oauth_state')) {
+    showAlert('خطأ في التحقق، حاول مرة أخرى'); return;
+  }
   switchTab('discord');
-  showAlert('جاري تسجيل الدخول...','inf');
-  try{
-    const codeVerifier=sessionStorage.getItem('code_verifier');
-    const tokenRes=await fetch('https://discord.com/api/oauth2/token',{
-      method:'POST',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:new URLSearchParams({client_id:CLIENT_ID,grant_type:'authorization_code',code,redirect_uri:REDIRECT_URI,code_verifier:codeVerifier||''})
+  showAlert('جاري تسجيل الدخول...', 'inf');
+  try {
+    const codeVerifier = sessionStorage.getItem('code_verifier');
+    const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: CLIENT_ID,
+        grant_type: 'authorization_code',
+        code, redirect_uri: REDIRECT_URI,
+        code_verifier: codeVerifier || ''
+      })
     });
-    const tokenData=await tokenRes.json();
-    if(!tokenData.access_token){showAlert('فشل الحصول على التوكن');return;}
-    const userRes=await fetch('https://discord.com/api/users/@me',{headers:{Authorization:`Bearer ${tokenData.access_token}`}});
-    const user=await userRes.json();
-    if(!user.id){showAlert('فشل جلب بيانات المستخدم');return;}
+    const tokenData = await tokenRes.json();
+    if (!tokenData.access_token) { showAlert('فشل الحصول على التوكن'); return; }
+    const userRes = await fetch('https://discord.com/api/users/@me', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` }
+    });
+    const user = await userRes.json();
+    if (!user.id) { showAlert('فشل جلب بيانات المستخدم'); return; }
     const displayName = user.global_name || user.username || user.id;
-    localStorage.setItem('user',JSON.stringify({id:user.id,name:displayName,username:displayName,global_name:user.global_name||'',avatar:user.avatar?`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`:'',email:user.email||''}));
-    showAlert('تم تسجيل الدخول بنجاح ✓','ok');
-    history.replaceState({},'',location.pathname);
-    setTimeout(()=>{window.location.href='index.html';},900);
-  }catch(e){showAlert('حدث خطأ، حاول مرة أخرى');}
+    localStorage.setItem('user', JSON.stringify({
+      id: user.id,
+      name: displayName,
+      username: displayName,
+      global_name: user.global_name || '',
+      avatar: user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` : '',
+      email: user.email || ''
+    }));
+    showAlert('تم تسجيل الدخول بنجاح ✓', 'ok');
+    history.replaceState({}, '', location.pathname);
+    setTimeout(() => { window.location.href = 'index.html'; }, 900);
+  } catch(e) { showAlert('حدث خطأ، حاول مرة أخرى'); }
 })();
 </script>
 </body>
