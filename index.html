@@ -120,7 +120,7 @@
 <a href="#" onclick="showPage('store')">Store</a>
 </div>
 <div class="social-links">
-<a class="plus-discord-btn" href="https://discord.gg/pev" target="_blank">
+<a class="plus-discord-btn" href="https://discord.gg/5zsr4BF5R7" target="_blank">
 <div class="plus-discord-inner">
 <span>Join Discord</span>
 <i class="fab fa-discord"></i>
@@ -564,6 +564,136 @@
   </div>
 </div>
 
+
+<!-- ═══════════════════════════════════════
+     WHITELIST PANEL
+═══════════════════════════════════════ -->
+<div class="adm-panel adm-section-gap" id="wl-panel">
+  <div class="adm-panel-head">
+    <div class="adm-panel-icon adm-icon-wl"><i class="fas fa-user-check"></i></div>
+    <div style="flex:1">
+      <h3 class="adm-panel-title">نظام Whitelist</h3>
+      <p class="adm-panel-sub">إضافة وإدارة اللاعبين المسموح لهم بالدخول مع تحديد رتبهم</p>
+    </div>
+    <div class="wl-head-stats">
+      <span class="wl-stat-badge wl-badge-total"><i class="fas fa-users"></i> <span id="wl-count-total">0</span></span>
+      <span class="wl-stat-badge wl-badge-active"><i class="fas fa-circle"></i> <span id="wl-count-active">0</span> مفعّل</span>
+    </div>
+  </div>
+
+  <!-- Add Player Row -->
+  <div class="wl-add-section">
+    <div class="wl-add-title"><i class="fas fa-plus-circle"></i> إضافة لاعب جديد</div>
+    <div class="wl-add-form">
+      <div class="wl-field-group">
+        <label class="wl-label">Discord ID</label>
+        <input class="wl-input" id="wl-discord-id" placeholder="مثال: 123456789012345678" type="text" maxlength="20">
+      </div>
+      <div class="wl-field-group">
+        <label class="wl-label">اسم اللاعب</label>
+        <input class="wl-input" id="wl-player-name" placeholder="الاسم الكامل" type="text">
+      </div>
+      <div class="wl-field-group">
+        <label class="wl-label">الرتبة</label>
+        <select class="wl-select" id="wl-player-rank">
+          <option value="مواطن">👤 مواطن</option>
+          <option value="شرطة">🛡️ شرطة</option>
+          <option value="إسعاف">🚑 إسعاف</option>
+          <option value="إدارة">⭐ إدارة</option>
+          <option value="مطور">🔧 مطور</option>
+          <option value="VIP">💎 VIP</option>
+          <option value="مؤسس">👑 مؤسس</option>
+        </select>
+      </div>
+      <div class="wl-field-group">
+        <label class="wl-label">ملاحظة (اختياري)</label>
+        <input class="wl-input" id="wl-player-note" placeholder="أي ملاحظة..." type="text">
+      </div>
+      <button class="wl-add-btn" onclick="addWhitelistPlayer()">
+        <i class="fas fa-plus"></i> إضافة للـ Whitelist
+      </button>
+    </div>
+    <div class="wl-alert" id="wl-alert"></div>
+  </div>
+
+  <!-- Search + Filter -->
+  <div class="wl-toolbar">
+    <div class="wl-search-wrap">
+      <i class="fas fa-search wl-search-icon"></i>
+      <input class="wl-search-input" id="wl-search" oninput="filterWhitelist()" placeholder="ابحث بالاسم أو ID...">
+    </div>
+    <div class="wl-rank-filters" id="wl-rank-filters">
+      <button class="wl-rank-btn wl-rank-active" onclick="filterByRank('all', this)">الكل</button>
+      <button class="wl-rank-btn" onclick="filterByRank('مواطن', this)">👤 مواطن</button>
+      <button class="wl-rank-btn" onclick="filterByRank('شرطة', this)">🛡️ شرطة</button>
+      <button class="wl-rank-btn" onclick="filterByRank('إسعاف', this)">🚑 إسعاف</button>
+      <button class="wl-rank-btn" onclick="filterByRank('إدارة', this)">⭐ إدارة</button>
+      <button class="wl-rank-btn" onclick="filterByRank('مطور', this)">🔧 مطور</button>
+      <button class="wl-rank-btn" onclick="filterByRank('VIP', this)">💎 VIP</button>
+      <button class="wl-rank-btn" onclick="filterByRank('مؤسس', this)">👑 مؤسس</button>
+    </div>
+  </div>
+
+  <!-- Players List -->
+  <div class="wl-list" id="wl-list">
+    <div class="wl-empty-state">
+      <i class="fas fa-user-slash"></i>
+      <p>لا يوجد لاعبين في الـ Whitelist حتى الآن</p>
+      <span>أضف أول لاعب من الأعلى</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="wl-footer">
+    <button class="adm-refresh-btn" onclick="loadWhitelist()"><i class="fas fa-sync-alt"></i> تحديث</button>
+    <button class="wl-export-btn" onclick="exportWhitelist()"><i class="fas fa-download"></i> تصدير CSV</button>
+  </div>
+</div>
+
+<!-- Edit Rank Modal -->
+<div class="wl-modal-overlay" id="wl-modal-overlay" onclick="closeWlModal()">
+  <div class="wl-modal" onclick="event.stopPropagation()">
+    <div class="wl-modal-head">
+      <h3><i class="fas fa-edit"></i> تعديل بيانات اللاعب</h3>
+      <button class="wl-modal-close" onclick="closeWlModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="wl-modal-body">
+      <input type="hidden" id="wl-edit-id">
+      <div class="wl-field-group">
+        <label class="wl-label">اسم اللاعب</label>
+        <input class="wl-input" id="wl-edit-name" type="text">
+      </div>
+      <div class="wl-field-group">
+        <label class="wl-label">الرتبة</label>
+        <select class="wl-select" id="wl-edit-rank">
+          <option value="مواطن">👤 مواطن</option>
+          <option value="شرطة">🛡️ شرطة</option>
+          <option value="إسعاف">🚑 إسعاف</option>
+          <option value="إدارة">⭐ إدارة</option>
+          <option value="مطور">🔧 مطور</option>
+          <option value="VIP">💎 VIP</option>
+          <option value="مؤسس">👑 مؤسس</option>
+        </select>
+      </div>
+      <div class="wl-field-group">
+        <label class="wl-label">ملاحظة</label>
+        <input class="wl-input" id="wl-edit-note" type="text">
+      </div>
+      <div class="wl-field-group">
+        <label class="wl-label">الحالة</label>
+        <select class="wl-select" id="wl-edit-status">
+          <option value="active">✅ مفعّل</option>
+          <option value="suspended">🚫 موقوف</option>
+        </select>
+      </div>
+    </div>
+    <div class="wl-modal-footer">
+      <button class="wl-save-btn" onclick="saveWlEdit()"><i class="fas fa-save"></i> حفظ التغييرات</button>
+      <button class="wl-cancel-btn" onclick="closeWlModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
 </div><!-- /adm-container -->
 </div>
 <!-- HOME PAGE -->
@@ -598,7 +728,7 @@
 <button class="btn-outline" onclick="showPage('jobs')">
 <i class="fas fa-paper-plane"></i> Apply for a Job
   </button>
-<button class="btn-outline btn-discord" onclick="window.open('https://discord.gg/pev','_blank')">
+<button class="btn-outline btn-discord" onclick="window.open('https://discord.gg/5zsr4BF5R7','_blank')">
 <i class="fab fa-discord"></i> Join Discord
   </button>
 </div>
@@ -1989,7 +2119,7 @@
 <i class="fab fa-instagram"></i>
 </a>
 <!-- Discord -->
-<a href="https://discord.gg/pev" target="_blank">
+<a href="https://discord.gg/5zsr4BF5R7" target="_blank">
 <i class="fab fa-discord"></i>
 </a>
 </div>
@@ -2165,7 +2295,7 @@
         </div>
         <div class="footer-col">
           <div class="footer-col-title">تواصل معنا</div>
-          <a href="https://discord.gg/pev" target="_blank"><i class="fab fa-discord"></i> ديسكورد</a>
+          <a href="https://discord.gg/5zsr4BF5R7" target="_blank"><i class="fab fa-discord"></i> ديسكورد</a>
           <a href="#" onclick="openTicketModal()"><i class="fas fa-ticket-alt"></i> فتح تذكرة</a>
           <a onclick="showPage('tracking-page')"><i class="fas fa-search-location"></i> تتبع طلبك</a>
         </div>
@@ -2173,7 +2303,7 @@
       <!-- Social -->
       <div class="footer-social-col">
         <div class="footer-col-title">انضم لمجتمعنا</div>
-        <a class="footer-discord-btn" href="https://discord.gg/pev" target="_blank">
+        <a class="footer-discord-btn" href="https://discord.gg/5zsr4BF5R7" target="_blank">
           <i class="fab fa-discord"></i>
           <span>Join Discord</span>
           <div class="fdb-online"><span class="online-dot"></span> 500+ عضو</div>
@@ -2193,5 +2323,258 @@
 
 <script src="home-animations.js"></script>
 <script src="home-fixes.js"></script>
+
+<!-- ═══ WHITELIST SYSTEM JS ═══ -->
+<script>
+(function() {
+  'use strict';
+
+  // ── State ──
+  let wlPlayers = [];        // كل اللاعبين
+  let wlFiltered = [];       // بعد الفلتر
+  let currentRankFilter = 'all';
+
+  const RANK_ICONS = {
+    'مواطن':'👤','شرطة':'🛡️','إسعاف':'🚑','إدارة':'⭐','مطور':'🔧','VIP':'💎','مؤسس':'👑'
+  };
+
+  // ── Firebase ref helper ──
+  async function getWlRef() {
+    const { getDatabase, ref } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js');
+    return { db: getDatabase(), ref };
+  }
+
+  // ── Show alert ──
+  function wlAlert(msg, type='ok') {
+    const el = document.getElementById('wl-alert');
+    if (!el) return;
+    el.className = `wl-alert show ${type}`;
+    el.innerHTML = `<i class="fas ${type==='ok'?'fa-check-circle':'fa-exclamation-circle'}"></i> ${msg}`;
+    setTimeout(() => el.className = 'wl-alert', 3000);
+  }
+
+  // ── Format date ──
+  function fmtDate(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+  }
+
+  // ── Render cards ──
+  function renderWl(list) {
+    const el = document.getElementById('wl-list');
+    if (!el) return;
+    if (!list.length) {
+      el.innerHTML = `<div class="wl-empty-state"><i class="fas fa-user-slash"></i><p>لا توجد نتائج</p><span>جرّب تغيير الفلتر أو البحث</span></div>`;
+      return;
+    }
+    el.innerHTML = list.map(p => `
+      <div class="wl-player-card ${p.status==='suspended'?'suspended':''}" id="wlcard-${p.id}" data-rank="${p.rank}">
+        <div class="wl-player-avatar">${RANK_ICONS[p.rank]||'👤'}</div>
+        <div class="wl-player-info">
+          <div class="wl-player-name">${p.name}</div>
+          <div class="wl-player-id">${p.discordId}</div>
+        </div>
+        <div class="wl-player-meta">
+          <span class="wl-rank-badge rank-${p.rank}">${RANK_ICONS[p.rank]||''} ${p.rank}</span>
+          <span class="wl-status-dot ${p.status==='active'?'active':'suspended'}" title="${p.status==='active'?'مفعّل':'موقوف'}"></span>
+          ${p.note ? `<span class="wl-note-text" title="${p.note}">${p.note}</span>` : ''}
+          <span class="wl-date">${fmtDate(p.addedAt)}</span>
+        </div>
+        <div class="wl-actions">
+          <button class="wl-btn" onclick="openWlEdit('${p.id}')" title="تعديل"><i class="fas fa-edit"></i></button>
+          <button class="wl-btn wl-btn-suspend" onclick="toggleWlStatus('${p.id}')" title="${p.status==='active'?'إيقاف':'تفعيل'}">
+            <i class="fas ${p.status==='active'?'fa-ban':'fa-check'}"></i>
+          </button>
+          <button class="wl-btn wl-btn-del" onclick="deleteWlPlayer('${p.id}','${p.name}')" title="حذف"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── Update counters ──
+  function updateWlCounts() {
+    const total  = wlPlayers.length;
+    const active = wlPlayers.filter(p => p.status === 'active').length;
+    const tEl = document.getElementById('wl-count-total');
+    const aEl = document.getElementById('wl-count-active');
+    if (tEl) tEl.textContent = total;
+    if (aEl) aEl.textContent = active;
+  }
+
+  // ── Load from Firebase ──
+  window.loadWhitelist = async function() {
+    try {
+      const { db, ref } = await getWlRef();
+      const { get } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js');
+      const snap = await get(ref(db, 'whitelist'));
+      wlPlayers = [];
+      if (snap.exists()) {
+        snap.forEach(child => {
+          wlPlayers.push({ id: child.key, ...child.val() });
+        });
+        // newest first
+        wlPlayers.sort((a,b) => (b.addedAt||0) - (a.addedAt||0));
+      }
+      applyWlFilter();
+      updateWlCounts();
+    } catch(e) {
+      console.warn('WL load error:', e);
+      // fallback to localStorage
+      const local = localStorage.getItem('wl_players');
+      wlPlayers = local ? JSON.parse(local) : [];
+      applyWlFilter();
+      updateWlCounts();
+    }
+  };
+
+  // ── Save helper (Firebase + localStorage fallback) ──
+  async function saveToFirebase(path, data) {
+    try {
+      const { db, ref } = await getWlRef();
+      const { set } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js');
+      await set(ref(db, path), data);
+    } catch(e) {
+      console.warn('Firebase unavailable, using localStorage');
+    }
+    localStorage.setItem('wl_players', JSON.stringify(wlPlayers));
+  }
+
+  async function removeFromFirebase(path) {
+    try {
+      const { db, ref } = await getWlRef();
+      const { remove } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js');
+      await remove(ref(db, path));
+    } catch(e) { /* silent */ }
+    localStorage.setItem('wl_players', JSON.stringify(wlPlayers));
+  }
+
+  // ── Add player ──
+  window.addWhitelistPlayer = async function() {
+    const discordId = document.getElementById('wl-discord-id')?.value.trim();
+    const name      = document.getElementById('wl-player-name')?.value.trim();
+    const rank      = document.getElementById('wl-player-rank')?.value;
+    const note      = document.getElementById('wl-player-note')?.value.trim();
+
+    if (!discordId || !name) { wlAlert('يرجى إدخال Discord ID والاسم', 'err'); return; }
+    if (!/^\d{15,20}$/.test(discordId)) { wlAlert('Discord ID يجب أن يكون 15-20 رقم', 'err'); return; }
+    if (wlPlayers.find(p => p.discordId === discordId)) { wlAlert('هذا اللاعب موجود بالفعل في الـ Whitelist', 'err'); return; }
+
+    const id = 'wl_' + Date.now();
+    const player = { id, discordId, name, rank, note: note||'', status: 'active', addedAt: Date.now() };
+
+    wlPlayers.unshift(player);
+    await saveToFirebase(`whitelist/${id}`, { discordId, name, rank, note: note||'', status: 'active', addedAt: Date.now() });
+    applyWlFilter();
+    updateWlCounts();
+    wlAlert(`تم إضافة ${name} (${rank}) بنجاح ✓`);
+
+    // clear inputs
+    ['wl-discord-id','wl-player-name','wl-player-note'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+  };
+
+  // ── Delete ──
+  window.deleteWlPlayer = async function(id, name) {
+    if (!confirm(`هل تريد حذف ${name} من الـ Whitelist؟`)) return;
+    wlPlayers = wlPlayers.filter(p => p.id !== id);
+    await removeFromFirebase(`whitelist/${id}`);
+    applyWlFilter();
+    updateWlCounts();
+    wlAlert(`تم حذف ${name}`);
+  };
+
+  // ── Toggle status ──
+  window.toggleWlStatus = async function(id) {
+    const p = wlPlayers.find(x => x.id === id);
+    if (!p) return;
+    p.status = p.status === 'active' ? 'suspended' : 'active';
+    await saveToFirebase(`whitelist/${id}/status`, p.status);
+    localStorage.setItem('wl_players', JSON.stringify(wlPlayers));
+    applyWlFilter();
+    updateWlCounts();
+    wlAlert(p.status === 'active' ? `تم تفعيل ${p.name}` : `تم إيقاف ${p.name} مؤقتاً`, p.status === 'active' ? 'ok' : 'err');
+  };
+
+  // ── Filter ──
+  function applyWlFilter() {
+    const q = (document.getElementById('wl-search')?.value || '').trim().toLowerCase();
+    wlFiltered = wlPlayers.filter(p => {
+      const matchRank = currentRankFilter === 'all' || p.rank === currentRankFilter;
+      const matchQ    = !q || p.name.toLowerCase().includes(q) || p.discordId.includes(q);
+      return matchRank && matchQ;
+    });
+    renderWl(wlFiltered);
+  }
+
+  window.filterWhitelist  = applyWlFilter;
+  window.filterByRank     = function(rank, btn) {
+    currentRankFilter = rank;
+    document.querySelectorAll('.wl-rank-btn').forEach(b => b.classList.remove('wl-rank-active'));
+    btn.classList.add('wl-rank-active');
+    applyWlFilter();
+  };
+
+  // ── Edit modal ──
+  window.openWlEdit = function(id) {
+    const p = wlPlayers.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('wl-edit-id').value    = id;
+    document.getElementById('wl-edit-name').value  = p.name;
+    document.getElementById('wl-edit-rank').value  = p.rank;
+    document.getElementById('wl-edit-note').value  = p.note || '';
+    document.getElementById('wl-edit-status').value = p.status;
+    document.getElementById('wl-modal-overlay').classList.add('open');
+  };
+  window.closeWlModal = function() {
+    document.getElementById('wl-modal-overlay').classList.remove('open');
+  };
+  window.saveWlEdit = async function() {
+    const id     = document.getElementById('wl-edit-id').value;
+    const name   = document.getElementById('wl-edit-name').value.trim();
+    const rank   = document.getElementById('wl-edit-rank').value;
+    const note   = document.getElementById('wl-edit-note').value.trim();
+    const status = document.getElementById('wl-edit-status').value;
+    if (!name) { alert('الاسم مطلوب'); return; }
+    const p = wlPlayers.find(x => x.id === id);
+    if (!p) return;
+    Object.assign(p, { name, rank, note, status });
+    await saveToFirebase(`whitelist/${id}`, { discordId: p.discordId, name, rank, note, status, addedAt: p.addedAt });
+    applyWlFilter();
+    updateWlCounts();
+    closeWlModal();
+    wlAlert(`تم تحديث بيانات ${name} ✓`);
+  };
+
+  // ── Export CSV ──
+  window.exportWhitelist = function() {
+    if (!wlPlayers.length) { wlAlert('لا يوجد بيانات للتصدير', 'err'); return; }
+    const rows = [['الاسم','Discord ID','الرتبة','الحالة','ملاحظة','تاريخ الإضافة']];
+    wlPlayers.forEach(p => rows.push([p.name, p.discordId, p.rank, p.status==='active'?'مفعّل':'موقوف', p.note||'', fmtDate(p.addedAt)]));
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob(['\ufeff'+csv], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'whitelist.csv';
+    a.click();
+    wlAlert('تم تصدير الملف ✓');
+  };
+
+  // ── Auto-load when admin panel opens ──
+  const origShowPage = window.showPage;
+  window.showPage = function(page) {
+    if (origShowPage) origShowPage(page);
+    if (page === 'admin-dashboard') loadWhitelist();
+  };
+
+  // ── Load on init if already on admin page ──
+  if (document.getElementById('admin-dashboard')?.classList.contains('active')) {
+    loadWhitelist();
+  }
+
+})();
+</script>
 </body>
 </html>
