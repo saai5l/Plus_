@@ -778,146 +778,146 @@
 </div>
 
 <script src="config.js"></script>
-<script>
-const CLIENT_ID   = CONFIG.DISCORD_CLIENT_ID;
-const REDIRECT_URI = CONFIG.REDIRECT_URI;
+  <script>
+  const CLIENT_ID   = CONFIG.DISCORD_CLIENT_ID;
+  const REDIRECT_URI = CONFIG.REDIRECT_URI;
 
-function switchTab(t) {
-  document.querySelectorAll('.tab').forEach((b,i) =>
-    b.classList.toggle('on', (t==='discord'&&i===0)||(t==='email'&&i===1))
-  );
-  document.getElementById('p-discord').classList.toggle('on', t==='discord');
-  document.getElementById('p-email').classList.toggle('on', t==='email');
-  clearAlert();
-}
-
-function showAlert(msg, type='err') {
-  const icons = {err:'fa-circle-exclamation', ok:'fa-circle-check', inf:'fa-circle-info'};
-  const el = document.getElementById('alert');
-  el.className = `alert on ${type}`;
-  el.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
-}
-function clearAlert() {
-  const el = document.getElementById('alert');
-  el.className = 'alert';
-  el.innerHTML = '';
-}
-
-async function generatePKCE() {
-  const verifier = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-    .map(b => b.toString(16).padStart(2,'0')).join('');
-  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
-  const challenge = btoa(String.fromCharCode(...new Uint8Array(digest)))
-    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-  return { verifier, challenge };
-}
-
-async function loginDiscord() {
-  const state = Math.random().toString(36).slice(2);
-  const { verifier, challenge } = await generatePKCE();
-  sessionStorage.setItem('oauth_state', state);
-  sessionStorage.setItem('code_verifier', verifier);
-  window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify+email&state=${state}&code_challenge=${challenge}&code_challenge_method=S256`;
-}
-
-function togglePw() {
-  const i = document.getElementById('pw'), e = document.getElementById('eye');
-  if (i.type === 'password') { i.type = 'text'; e.className = 'fas fa-eye-slash'; }
-  else { i.type = 'password'; e.className = 'fas fa-eye'; }
-}
-
-async function submitEmail(e) {
-  e.preventDefault();
-  const em  = document.getElementById('em').value.trim();
-  const pw  = document.getElementById('pw').value;
-  const rem = document.getElementById('rem').checked;
-  if (!em || !pw) { showAlert('يرجى ملء جميع الحقول'); return; }
-  const btn = document.getElementById('sbtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin"></span> جاري التحقق...';
-  clearAlert();
-  try {
-    const { getAuth, signInWithEmailAndPassword, browserLocalPersistence, browserSessionPersistence, setPersistence }
-      = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js');
-    const auth = getAuth();
-    await setPersistence(auth, rem ? browserLocalPersistence : browserSessionPersistence);
-    const cred = await signInWithEmailAndPassword(auth, em, pw);
-    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
-    const db = getFirestore();
-    const snap = await getDoc(doc(db, 'users', cred.user.uid));
-    if (!snap.exists()) { showAlert('الحساب غير موجود'); btn.disabled=false; btn.innerHTML='تسجيل الدخول'; return; }
-    const data = snap.data();
-    const uName = data.username || data.global_name || cred.user.email;
-    localStorage.setItem('user', JSON.stringify({
-      id: data.discordId || cred.user.uid,
-      name: uName, username: uName,
-      avatar: data.avatar || '',
-      email: cred.user.email
-    }));
-    showAlert('تم تسجيل الدخول بنجاح ✓', 'ok');
-    setTimeout(() => { window.location.href = 'index.html'; }, 900);
-  } catch(err) {
-    const msgs = {
-      'auth/user-not-found':    'البريد غير مسجّل',
-      'auth/wrong-password':    'كلمة المرور خاطئة',
-      'auth/invalid-email':     'البريد غير صحيح',
-      'auth/too-many-requests': 'محاولات كثيرة، حاول لاحقاً',
-      'auth/invalid-credential':'البريد أو الباسورد خاطئ'
-    };
-    showAlert(msgs[err.code] || 'حدث خطأ، حاول مرة أخرى');
-    btn.disabled = false;
-    btn.innerHTML = 'تسجيل الدخول';
+  function switchTab(t) {
+    document.querySelectorAll('.tab').forEach((b,i) =>
+      b.classList.toggle('on', (t==='discord'&&i===0)||(t==='email'&&i===1))
+    );
+    document.getElementById('p-discord').classList.toggle('on', t==='discord');
+    document.getElementById('p-email').classList.toggle('on', t==='email');
+    clearAlert();
   }
-}
 
-function forgotPw() { showAlert('تواصل مع الإدارة عبر الديسكورد لإعادة تعيين الباسورد', 'inf'); }
-function confirmLink() { document.getElementById('link-banner').classList.remove('on'); showAlert('تم ربط الحسابين بنجاح ✓','ok'); }
-function dismissLink() { document.getElementById('link-banner').classList.remove('on'); }
-
-// OAuth2 callback
-(async function handleCallback() {
-  const params = new URLSearchParams(location.search);
-  const code   = params.get('code');
-  const state  = params.get('state');
-  if (!code) return;
-  if (state !== sessionStorage.getItem('oauth_state')) {
-    showAlert('خطأ في التحقق، حاول مرة أخرى'); return;
+  function showAlert(msg, type='err') {
+    const icons = {err:'fa-circle-exclamation', ok:'fa-circle-check', inf:'fa-circle-info'};
+    const el = document.getElementById('alert');
+    el.className = `alert on ${type}`;
+    el.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
   }
-  switchTab('discord');
-  showAlert('جاري تسجيل الدخول...', 'inf');
-  try {
-    const codeVerifier = sessionStorage.getItem('code_verifier');
-    const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: CLIENT_ID,
-        grant_type: 'authorization_code',
-        code, redirect_uri: REDIRECT_URI,
-        code_verifier: codeVerifier || ''
-      })
-    });
-    const tokenData = await tokenRes.json();
-    if (!tokenData.access_token) { showAlert('فشل الحصول على التوكن'); return; }
-    const userRes = await fetch('https://discord.com/api/users/@me', {
-      headers: { Authorization: `Bearer ${tokenData.access_token}` }
-    });
-    const user = await userRes.json();
-    if (!user.id) { showAlert('فشل جلب بيانات المستخدم'); return; }
-    const displayName = user.global_name || user.username || user.id;
-    localStorage.setItem('user', JSON.stringify({
-      id: user.id,
-      name: displayName,
-      username: displayName,
-      global_name: user.global_name || '',
-      avatar: user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` : '',
-      email: user.email || ''
-    }));
-    showAlert('تم تسجيل الدخول بنجاح ✓', 'ok');
-    history.replaceState({}, '', location.pathname);
-    setTimeout(() => { window.location.href = 'index.html'; }, 900);
-  } catch(e) { showAlert('حدث خطأ، حاول مرة أخرى'); }
-})();
-</script>
+  function clearAlert() {
+    const el = document.getElementById('alert');
+    el.className = 'alert';
+    el.innerHTML = '';
+  }
+
+  async function generatePKCE() {
+    const verifier = Array.from(crypto.getRandomValues(new Uint8Array(32)))
+      .map(b => b.toString(16).padStart(2,'0')).join('');
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
+    const challenge = btoa(String.fromCharCode(...new Uint8Array(digest)))
+      .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+    return { verifier, challenge };
+  }
+
+  async function loginDiscord() {
+    const state = Math.random().toString(36).slice(2);
+    const { verifier, challenge } = await generatePKCE();
+    sessionStorage.setItem('oauth_state', state);
+    sessionStorage.setItem('code_verifier', verifier);
+    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify+email&state=${state}&code_challenge=${challenge}&code_challenge_method=S256`;
+  }
+
+  function togglePw() {
+    const i = document.getElementById('pw'), e = document.getElementById('eye');
+    if (i.type === 'password') { i.type = 'text'; e.className = 'fas fa-eye-slash'; }
+    else { i.type = 'password'; e.className = 'fas fa-eye'; }
+  }
+
+  async function submitEmail(e) {
+    e.preventDefault();
+    const em  = document.getElementById('em').value.trim();
+    const pw  = document.getElementById('pw').value;
+    const rem = document.getElementById('rem').checked;
+    if (!em || !pw) { showAlert('يرجى ملء جميع الحقول'); return; }
+    const btn = document.getElementById('sbtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spin"></span> جاري التحقق...';
+    clearAlert();
+    try {
+      const { getAuth, signInWithEmailAndPassword, browserLocalPersistence, browserSessionPersistence, setPersistence }
+        = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js');
+      const auth = getAuth();
+      await setPersistence(auth, rem ? browserLocalPersistence : browserSessionPersistence);
+      const cred = await signInWithEmailAndPassword(auth, em, pw);
+      const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js');
+      const db = getFirestore();
+      const snap = await getDoc(doc(db, 'users', cred.user.uid));
+      if (!snap.exists()) { showAlert('الحساب غير موجود'); btn.disabled=false; btn.innerHTML='تسجيل الدخول'; return; }
+      const data = snap.data();
+      const uName = data.username || data.global_name || cred.user.email;
+      localStorage.setItem('user', JSON.stringify({
+        id: data.discordId || cred.user.uid,
+        name: uName, username: uName,
+        avatar: data.avatar || '',
+        email: cred.user.email
+      }));
+      showAlert('تم تسجيل الدخول بنجاح ✓', 'ok');
+      setTimeout(() => { window.location.href = 'index.html'; }, 900);
+    } catch(err) {
+      const msgs = {
+        'auth/user-not-found':    'البريد غير مسجّل',
+        'auth/wrong-password':    'كلمة المرور خاطئة',
+        'auth/invalid-email':     'البريد غير صحيح',
+        'auth/too-many-requests': 'محاولات كثيرة، حاول لاحقاً',
+        'auth/invalid-credential':'البريد أو الباسورد خاطئ'
+      };
+      showAlert(msgs[err.code] || 'حدث خطأ، حاول مرة أخرى');
+      btn.disabled = false;
+      btn.innerHTML = 'تسجيل الدخول';
+    }
+  }
+
+  function forgotPw() { showAlert('تواصل مع الإدارة عبر الديسكورد لإعادة تعيين الباسورد', 'inf'); }
+  function confirmLink() { document.getElementById('link-banner').classList.remove('on'); showAlert('تم ربط الحسابين بنجاح ✓','ok'); }
+  function dismissLink() { document.getElementById('link-banner').classList.remove('on'); }
+
+  // OAuth2 callback
+  (async function handleCallback() {
+    const params = new URLSearchParams(location.search);
+    const code   = params.get('code');
+    const state  = params.get('state');
+    if (!code) return;
+    if (state !== sessionStorage.getItem('oauth_state')) {
+      showAlert('خطأ في التحقق، حاول مرة أخرى'); return;
+    }
+    switchTab('discord');
+    showAlert('جاري تسجيل الدخول...', 'inf');
+    try {
+      const codeVerifier = sessionStorage.getItem('code_verifier');
+      const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          client_id: CLIENT_ID,
+          grant_type: 'authorization_code',
+          code, redirect_uri: REDIRECT_URI,
+          code_verifier: codeVerifier || ''
+        })
+      });
+      const tokenData = await tokenRes.json();
+      if (!tokenData.access_token) { showAlert('فشل الحصول على التوكن'); return; }
+      const userRes = await fetch('https://discord.com/api/users/@me', {
+        headers: { Authorization: `Bearer ${tokenData.access_token}` }
+      });
+      const user = await userRes.json();
+      if (!user.id) { showAlert('فشل جلب بيانات المستخدم'); return; }
+      const displayName = user.global_name || user.username || user.id;
+      localStorage.setItem('user', JSON.stringify({
+        id: user.id,
+        name: displayName,
+        username: displayName,
+        global_name: user.global_name || '',
+        avatar: user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` : '',
+        email: user.email || ''
+      }));
+      showAlert('تم تسجيل الدخول بنجاح ✓', 'ok');
+      history.replaceState({}, '', location.pathname);
+      setTimeout(() => { window.location.href = 'index.html'; }, 900);
+    } catch(e) { showAlert('حدث خطأ، حاول مرة أخرى'); }
+  })();
+  </script>
 </body>
 </html>

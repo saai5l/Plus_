@@ -2,27 +2,27 @@
 
 <html dir="rtl" lang="ar">
 <head>
-<meta charset="utf-8"/>
-<title>Pevix Development</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<link href="style.css" rel="stylesheet"/>
-<link href="ai-chat-enhanced.css" rel="stylesheet"/>
-<meta content="website" property="og:type"/>
-<meta content="YOUR SERVER NAME" property="og:site_name"/>
-<meta content="YOUR SERVER NAME - موقع السيرفر الرسمي" property="og:title"/>
-<meta content="الموقع الرسمي للسيرفر. انضم الآن!" property="og:description"/>
-<meta content="YOUR_SITE_URL" property="og:url"/>
-<meta content="ServerLogo.png" property="og:image"/>
-<meta content="800" property="og:image:width"/>
-<meta content="420" property="og:image:height"/>
-<meta content="summary_large_image" name="twitter:card"/>
-<meta content="#B8860B" name="theme-color"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<!-- Favicon -->
-<link href="ServerLogo.png" rel="icon" type="image/png"/>
-<link href="ServerLogo.png" rel="shortcut icon" type="image/png"/>
-<link href="home-redesign.css" rel="stylesheet"/>
-<link href="home-fixes.css" rel="stylesheet"/>
+  <meta charset="utf-8"/>
+    <title>Pevix Development</title>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+      <link href="style.css" rel="stylesheet"/>
+      <link href="ai-chat-enhanced.css" rel="stylesheet"/>
+      <meta content="website" property="og:type"/>
+      <meta content="Pevix Development" property="og:site_name"/>
+      <meta content="Pevix Development - موقع السيرفر الرسمي" property="og:title"/>
+      <meta content="الموقع الرسمي للسيرفر. انضم الآن!" property="og:description"/>
+      <meta content="https://saai5l.github.io/Plus_" property="og:url"/>
+      <meta content="ServerLogo.png" property="og:image"/>
+      <meta content="800" property="og:image:width"/>
+      <meta content="420" property="og:image:height"/>
+      <meta content="summary_large_image" name="twitter:card"/>
+      <meta content="#B8860B" name="theme-color"/>
+      <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <!-- Favicon -->
+    <link href="ServerLogo.png" rel="icon" type="image/png"/>
+    <link href="ServerLogo.png" rel="shortcut icon" type="image/png"/>
+    <link href="home-redesign.css" rel="stylesheet"/>
+    <link href="home-fixes.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="custom-modal" id="req-modal">
@@ -118,6 +118,7 @@
 <a href="#" onclick="showPage('tutorials')">Explanations</a>
 <a href="#" onclick="showPage('jobs')">Apply Jobs</a>
 <a href="#" onclick="showPage('store')">Store</a>
+<a href="#" onclick="showPage('team-page')">Team</a>
 </div>
 <div class="social-links">
 <a class="plus-discord-btn" href="https://discord.gg/pev" target="_blank">
@@ -565,7 +566,63 @@
 </div>
 
 </div><!-- /adm-container -->
+
+<!-- ═══ قسم إدارة الفريق — داخل admin-dashboard ═══ -->
+<div class="adm-container" style="margin-top:2rem;">
+  <div class="adm-panel adm-section-gap">
+    <div class="adm-table-head">
+      <div class="adm-table-title-wrap">
+        <div class="adm-panel-icon adm-icon-orange"><i class="fas fa-users-cog"></i></div>
+        <h3 class="adm-panel-title">إدارة الفريق</h3>
+      </div>
+      <button class="adm-refresh-btn" onclick="openAddMemberModal()"><i class="fas fa-plus"></i> إضافة عضو</button>
+    </div>
+
+    <!-- فورم إضافة/تعديل عضو -->
+    <div id="member-form-wrap" style="display:none; background:rgba(255,255,255,0.04); border-radius:12px; padding:1.5rem; margin:1rem 0; border:1px solid rgba(255,255,255,0.08);">
+      <h4 style="margin:0 0 1rem; color:var(--primary);"><i class="fas fa-user-plus"></i> <span id="member-form-title">إضافة عضو جديد</span></h4>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div>
+          <label style="display:block;margin-bottom:.4rem;font-size:.85rem;color:var(--text-muted);">الاسم</label>
+          <input class="adm-input" id="mf-name" placeholder="اسم العضو" style="width:100%;"/>
+        </div>
+        <div>
+          <label style="display:block;margin-bottom:.4rem;font-size:.85rem;color:var(--text-muted);">الرتبة</label>
+          <input class="adm-input" id="mf-rank" placeholder="مثال: Owner / مدير / ستاف" style="width:100%;"/>
+        </div>
+        <div>
+          <label style="display:block;margin-bottom:.4rem;font-size:.85rem;color:var(--text-muted);">الفئة</label>
+          <select class="adm-input" id="mf-category" style="width:100%;">
+            <option value="الإدارة">الإدارة</option>
+            <option value="الستاف">الستاف</option>
+            <option value="فريق التطوير">فريق التطوير</option>
+            <option value="فريق الدعم">فريق الدعم</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;margin-bottom:.4rem;font-size:.85rem;color:var(--text-muted);">Discord ID (اختياري)</label>
+          <input class="adm-input" id="mf-discord" placeholder="Discord ID للصورة الشخصية" style="width:100%;"/>
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="display:block;margin-bottom:.4rem;font-size:.85rem;color:var(--text-muted);">وصف قصير (اختياري)</label>
+          <input class="adm-input" id="mf-desc" placeholder="مثال: مسؤول عن الشرطة والنظام" style="width:100%;"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:.8rem;margin-top:1rem;">
+        <button class="adm-add-btn" onclick="saveMember()"><i class="fas fa-save"></i> حفظ</button>
+        <button class="adm-refresh-btn" onclick="closeMemberForm()"><i class="fas fa-times"></i> إلغاء</button>
+      </div>
+      <input type="hidden" id="mf-edit-key"/>
+    </div>
+
+    <!-- قائمة الفريق في لوحة الإدارة -->
+    <div id="team-admin-list" class="adm-ids-list" style="margin-top:1rem;">
+      <div class="adm-ids-loading"><i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...</div>
+    </div>
+  </div>
 </div>
+
+</div><!-- /admin-dashboard page -->
 <!-- HOME PAGE -->
 <div class="page active" id="home">
 <div class="container">
@@ -2132,6 +2189,32 @@
 </div>
 </div>
 
+<!-- TEAM PAGE -->
+<div class="page" id="team-page">
+  <div class="laws-hero">
+    <div class="laws-hero-bg"></div>
+    <div class="laws-hero-inner">
+      <div class="laws-hero-icon"><i class="fas fa-users-cog"></i></div>
+      <h1 class="laws-hero-title">فريق العمل</h1>
+      <p class="laws-hero-sub">تعرّف على الفريق الذي يُدير السيرفر ويحرص على تجربتك</p>
+      <div class="tut-stats-row">
+        <div class="tut-stat"><i class="fas fa-user-shield"></i><span id="team-stat-admins">0 مدير</span></div>
+        <div class="tut-stat"><i class="fas fa-user-cog"></i><span id="team-stat-staff">0 ستاف</span></div>
+        <div class="tut-stat"><i class="fas fa-users"></i><span id="team-stat-total">0 إجمالي</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="laws-content-wrap" style="max-width:1100px;margin:0 auto;padding:2rem 1rem 4rem;">
+    <div id="team-sections-container">
+      <div class="adm-list-empty" style="text-align:center;padding:3rem;">
+        <i class="fas fa-circle-notch fa-spin" style="font-size:2rem;color:var(--primary);"></i>
+        <p style="margin-top:1rem;color:var(--text-muted);">جاري تحميل الفريق...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Back To Top -->
 <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="للأعلى">
   <i class="fas fa-arrow-up"></i>
@@ -2162,6 +2245,7 @@
           <a onclick="showPage('tutorials')"><i class="fas fa-clapperboard"></i> الشروحات</a>
           <a onclick="showPage('store')"><i class="fas fa-store"></i> المتجر</a>
           <a onclick="showPage('jobs')"><i class="fas fa-paper-plane"></i> الوظائف</a>
+          <a onclick="showPage('team-page')"><i class="fas fa-users-cog"></i> الفريق</a>
         </div>
         <div class="footer-col">
           <div class="footer-col-title">تواصل معنا</div>

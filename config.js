@@ -33,7 +33,6 @@ const CONFIG = {
   LOGO_URL: "ServerLogo.png",
 
   OG_IMAGE: "ServerLogo.png",
-
-
+  
   SITE_URL: "https://saai5l.github.io/Plus_"
 };

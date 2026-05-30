@@ -1,5 +1,57 @@
 const WEBHOOKS = CONFIG.WEBHOOKS;
 
+/* ============================================================
+   applyConfig — يطبق قيم config.js على الصفحة تلقائياً
+   ============================================================ */
+function applyConfig() {
+  const name = CONFIG.SERVER_NAME;
+  const url  = CONFIG.SITE_URL;
+  const color = CONFIG.PRIMARY_COLOR;
+
+  // ── العنوان ──
+  document.title = name;
+
+  // ── OG / Meta tags ──
+  const setMeta = (sel, val) => { const el = document.querySelector(sel); if (el) el.setAttribute('content', val); };
+  setMeta('meta[property="og:site_name"]',  name);
+  setMeta('meta[property="og:title"]',      name + ' - موقع السيرفر الرسمي');
+  setMeta('meta[property="og:url"]',        url);
+  setMeta('meta[property="og:image"]',      CONFIG.OG_IMAGE);
+  setMeta('meta[name="theme-color"]',       color);
+
+  // ── Loading screen ──
+  const loading = document.querySelector('.loading-text');
+  if (loading) loading.textContent = name + ' IS LOADING...';
+
+  // ── روابط ديسكورد ──
+  document.querySelectorAll('a[href*="discord.gg/"]').forEach(a => {
+    a.href = CONFIG.DISCORD_INVITE;
+  });
+
+  // ── الفوتر — اسم السيرفر ──
+  document.querySelectorAll('.footer-brand-name, .footer-copy').forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/اسم السيرفر/g, name);
+  });
+  const footerCopy = document.querySelector('.footer-copy');
+  if (footerCopy) footerCopy.textContent = '© 2025 ' + name + ' — جميع الحقوق محفوظة';
+
+  // ── اللون الأساسي (CSS variable) ──
+  document.documentElement.style.setProperty('--primary', color);
+  document.documentElement.style.setProperty('--primary-color', color);
+
+  // ── الشعار ──
+  document.querySelectorAll('img[src="ServerLogo.png"]').forEach(img => {
+    img.src = CONFIG.LOGO_URL;
+  });
+  const favicon = document.querySelector('link[rel="icon"]');
+  if (favicon) favicon.href = CONFIG.LOGO_URL;
+  const favicon2 = document.querySelector('link[rel="shortcut icon"]');
+  if (favicon2) favicon2.href = CONFIG.LOGO_URL;
+}
+
+document.addEventListener('DOMContentLoaded', applyConfig);
+
+
 /* ============================================================ */
 
 const firebaseConfig = CONFIG.FIREBASE;
@@ -2442,3 +2494,187 @@ window.addEventListener('scroll', function() {
   const nav = document.querySelector('.navbar');
   if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
 }, { passive: true });
+/* ============================================================
+   TEAM MANAGEMENT — صفحة الفريق
+   ============================================================ */
+
+// ── تحميل الفريق للزوار ──
+function loadTeamPage() {
+  database.ref('team').on('value', (snap) => {
+    const data = snap.val();
+    const container = document.getElementById('team-sections-container');
+    if (!container) return;
+
+    if (!data) {
+      container.innerHTML = `<div class="adm-list-empty" style="text-align:center;padding:3rem;">
+        <i class="fas fa-users" style="font-size:2.5rem;color:var(--primary);opacity:.5;"></i>
+        <p style="margin-top:1rem;color:var(--text-muted);">لم يتم إضافة أعضاء بعد</p>
+      </div>`;
+      return;
+    }
+
+    const members = Object.entries(data).map(([key, val]) => ({ key, ...val }));
+
+    // تجميع حسب الفئة
+    const grouped = {};
+    members.forEach(m => {
+      const cat = m.category || 'الفريق';
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(m);
+    });
+
+    // ترتيب الفئات
+    const order = ['الإدارة', 'فريق التطوير', 'الستاف', 'فريق الدعم'];
+    const sorted = [...order.filter(c => grouped[c]), ...Object.keys(grouped).filter(c => !order.includes(c))];
+
+    let html = '';
+    let totalAdmins = 0, totalStaff = 0;
+
+    sorted.forEach(cat => {
+      const list = grouped[cat];
+      if (cat === 'الإدارة') totalAdmins += list.length;
+      else totalStaff += list.length;
+
+      html += `<div style="margin-bottom:3rem;">
+        <div style="display:flex;align-items:center;gap:.8rem;margin-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem;">
+          <div class="laws-hero-icon" style="width:40px;height:40px;font-size:1rem;"><i class="fas fa-${cat==='الإدارة'?'user-shield':cat==='الستاف'?'user-cog':cat==='فريق التطوير'?'code':'headset'}"></i></div>
+          <h2 style="margin:0;font-size:1.4rem;">${cat}</h2>
+          <span style="background:rgba(255,255,255,0.06);padding:.2rem .7rem;border-radius:20px;font-size:.8rem;color:var(--text-muted);">${list.length} عضو</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;">
+          ${list.map(m => `
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:1.5rem;text-align:center;transition:transform .2s,box-shadow .2s;" 
+                 onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.3)'"
+                 onmouseout="this.style.transform='';this.style.boxShadow=''">
+              <div style="width:70px;height:70px;border-radius:50%;margin:0 auto 1rem;overflow:hidden;border:3px solid var(--primary);background:rgba(255,255,255,0.05);">
+                ${m.discordId
+                  ? `<img src="https://cdn.discordapp.com/avatars/${m.discordId}/${m.discordId}.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" style="width:100%;height:100%;object-fit:cover;"/><div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.6rem;"><i class="fas fa-user"></i></div>`
+                  : `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:1.6rem;"><i class="fas fa-user"></i></div>`
+                }
+              </div>
+              <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem;">${m.name}</div>
+              <div style="background:var(--primary);color:#000;font-size:.75rem;font-weight:700;padding:.2rem .8rem;border-radius:20px;display:inline-block;margin-bottom:.5rem;">${m.rank}</div>
+              ${m.description ? `<p style="font-size:.8rem;color:var(--text-muted);margin:0;line-height:1.5;">${m.description}</p>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+    });
+
+    container.innerHTML = html;
+
+    // تحديث الإحصائيات
+    const total = members.length;
+    const statAdmins = document.getElementById('team-stat-admins');
+    const statStaff  = document.getElementById('team-stat-staff');
+    const statTotal  = document.getElementById('team-stat-total');
+    if (statAdmins) statAdmins.textContent = `${totalAdmins} مدير`;
+    if (statStaff)  statStaff.textContent  = `${totalStaff} ستاف`;
+    if (statTotal)  statTotal.textContent  = `${total} إجمالي`;
+  });
+}
+
+// ── تحميل الفريق في لوحة الإدارة ──
+function loadTeamAdmin() {
+  database.ref('team').on('value', (snap) => {
+    const data = snap.val();
+    const list = document.getElementById('team-admin-list');
+    if (!list) return;
+
+    if (!data) {
+      list.innerHTML = `<div class="adm-list-empty"><i class="fas fa-users"></i> لا يوجد أعضاء بعد</div>`;
+      return;
+    }
+
+    const members = Object.entries(data).map(([key, val]) => ({ key, ...val }));
+    list.innerHTML = members.map(m => `
+      <div class="adm-id-row" style="display:flex;align-items:center;gap:1rem;padding:.8rem 1rem;border-radius:10px;background:rgba(255,255,255,0.03);margin-bottom:.5rem;border:1px solid rgba(255,255,255,0.06);">
+        <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid var(--primary);background:rgba(255,255,255,0.05);flex-shrink:0;">
+          ${m.discordId
+            ? `<img src="https://cdn.discordapp.com/avatars/${m.discordId}/${m.discordId}.png" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover;"/>`
+            : `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;"><i class="fas fa-user"></i></div>`
+          }
+        </div>
+        <div style="flex:1;">
+          <div style="font-weight:700;">${m.name}</div>
+          <div style="font-size:.8rem;color:var(--text-muted);">${m.rank} · ${m.category || ''}</div>
+        </div>
+        <div style="display:flex;gap:.5rem;">
+          <button class="adm-refresh-btn" onclick="editMember('${m.key}')"><i class="fas fa-edit"></i></button>
+          <button class="adm-clear-btn" style="padding:.4rem .8rem;font-size:.8rem;" onclick="deleteMember('${m.key}','${m.name}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `).join('');
+  });
+}
+
+// ── فتح فورم إضافة عضو ──
+function openAddMemberModal() {
+  document.getElementById('mf-name').value = '';
+  document.getElementById('mf-rank').value = '';
+  document.getElementById('mf-discord').value = '';
+  document.getElementById('mf-desc').value = '';
+  document.getElementById('mf-edit-key').value = '';
+  document.getElementById('mf-category').value = 'الإدارة';
+  document.getElementById('member-form-title').textContent = 'إضافة عضو جديد';
+  document.getElementById('member-form-wrap').style.display = 'block';
+  document.getElementById('member-form-wrap').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── إغلاق الفورم ──
+function closeMemberForm() {
+  document.getElementById('member-form-wrap').style.display = 'none';
+}
+
+// ── حفظ عضو (إضافة أو تعديل) ──
+function saveMember() {
+  const name     = document.getElementById('mf-name').value.trim();
+  const rank     = document.getElementById('mf-rank').value.trim();
+  const category = document.getElementById('mf-category').value;
+  const discord  = document.getElementById('mf-discord').value.trim();
+  const desc     = document.getElementById('mf-desc').value.trim();
+  const editKey  = document.getElementById('mf-edit-key').value;
+
+  if (!name || !rank) { showNotification('⚠️ الاسم والرتبة مطلوبان', true); return; }
+
+  const memberData = { name, rank, category, discordId: discord, description: desc };
+  const ref = editKey ? database.ref('team/' + editKey) : database.ref('team').push();
+
+  ref.set(memberData).then(() => {
+    showNotification(editKey ? '✅ تم تعديل العضو' : '✅ تم إضافة العضو');
+    closeMemberForm();
+  }).catch(() => showNotification('❌ حدث خطأ', true));
+}
+
+// ── تعديل عضو ──
+function editMember(key) {
+  database.ref('team/' + key).once('value', snap => {
+    const m = snap.val();
+    if (!m) return;
+    document.getElementById('mf-name').value     = m.name || '';
+    document.getElementById('mf-rank').value     = m.rank || '';
+    document.getElementById('mf-category').value = m.category || 'الإدارة';
+    document.getElementById('mf-discord').value  = m.discordId || '';
+    document.getElementById('mf-desc').value     = m.description || '';
+    document.getElementById('mf-edit-key').value = key;
+    document.getElementById('member-form-title').textContent = 'تعديل عضو';
+    document.getElementById('member-form-wrap').style.display = 'block';
+    document.getElementById('member-form-wrap').scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+// ── حذف عضو ──
+function deleteMember(key, name) {
+  if (!confirm(`هل تريد حذف "${name}" من الفريق؟`)) return;
+  database.ref('team/' + key).remove()
+    .then(() => showNotification('🗑️ تم حذف العضو'))
+    .catch(() => showNotification('❌ حدث خطأ', true));
+}
+
+// ── تشغيل التحميل عند فتح الصفحات ──
+const _origShowPage = showPage;
+showPage = function(pageId) {
+  _origShowPage(pageId);
+  if (pageId === 'team-page') loadTeamPage();
+  if (pageId === 'admin-dashboard') { loadTeamAdmin(); }
+};
