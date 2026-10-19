@@ -55,7 +55,7 @@
   align-items: center;
   justify-content: center;
   font-size: 28px;
-  color: #B8860B;
+  color: #ff5b14;
   margin: 0 auto 24px;
   box-shadow: 0 0 40px rgba(184,134,11,0.12), inset 0 1px 0 rgba(255,255,255,0.05);
   animation: adminIconPulse 3s ease-in-out infinite;
@@ -106,7 +106,7 @@
 }
 
 #admin-dashboard .tut-stat i {
-  color: #B8860B;
+  color: #ff5b14;
   font-size: 0.85rem;
 }
 
@@ -165,7 +165,7 @@
 
 .adm-stat-card:hover::before { left: 10%; right: 10%; }
 
-.adm-stat-total::before  { background: linear-gradient(90deg, transparent, #B8860B, transparent); }
+.adm-stat-total::before  { background: linear-gradient(90deg, transparent, #ff5b14, transparent); }
 .adm-stat-approved::before { background: linear-gradient(90deg, transparent, #2ecc71, transparent); }
 .adm-stat-pending::before  { background: linear-gradient(90deg, transparent, #f39c12, transparent); }
 .adm-stat-rejected::before { background: linear-gradient(90deg, transparent, #e74c3c, transparent); }
@@ -184,7 +184,7 @@
 
 .adm-stat-card:hover::after { opacity: 0.12; }
 
-.adm-stat-total::after   { background: #B8860B; }
+.adm-stat-total::after   { background: #ff5b14; }
 .adm-stat-approved::after { background: #2ecc71; }
 .adm-stat-pending::after  { background: #f39c12; }
 .adm-stat-rejected::after { background: #e74c3c; }
@@ -205,7 +205,7 @@
 
 .adm-stat-card:hover .adm-stat-icon { transform: scale(1.08) rotate(-3deg); }
 
-.adm-stat-total .adm-stat-icon    { background: rgba(184,134,11,0.12); color: #B8860B; border: 1px solid rgba(184,134,11,0.2); }
+.adm-stat-total .adm-stat-icon    { background: rgba(184,134,11,0.12); color: #ff5b14; border: 1px solid rgba(184,134,11,0.2); }
 .adm-stat-approved .adm-stat-icon { background: rgba(46,204,113,0.12); color: #2ecc71; border: 1px solid rgba(46,204,113,0.2); }
 .adm-stat-pending .adm-stat-icon  { background: rgba(243,156,18,0.12); color: #f39c12; border: 1px solid rgba(243,156,18,0.2); }
 .adm-stat-rejected .adm-stat-icon { background: rgba(231,76,60,0.12);  color: #e74c3c; border: 1px solid rgba(231,76,60,0.2); }
@@ -290,7 +290,7 @@
   flex-shrink: 0;
 }
 
-.adm-icon-orange { background: rgba(184,134,11,0.1) !important; border-color: rgba(184,134,11,0.22) !important; color: #B8860B !important; }
+.adm-icon-orange { background: rgba(184,134,11,0.1) !important; border-color: rgba(184,134,11,0.22) !important; color: #ff5b14 !important; }
 .adm-icon-blue   { background: rgba(52,152,219,0.1) !important; border-color: rgba(52,152,219,0.22) !important; color: #3498db !important; }
 .adm-icon-green  { background: rgba(46,204,113,0.1) !important; border-color: rgba(46,204,113,0.22) !important; color: #2ecc71 !important; }
 
@@ -340,7 +340,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #B8860B;
+  color: #ff5b14;
   font-weight: 700;
   font-size: 0.88rem;
 }
@@ -388,7 +388,7 @@
 
 .adm-police-icon { background: rgba(52,152,219,0.12); color: #3498db; }
 .adm-ems-icon    { background: rgba(231,76,60,0.12);  color: #e74c3c; }
-.adm-staff-icon  { background: rgba(184,134,11,0.12); color: #B8860B; }
+.adm-staff-icon  { background: rgba(184,134,11,0.12); color: #ff5b14; }
 
 /* Custom Toggle Switch */
 .adm-toggle-btn {
@@ -402,7 +402,7 @@
   flex-shrink: 0;
 }
 
-.adm-toggle-on  { background: linear-gradient(135deg, #B8860B, #9A7209); box-shadow: 0 0 16px rgba(184,134,11,0.38); }
+.adm-toggle-on  { background: linear-gradient(135deg, #ff5b14, #9A7209); box-shadow: 0 0 16px rgba(184,134,11,0.38); }
 .adm-toggle-off { background: rgba(255,255,255,0.07); box-shadow: none; }
 
 .adm-toggle-knob {
@@ -452,7 +452,7 @@
 .adm-input::placeholder { color: rgba(255,255,255,0.22); }
 
 .adm-add-btn {
-  background: linear-gradient(135deg, #B8860B, #9A7209);
+  background: linear-gradient(135deg, #ff5b14, #9A7209);
   border: none;
   border-radius: 13px;
   color: #fff;
@@ -602,11 +602,11 @@
 .adm-filter-btn:hover {
   background: rgba(184,134,11,0.08);
   border-color: rgba(184,134,11,0.3);
-  color: #B8860B;
+  color: #ff5b14;
 }
 
 .adm-filter-active {
-  background: linear-gradient(135deg, #B8860B, #9A7209) !important;
+  background: linear-gradient(135deg, #ff5b14, #9A7209) !important;
   border-color: transparent !important;
   color: white !important;
   font-weight: 700;
@@ -672,7 +672,7 @@
 }
 
 .adm-table .app-id-cell {
-  color: #B8860B !important;
+  color: #ff5b14 !important;
   font-weight: 800;
   font-family: 'Courier New', monospace;
   font-size: 0.85rem;

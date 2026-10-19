@@ -28,7 +28,7 @@ const CONFIG = {
     appId:             "1:493882886067:web:ed8f0db9678a7e8a042dc6"
   },
 
-  PRIMARY_COLOR: "#B8860B",
+  PRIMARY_COLOR: "#ff5b14",
 
   LOGO_URL: "ServerLogo.png",
 

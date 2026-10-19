@@ -314,7 +314,7 @@ function showRequirements(jobType) {
     const reqList = document.getElementById('req-list');
     const requirements = jobRequirements[jobType] || ['يجب الالتزام بالقوانين'];
 
-    reqList.innerHTML = requirements.map(r => `<p style="margin:10px 0;"><i class="fa-solid fa-check" style="color:#B8860B;"></i> ${r}</p>`).join('');
+    reqList.innerHTML = requirements.map(r => `<p style="margin:10px 0;"><i class="fa-solid fa-check" style="color:#ff5b14;"></i> ${r}</p>`).join('');
     reqModal.style.display = 'flex';
 
     document.getElementById('accept-req').onclick = function() {
@@ -803,7 +803,7 @@ function updateUI(user) {
 
         if (ADMIN_IDS.includes(user.id)) {
             userStatus.innerText = "Higher Administration";
-            userStatus.style.color = "#B8860B";
+            userStatus.style.color = "#ff5b14";
             if (document.getElementById('admin-btn')) {
                 document.getElementById('admin-btn').style.display = 'flex';
             }
@@ -1325,7 +1325,7 @@ function openCustomConfirm(message, title, iconClass, action) {
     if (message.includes("حذف") || message.includes("تصفير")) {
         iconElem.style.color = "#e74c3c";
     } else {
-        iconElem.style.color = "#B8860B";
+        iconElem.style.color = "#ff5b14";
     }
 
     document.getElementById('confirm-modal').style.display = 'flex';
@@ -1500,7 +1500,7 @@ function openProductModal(name, price, cat, emoji, desc, featuresStr, oldPrice) 
         priceEl.style.color = '#2ecc71';
     } else {
         priceEl.textContent = price + '$';
-        priceEl.style.color = '#B8860B';
+        priceEl.style.color = '#ff5b14';
     }
 
     // Features
@@ -1649,7 +1649,7 @@ async function confirmPurchase() {
             navigator.clipboard.writeText(orderId);
             badge.style.background = 'rgba(184,134,11,0.15)';
             badge.style.borderColor = 'rgba(184,134,11,0.4)';
-            badge.style.color = '#B8860B';
+            badge.style.color = '#ff5b14';
             setTimeout(() => {
                 badge.style.background = '';
                 badge.style.borderColor = '';
@@ -1719,8 +1719,8 @@ function loadMyOrders(userId) {
                   </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-                  <span style="background:rgba(184,134,11,0.1);color:#B8860B;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
-                  <span style="font-size:1.1rem;font-weight:900;color:#B8860B">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
+                  <span style="background:rgba(184,134,11,0.1);color:#ff5b14;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
+                  <span style="font-size:1.1rem;font-weight:900;color:#ff5b14">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
                   <span style="background:${s.bg};color:${s.color};border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${s.label}</span>
                 </div>
               </div>
@@ -1775,8 +1775,8 @@ function renderOrders(list) {
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-              <span style="background:rgba(184,134,11,0.1);color:#B8860B;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
-              <span style="font-weight:900;color:#B8860B">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
+              <span style="background:rgba(184,134,11,0.1);color:#ff5b14;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${o.id}</span>
+              <span style="font-weight:900;color:#ff5b14">${o.price === 0 ? 'مجاني' : o.price + '$'}</span>
               <span style="background:${s.bg};color:${s.color};border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${s.label}</span>
               ${o.status === 'pending' ? `
               <button onclick="updateOrderStatus('${o.id}','completed')" style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.2);color:#2ecc71;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.78rem"><i class="fas fa-check"></i> إتمام</button>
@@ -2238,7 +2238,7 @@ function renderTickets(tickets) {
           <div style="display:flex;align-items:flex-start;gap:12px">
             <div style="flex:1;min-width:0">
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">
-                <span style="background:rgba(184,134,11,0.1);color:#B8860B;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
+                <span style="background:rgba(184,134,11,0.1);color:#ff5b14;border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
                 <span style="background:${statusBg};color:${statusColor};border-radius:6px;padding:2px 10px;font-size:0.72rem;font-weight:700">${statusText}</span>
                 <span style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.4);border-radius:6px;padding:2px 10px;font-size:0.72rem">${t.type}</span>
               </div>
@@ -2371,7 +2371,7 @@ function loadMyTickets(userId) {
             <div style="background:rgba(16,16,20,0.95);border:1px solid ${hasReply ? 'rgba(46,204,113,0.3)' : 'rgba(255,255,255,0.07)'};border-radius:16px;padding:18px 20px;transition:all 0.3s;${hasReply ? 'box-shadow:0 0 20px rgba(46,204,113,0.08)' : ''}">
               <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px">
                 <div style="display:flex;align-items:center;gap:10px">
-                  <div style="width:36px;height:36px;border-radius:10px;background:rgba(184,134,11,0.1);border:1px solid rgba(184,134,11,0.2);display:flex;align-items:center;justify-content:center;color:#B8860B;font-size:0.9rem;flex-shrink:0">
+                  <div style="width:36px;height:36px;border-radius:10px;background:rgba(184,134,11,0.1);border:1px solid rgba(184,134,11,0.2);display:flex;align-items:center;justify-content:center;color:#ff5b14;font-size:0.9rem;flex-shrink:0">
                     <i class="fas fa-ticket-alt"></i>
                   </div>
                   <div>
@@ -2380,7 +2380,7 @@ function loadMyTickets(userId) {
                   </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-                  <span style="background:rgba(184,134,11,0.1);color:#B8860B;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
+                  <span style="background:rgba(184,134,11,0.1);color:#ff5b14;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">${t.id}</span>
                   <span style="background:${isOpen ? 'rgba(52,152,219,0.1)' : 'rgba(46,204,113,0.1)'};color:${isOpen ? '#3498db' : '#2ecc71'};border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:700">
                     ${isOpen ? '🔵 مفتوحة' : '✅ مغلقة'}
                   </span>

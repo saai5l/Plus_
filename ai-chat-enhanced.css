@@ -10,7 +10,7 @@
   right: 30px;
   width: 68px;
   height: 68px;
-  background: linear-gradient(135deg, #B8860B, #9A7209);
+  background: linear-gradient(135deg, #ff5b14, #9A7209);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -128,7 +128,7 @@
 
 /* ===== رأس الشات ===== */
 .chat-header {
-  background: linear-gradient(135deg, #B8860B 0%, #9A7209 100%);
+  background: linear-gradient(135deg, #ff5b14 0%, #9A7209 100%);
   padding: 16px 18px;
   display: flex;
   justify-content: space-between;
@@ -269,7 +269,7 @@
 }
 
 .chat-search-input:focus {
-  border-color: #B8860B;
+  border-color: #ff5b14;
   box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.12);
 }
 
@@ -314,7 +314,7 @@
 
 /* ===== رسائل المستخدم ===== */
 .user-msg {
-  background: linear-gradient(135deg, #B8860B, #9A7209);
+  background: linear-gradient(135deg, #ff5b14, #9A7209);
   color: white;
   padding: 14px 16px;
   border-radius: 18px 18px 4px 18px;
@@ -337,7 +337,7 @@
 .typing-indicator span {
   width: 7px;
   height: 7px;
-  background: #B8860B;
+  background: #ff5b14;
   border-radius: 50%;
   animation: typingBounce 1.2s ease-in-out infinite;
 }
@@ -356,7 +356,7 @@
 .response-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #B8860B;
+  color: #ff5b14;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
@@ -375,7 +375,7 @@
 .law-title {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #B8860B;
+  color: #ff5b14;
   margin: 12px 0 8px 0;
   padding-bottom: 6px;
   border-bottom: 1px solid rgba(184, 134, 11, 0.25);
@@ -398,11 +398,11 @@
 
 .law-item:hover {
   background: rgba(184, 134, 11, 0.07);
-  border-right-color: #B8860B;
+  border-right-color: #ff5b14;
 }
 
 .law-number {
-  background: linear-gradient(135deg, #B8860B, #9A7209);
+  background: linear-gradient(135deg, #ff5b14, #9A7209);
   color: white;
   min-width: 24px;
   height: 24px;
@@ -441,7 +441,7 @@
 }
 
 .copy-law-btn:hover {
-  color: #B8860B;
+  color: #ff5b14;
   background: rgba(184, 134, 11, 0.1);
 }
 
@@ -497,7 +497,7 @@ mark.search-highlight {
   width: 100%;
   background: rgba(184, 134, 11, 0.1);
   border: 1px solid rgba(184, 134, 11, 0.3);
-  color: #B8860B;
+  color: #ff5b14;
   padding: 9px 14px;
   border-radius: 10px;
   cursor: pointer;
@@ -510,7 +510,7 @@ mark.search-highlight {
 
 .show-more-btn:hover {
   background: rgba(184, 134, 11, 0.2);
-  border-color: #B8860B;
+  border-color: #ff5b14;
 }
 
 .show-more-hint {
@@ -587,7 +587,7 @@ mark.search-highlight {
 }
 
 .quick-btn:hover {
-  background: linear-gradient(135deg, #B8860B, #9A7209);
+  background: linear-gradient(135deg, #ff5b14, #9A7209);
   color: white;
   border-color: transparent;
   transform: translateY(-2px);
@@ -632,7 +632,7 @@ mark.search-highlight {
 }
 
 #ai-input:focus {
-  border-color: #B8860B;
+  border-color: #ff5b14;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.12);
 }
@@ -657,7 +657,7 @@ mark.search-highlight {
 }
 
 #send-btn {
-  background: linear-gradient(135deg, #B8860B, #9A7209);
+  background: linear-gradient(135deg, #ff5b14, #9A7209);
   border: none;
   color: white;
   padding: 11px 20px;
